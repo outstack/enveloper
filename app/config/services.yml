@@ -1,0 +1,58 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/service_container.html
+parameters:
+    #parameter_name: value
+
+services:
+    #service_name:
+    #    class: AppBundle\Directory\ClassName
+    #    arguments: ['@another_service_name', 'plain_value', '%parameter_name%']
+
+    enveloper.template_language:
+        alias: enveloper.template_language.twig
+
+    enveloper.template_language.twig:
+        class: Outstack\Enveloper\Resolution\Twig\TwigTemplateLanguage
+        arguments:
+            - '@twig'
+
+    enveloepr.resolution.participant_resolver:
+        public: false
+        class: Outstack\Enveloper\Resolution\ParticipantResolver
+        arguments:
+            - '@enveloper.template_language'
+
+    enveloper.resolution.participant_list_resolver:
+        public: false
+        class: Outstack\Enveloper\Resolution\ParticipantListResolver
+        arguments:
+            - '@enveloepr.resolution.participant_resolver'
+
+    enveloper.resolution.message_resolver:
+        class: Outstack\Enveloper\Resolution\MessageResolver
+        arguments:
+            - '@enveloper.template_language'
+            - '@enveloper.resolution.participant_list_resolver'
+            - '@enveloepr.resolution.participant_resolver'
+            - '%default_sender_email%'
+
+
+    enveloper.templates.template_loader:
+        alias: enveloper.templates.template_loader.filesystem
+
+    enveloper.templates.template_loader.filesystem:
+        class: Outstack\Enveloper\Templates\Loader\FilesystemLoader
+        arguments:
+            - '@enveloper.templates.template_loader.filesystem.flysystem'
+
+    enveloper.templates.template_loader.filesystem.flysystem:
+        public: false
+        class: League\Flysystem\Filesystem
+        arguments:
+            - '@enveloper.templates.template_loader.filesystem.flysystem.adapter'
+
+    enveloper.templates.template_loader.filesystem.flysystem.adapter:
+        public: false
+        class: League\Flysystem\Adapter\Local
+        arguments:
+            - '%template_directory%'

@@ -1,0 +1,104 @@
+<?php
+
+namespace Outstack\Enveloper\Mail;
+
+use Outstack\Enveloper\Mail\Participants\Participant;
+use Outstack\Enveloper\Mail\Participants\ParticipantList;
+
+class Message
+{
+    /**
+     * @var string
+     */
+    private $id;
+    /**
+     * @var string
+     */
+    private $subject;
+    /**
+     * @var string
+     */
+    private $text;
+
+    /**
+     * @var ParticipantList
+     */
+    private $to;
+    /**
+     * @var ParticipantList
+     */
+    private $cc;
+    /**
+     * @var ParticipantList
+     */
+    private $bcc;
+    /**
+     * @var string
+     */
+    private $html;
+    /**
+     * @var Participant
+     */
+    private $sender;
+
+    public function __construct(string $id, string $subject, Participant $sender, ParticipantList $to, ParticipantList $cc, ParticipantList $bcc, string $text, string $html)
+    {
+        $this->id = $id;
+        $this->subject = $subject;
+        $this->sender = $sender;
+        $this->text = $text;
+        $this->to = $to;
+        $this->cc = $cc;
+        $this->bcc = $bcc;
+        $this->html = $html;
+    }
+
+    /**
+     * @return ParticipantList|Participant[]
+     */
+    public function getTo(): ParticipantList
+    {
+        return $this->to;
+    }
+
+    /**
+     * @return ParticipantList|Participant[]
+     */
+    public function getCc(): ParticipantList
+    {
+        return $this->cc;
+    }
+
+    /**
+     * @return ParticipantList|Participant[]
+     */
+    public function getBcc(): ParticipantList
+    {
+        return $this->bcc;
+    }
+
+    public function getHtml(): string
+    {
+        return $this->html;
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    public function getSubject(): string
+    {
+        return $this->subject;
+    }
+
+    public function getSender(): Participant
+    {
+        return $this->sender;
+    }
+
+    public function getText(): string
+    {
+        return $this->text;
+    }
+}

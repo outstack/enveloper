@@ -1,0 +1,14 @@
+:80
+root /app/web
+gzip
+fastcgi / 127.0.0.1:9000 php {
+  index app.php
+}
+
+log stdout
+errors stderr
+
+rewrite {
+    if {file} not favicon.ico
+    to {path} {path}/ /maintenance.html /app.php
+}

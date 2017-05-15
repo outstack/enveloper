@@ -1,0 +1,19 @@
+version: '3.1'
+services:
+    enveloper:
+        build: .
+        ports:
+            - 80:80
+        environment:
+            - SYMFONY_ENV=prod
+            - ENVELOPER_SMTP_HOST=mailhog
+            - ENVELOPER_SMTP_PORT=1025
+            - ENVELOPER_SMTP_USER=test
+            - ENVELOPER_SMTP_PASSWORD=test
+            - ENVELOPER_DEFAULT_SENDER_EMAIL=noreply@example.com
+        links:
+            - mailhog
+    mailhog:
+        image: mailhog/mailhog
+        ports:
+            - 8025:8025
