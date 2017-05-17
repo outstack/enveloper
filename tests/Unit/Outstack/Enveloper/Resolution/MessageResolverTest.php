@@ -33,7 +33,8 @@ class MessageResolverTest extends AbstractResolutionUnitTest
             $this->language,
             new ParticipantListResolver($recipientResolver),
             $recipientResolver,
-            'noreply@example.com'
+            'noreply@example.com',
+            null
         );
 
         $message = $this->sut->resolve(
@@ -64,7 +65,8 @@ class MessageResolverTest extends AbstractResolutionUnitTest
             $this->language,
             new ParticipantListResolver($recipientResolver),
             $recipientResolver,
-            'noreply@example.com'
+            'noreply@example.com',
+            'Do not reply'
         );
 
         $message = $this->sut->resolve(
@@ -85,7 +87,7 @@ class MessageResolverTest extends AbstractResolutionUnitTest
             ]
         );
 
-        $this->assertEquals(new Participant(null, new EmailAddress('noreply@example.com')), $message->getSender());
+        $this->assertEquals(new Participant('Do not reply', new EmailAddress('noreply@example.com')), $message->getSender());
     }
 
     public function test_it_resolves_message_with_multiple_templated_recipients()
@@ -95,7 +97,8 @@ class MessageResolverTest extends AbstractResolutionUnitTest
             $this->language,
             new ParticipantListResolver($recipientResolver),
             $recipientResolver,
-            'noreply@example.com'
+            'noreply@example.com',
+            null
         );
 
         $message = $this->sut->resolve(

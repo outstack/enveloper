@@ -51,7 +51,7 @@ class EmailSendingFunctionalTest extends AbstractApiTestCase
                 return
                     1 === count($message->getTo()) &&
                     $this->doesToIncludeEmailAddress($message, 'bob@example.com') &&
-                    $this->messageWasFromEmailAddress($message, 'test@example.com');
+                    $this->messageWasFromContact($message, 'test@example.com', 'Test Default Sender');
             }
         );
     }

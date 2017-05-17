@@ -35,6 +35,7 @@ services:
             - '@enveloper.resolution.participant_list_resolver'
             - '@enveloepr.resolution.participant_resolver'
             - '%default_sender_email%'
+            - '%default_sender_name%'
 
 
     enveloper.templates.template_loader:

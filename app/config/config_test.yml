@@ -4,6 +4,7 @@ imports:
 parameters:
     template_directory: "%kernel.root_dir%/../tests/fixtures/templates"
     default_sender_email: "test@example.com"
+    default_sender_name: "Test Default Sender"
 
 framework:
     test: ~

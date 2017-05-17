@@ -25,19 +25,24 @@ class MessageResolver
      * @var string
      */
     private $defaultSenderEmail;
+    /**
+     * @var null|string
+     */
+    private $defaultSenderName;
 
-    public function __construct(TemplateLanguage $language, ParticipantListResolver $recipientListResolver, ParticipantResolver $recipientResolver, ?string $defaultSenderEmail)
+    public function __construct(TemplateLanguage $language, ParticipantListResolver $recipientListResolver, ParticipantResolver $recipientResolver, ?string $defaultSenderEmail, ?string $defaultSenderName)
     {
         $this->language = $language;
         $this->recipientListResolver = $recipientListResolver;
         $this->recipientResolver = $recipientResolver;
         $this->defaultSenderEmail = $defaultSenderEmail;
+        $this->defaultSenderName = $defaultSenderName;
     }
 
     public function resolve(Template $template, $parameters): Message
     {
         if (is_null($template->getSender())) {
-            $from = new Participant(null, new EmailAddress($this->defaultSenderEmail));
+            $from = new Participant($this->defaultSenderName, new EmailAddress($this->defaultSenderEmail));
         } else {
             $from = $this->recipientResolver->resolveRecipient($template->getSender(), $parameters);
         }

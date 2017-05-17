@@ -24,7 +24,7 @@ Hello world
 
 ## Roadmap
 
- - [ ] Minimal alpha proof-of-concept
+ - [x] Minimal alpha proof-of-concept
  - [ ] Attachments
  - [ ] Good docker setup
  - [ ] Automatic generation of text/plain version from HTML

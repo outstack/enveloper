@@ -50,9 +50,11 @@ trait SwiftMailerAssertionTrait
     {
         return array_key_exists($email, $message->getTo());
     }
-    private function messageWasFromEmailAddress(\Swift_Message $message, string $email): bool
+    private function messageWasFromContact(\Swift_Message $message, string $expectedEmail, ?string $name): bool
     {
         $sender = $message->getFrom();
-        return $email === $sender || is_array($sender) && array_key_exists($email, $sender);
+        return
+            ( is_null($name) && $expectedEmail === $sender) ||
+            (!is_null($name) && is_array($sender) && array_key_exists($expectedEmail, $sender) && $sender[$expectedEmail] == $name);
     }
 }
