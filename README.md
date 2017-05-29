@@ -1,5 +1,7 @@
 # OutStack Enveloper
 
+**Warning: This is pre-release alpha code. It may be buggy, and the docs may be wrong. Use with caution and if you're not sure about something, just ask!**
+
 ## Installation
 
 Install via docker
