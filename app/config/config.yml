@@ -8,6 +8,17 @@ imports:
 parameters:
     locale: en
 
+monolog:
+    handlers:
+        main:
+            type: stream
+            path:  "php://stdout"
+            level: debug
+            channels: ['!event']
+        console:
+            type: console
+            channels: ['!event', '!doctrine']
+
 framework:
     #esi: ~
     #translator: { fallbacks: ['%locale%'] }
@@ -23,7 +34,6 @@ framework:
         engines: ['twig']
     default_locale: '%locale%'
     trusted_hosts: ~
-    trusted_proxies: ~
     session:
         # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id
         handler_id:  session.handler.native_file

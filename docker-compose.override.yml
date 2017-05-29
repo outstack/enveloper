@@ -3,3 +3,5 @@ services:
     enveloper:
         volumes:
             - .:/app
+        environment:
+            - SYMFONY_ENV=dev

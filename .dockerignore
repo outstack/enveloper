@@ -1,3 +1,4 @@
 var/*
-tests/Functional
-tests/Unit
+tests/Functional/*
+tests/Unit/*
+#vendor/*

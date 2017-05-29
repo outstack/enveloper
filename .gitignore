@@ -2,3 +2,5 @@ var
 vendor
 phpunit.phar
 supervisord.log
+composer.phar
+.DS_Store
