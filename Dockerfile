@@ -1,8 +1,8 @@
 FROM php:7-fpm-alpine
+MAINTAINER Adam Quaile <adamquaile@gmail.com>
 RUN apk update \
     && apk add openssl \
     && apk add bash \
-#    && apk add curl \
     && apk add caddy \
     && wget https://raw.githubusercontent.com/chrismytton/shoreman/380e745d1c2cd7bc163a1485ee57b20c76395198/shoreman.sh && chmod +x shoreman.sh && mv shoreman.sh /usr/local/bin/shoreman
 
