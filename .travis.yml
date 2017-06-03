@@ -1,0 +1,8 @@
+language: php
+php:
+  - '7.1'
+jobs:
+  include:
+    - stage: test
+      install: composer install
+      script: ./test.sh
