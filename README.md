@@ -1,5 +1,7 @@
 # OutStack Enveloper
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/93720c538eac41c78502805bfa6c04d2)](https://www.codacy.com/app/outstack/enveloper?utm_source=github.com&utm_medium=referral&utm_content=outstack/enveloper&utm_campaign=badger)
+
 **Warning: This is pre-release alpha code. It may be buggy, and the docs may be wrong. Use with caution and if you're not sure about something, just ask!**
 
 ## Installation
