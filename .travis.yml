@@ -1,4 +1,6 @@
 language: php
+php:
+  - '7.1'
 jobs:
   include:
     - stage: test
