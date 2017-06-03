@@ -1,0 +1,5 @@
+jobs:
+  include:
+    - stage: test
+      install: composer install
+      script: ./test.sh
