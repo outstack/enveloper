@@ -6,6 +6,14 @@ parameters:
     default_sender_email: "test@example.com"
     default_sender_name: "Test Default Sender"
 
+monolog:
+    handlers:
+        main:
+            type: stream
+            path: '%kernel.logs_dir%/%kernel.environment%.log'
+            level: debug
+            channels: ['!event']
+
 framework:
     test: ~
     session:
