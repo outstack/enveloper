@@ -4,27 +4,13 @@
 
 **Warning: This is pre-release alpha code. It may be buggy, and the docs may be wrong. Use with caution and if you're not sure about something, just ask!**
 
-## Installation
+## What is it? 
 
-Install via docker
+Enveloper is a small service intended to be run in your infrastucture to speed up developing and testing transactional emails in your application.
 
-    docker run outstack/enveloper \
-        -v ./enveloper/config/:/app/config \
-        -v ./enveloper/data:/app/data \
-        -e ENVELOPER_SMTP_HOST=smtp.mailgun.org \
-        -e ENVELOPER_SMTP_USER=postmaster@example.com \
-        -e ENVELOPER_SMTP_PASSWORD=password \
-        -e ENVELOPER_SMTP_PORT=1025 \
-        -e ENVELOPER_DEFAULT_SENDER_EMAIL=noreply@example.com \
-        -e ENVELOPER_DEFAULT_SENDER_NAME=Your\ App
+Define your templates using simple template files and YAML, then send messages using simple API requests. 
 
-## Usage
-
-Hello world
-
-    curl -v http://localhost/outbox \
-        -X POST \
-        -d '{"template":"hello-world","parameters":{"name":"Bob","email":"adamquaile@gmail.com"}}'
+See [Getting Started](./docs/01-getting-started.md) and [all docs](./docs)
 
 ## Issues
 
@@ -43,4 +29,3 @@ Feel free to suggest other features we could add.
  - [ ] Automatic generation of text/plain version from HTML
  - [ ] Automatic CSS inlining
  - [ ] MJML support
- - [ ] 

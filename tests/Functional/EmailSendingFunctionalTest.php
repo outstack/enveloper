@@ -34,7 +34,7 @@ class EmailSendingFunctionalTest extends AbstractApiTestCase
             '/outbox',
             'POST',
             $convertToStream(json_encode([
-                'template' => 'hello-world',
+                'template' => 'simplest-test-message',
                 'parameters' => [
                     'name' => 'Bob',
                     'email' => 'bob@example.com'
