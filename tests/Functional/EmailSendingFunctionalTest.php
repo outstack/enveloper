@@ -22,6 +22,36 @@ class EmailSendingFunctionalTest extends AbstractApiTestCase
         $this->setMessageDataCollector($profiler->get('swiftmailer'));
     }
 
+    public function test_page_not_found_is_nicely_formatted()
+    {
+        $request = new Request(
+            '/not-found',
+            'GET'
+        );
+
+        try {
+            $this->client->sendRequest($request);
+        } catch (HttpException $e) {
+
+            $response   = $e->getResponse();
+            $body       = (string) $response->getBody();
+
+            $this->assertEquals(404, $response->getStatusCode());
+            $this->assertJson($body);
+            $this->assertEquals([
+                'title' => 'Not Found',
+                'detail' => 'No matching action was found to handle the request',
+                'status' => 404
+            ], json_decode($body, true));
+            $this->assertEquals('application/problem+json', $response->getHeaderLine('Content-type'));
+
+            return;
+        }
+
+        throw new \LogicException("Expected HttpException, none caught");
+
+    }
+
     public function test_debugging_email_sent()
     {
         $convertToStream = function($str) {

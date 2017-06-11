@@ -1,3 +1,9 @@
 app:
     resource: '@AppBundle/Controller/'
     type: annotation
+
+error_404:
+  path: /{req}
+  defaults: { _controller: 'AppBundle:Error:pageNotFound' }
+  requirements:
+      req: ".+"

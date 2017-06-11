@@ -34,5 +34,6 @@
         "php-http/client-common": "^1.5"
     },
     "require-dev": {
+        "symfony/phpunit-bridge": "^3.3"
     }
 }

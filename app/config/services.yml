@@ -4,6 +4,37 @@ parameters:
     #parameter_name: value
 
 services:
+
+    # default configuration for services in *this* file
+    _defaults:
+        # automatically injects dependencies in your services
+        autowire: true
+        # automatically registers your services as commands, event subscribers, etc.
+        autoconfigure: true
+        # this means you cannot fetch services directly from the container via $container->get()
+        # if you need to do this, you can override this setting on individual services
+        public: false
+
+    # makes classes in src/AppBundle available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    AppBundle\:
+        resource: '../../src/AppBundle/*'
+        # you can exclude directories or files
+        # but if a service is unused, it's removed anyway
+        exclude: '../../src/AppBundle/{Entity,Repository,Tests}'
+
+    # controllers are imported separately to make sure they're public
+    # and have a tag that allows actions to type-hint services
+    AppBundle\Controller\:
+        resource: '../../src/AppBundle/Controller'
+        public: true
+        tags: ['controller.service_arguments']
+
+    Http\Message\ResponseFactory: '@Http\Message\MessageFactory\DiactorosMessageFactory'
+    Http\Message\MessageFactory\DiactorosMessageFactory: ~
+
+    Outstack\Components\ApiProvider\ApiProblemDetails\ApiProblemFactory: ~
+
     #service_name:
     #    class: AppBundle\Directory\ClassName
     #    arguments: ['@another_service_name', 'plain_value', '%parameter_name%']
@@ -41,8 +72,9 @@ services:
     enveloper.templates.template_loader:
         alias: enveloper.templates.template_loader.filesystem
 
-    enveloper.templates.template_loader.filesystem:
-        class: Outstack\Enveloper\Templates\Loader\FilesystemLoader
+    Outstack\Enveloper\Templates\Loader\TemplateLoader: '@Outstack\Enveloper\Templates\Loader\FilesystemLoader'
+
+    Outstack\Enveloper\Templates\Loader\FilesystemLoader:
         arguments:
             - '@enveloper.templates.template_loader.filesystem.flysystem'
 
