@@ -27,7 +27,7 @@ class ErrorController extends Controller
         throw new \RuntimeException("Example exception");
     }
 
-    public function showExceptionAction(FlattenException $exception)
+    public function showExceptionAction()
     {
         return $this->problemFactory
             ->createProblem(500, 'Server Error')
@@ -36,7 +36,7 @@ class ErrorController extends Controller
 
     }
 
-    public function pageNotFoundAction(ApiProblemFactory $problemFactory)
+    public function pageNotFoundAction()
     {
         return $this->problemFactory
             ->createProblem(404, 'Not Found')
