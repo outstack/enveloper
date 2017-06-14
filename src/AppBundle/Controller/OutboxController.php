@@ -4,6 +4,8 @@ namespace AppBundle\Controller;
 
 use Outstack\Enveloper\Mail\Message;
 use Outstack\Enveloper\Mail\Participants\ParticipantList;
+use Outstack\Enveloper\Resolution\MessageResolver;
+use Outstack\Enveloper\Templates\Loader\TemplateLoader;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,12 +16,8 @@ class OutboxController extends Controller
     /**
      * @Route("/outbox", name="homepage")
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, MessageResolver $resolver, TemplateLoader $templateLoader)
     {
-//        var_dump($this->getParameter('default_sender_email'));exit;
-        $this->get('logger')->info('Test');
-        $resolver = $this->get('enveloper.resolution.message_resolver');
-        $templateLoader = $this->get('enveloper.templates.template_loader');
 
         $payload = json_decode($request->getContent(), true);
 
