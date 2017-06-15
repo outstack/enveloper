@@ -1,8 +1,11 @@
+sudo: required
 language: php
 php:
   - '7.1'
+services:
+  - docker
 jobs:
   include:
     - stage: test
-      install: composer install
-      script: ./test.sh
+      install: docker build -t outstack/enveloper:$TRAVIS_COMMIT
+      script: docker run outstack/enveloper:$TRAVIS_COMMIT /app/test.sh
