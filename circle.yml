@@ -1,0 +1,14 @@
+## Customize the test machine
+machine:
+
+## Customize dependencies
+dependencies:
+
+  override: []
+
+
+## Customize test commands
+test:
+  override:
+    - docker build -t outstack/enveloper:$CIRCLE_SHA1
+    - docker run outstack/enveloper:$CIRCLE_SHA1 /app/test.sh
