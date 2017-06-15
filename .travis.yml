@@ -7,5 +7,5 @@ services:
 jobs:
   include:
     - stage: test
-      install: docker build -t outstack/enveloper:$TRAVIS_COMMIT
+      install: docker build -t outstack/enveloper:$TRAVIS_COMMIT .
       script: docker run outstack/enveloper:$TRAVIS_COMMIT /app/test.sh
