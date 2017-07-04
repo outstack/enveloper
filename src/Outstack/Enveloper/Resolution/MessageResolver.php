@@ -2,6 +2,7 @@
 
 namespace Outstack\Enveloper\Resolution;
 
+use Outstack\Enveloper\Mail\Attachments\AttachmentList;
 use Outstack\Enveloper\Mail\Message;
 use Outstack\Enveloper\Mail\Participants\EmailAddress;
 use Outstack\Enveloper\Mail\Participants\Participant;
@@ -22,6 +23,10 @@ class MessageResolver
      */
     private $recipientResolver;
     /**
+     * @var AttachmentListResolver
+     */
+    private $attachmentListResolver;
+    /**
      * @var string
      */
     private $defaultSenderEmail;
@@ -30,13 +35,20 @@ class MessageResolver
      */
     private $defaultSenderName;
 
-    public function __construct(TemplateLanguage $language, ParticipantListResolver $recipientListResolver, ParticipantResolver $recipientResolver, ?string $defaultSenderEmail, ?string $defaultSenderName)
-    {
+    public function __construct(
+        TemplateLanguage $language,
+        ParticipantListResolver $recipientListResolver,
+        ParticipantResolver $recipientResolver,
+        AttachmentListResolver $attachmentListResolver,
+        ?string $defaultSenderEmail,
+        ?string $defaultSenderName
+    ) {
         $this->language = $language;
         $this->recipientListResolver = $recipientListResolver;
         $this->recipientResolver = $recipientResolver;
         $this->defaultSenderEmail = $defaultSenderEmail;
         $this->defaultSenderName = $defaultSenderName;
+        $this->attachmentListResolver = $attachmentListResolver;
     }
 
     public function resolve(Template $template, $parameters): Message
@@ -55,7 +67,8 @@ class MessageResolver
             $this->recipientListResolver->resolveParticipantList($template->getRecipientsCc(), $parameters),
             $this->recipientListResolver->resolveParticipantList($template->getRecipientsBcc(), $parameters),
             $this->language->render($template->getText(), $parameters),
-            $this->language->render($template->getHtml(), $parameters)
+            $this->language->render($template->getHtml(), $parameters),
+            $this->attachmentListResolver->resolveAttachmentList($template->getAttachments(), $parameters)
         );
     }
 }

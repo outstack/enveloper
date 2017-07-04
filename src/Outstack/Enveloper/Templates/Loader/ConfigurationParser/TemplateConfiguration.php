@@ -83,6 +83,15 @@ class TemplateConfiguration implements ConfigurationInterface
                         ->scalarNode('html')->end()
                     ->end()
                 ->end()
+                ->arrayNode('attachments')
+                    ->prototype('array')
+                        ->children()
+                            ->scalarNode('contents')->isRequired()->end()
+                            ->scalarNode('filename')->isRequired()->end()
+                            ->scalarNode('iterateOver')->defaultNull()->end()
+                        ->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 

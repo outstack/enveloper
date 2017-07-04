@@ -2,6 +2,7 @@
 
 namespace Outstack\Enveloper\Mail;
 
+use Outstack\Enveloper\Mail\Attachments\AttachmentList;
 use Outstack\Enveloper\Mail\Participants\Participant;
 use Outstack\Enveloper\Mail\Participants\ParticipantList;
 
@@ -40,8 +41,22 @@ class Message
      * @var Participant
      */
     private $sender;
+    /**
+     * @var AttachmentList
+     */
+    private $attachments;
 
-    public function __construct(string $id, string $subject, Participant $sender, ParticipantList $to, ParticipantList $cc, ParticipantList $bcc, string $text, string $html)
+    public function __construct(
+        string $id,
+        string $subject,
+        Participant $sender,
+        ParticipantList $to,
+        ParticipantList $cc,
+        ParticipantList $bcc,
+        string $text,
+        string $html,
+        AttachmentList $attachments
+    )
     {
         $this->id = $id;
         $this->subject = $subject;
@@ -51,6 +66,7 @@ class Message
         $this->cc = $cc;
         $this->bcc = $bcc;
         $this->html = $html;
+        $this->attachments = $attachments;
     }
 
     /**
@@ -77,11 +93,6 @@ class Message
         return $this->bcc;
     }
 
-    public function getHtml(): string
-    {
-        return $this->html;
-    }
-
     public function getId(): string
     {
         return $this->id;
@@ -100,5 +111,15 @@ class Message
     public function getText(): string
     {
         return $this->text;
+    }
+
+    public function getHtml(): string
+    {
+        return $this->html;
+    }
+
+    public function getAttachments(): AttachmentList
+    {
+        return $this->attachments;
     }
 }

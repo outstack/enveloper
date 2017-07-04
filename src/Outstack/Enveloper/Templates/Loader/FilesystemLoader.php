@@ -4,6 +4,8 @@ namespace Outstack\Enveloper\Templates\Loader;
 
 use League\Flysystem\FileNotFoundException;
 use League\Flysystem\Filesystem;
+use Outstack\Enveloper\Templates\AttachmentListTemplate;
+use Outstack\Enveloper\Templates\AttachmentTemplate;
 use Outstack\Enveloper\Templates\Loader\ConfigurationParser\TemplateConfiguration;
 use Outstack\Enveloper\Templates\Loader\Exceptions\InvalidConfigurationException;
 use Outstack\Enveloper\Templates\ParticipantListTemplate;
@@ -56,8 +58,21 @@ class FilesystemLoader implements TemplateLoader
             $this->parseRecipientListTemplate($config['recipients']['cc']),
             $this->parseRecipientListTemplate($config['recipients']['bcc']),
             $textTemplate,
-            $htmlTemplate
+            $htmlTemplate,
+            $this->parseAttachmentListTemplate($config['attachments'])
         );
+    }
+
+    private function parseAttachmentListTemplate(array $attachments)
+    {
+        return new AttachmentListTemplate(
+            array_map([$this, 'parseAttachmentTemplate'], $attachments)
+        );
+    }
+
+    private function parseAttachmentTemplate(array $template)
+    {
+        return new AttachmentTemplate($template['contents'], $template['filename'], $template['iterateOver'] ?? null);
     }
 
     private function parseRecipientListTemplate(array $recipients): ParticipantListTemplate

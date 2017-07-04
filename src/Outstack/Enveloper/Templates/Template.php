@@ -35,6 +35,10 @@ class Template
      * @var ParticipantTemplate
      */
     private $sender;
+    /**
+     * @var AttachmentListTemplate
+     */
+    private $attachments;
 
     public function __construct(
         string $subject,
@@ -43,7 +47,8 @@ class Template
         ParticipantListTemplate $recipientsCc,
         ParticipantListTemplate $recipientsBcc,
         ?string $text,
-        string $html
+        string $html,
+        AttachmentListTemplate $attachments
     ) {
         $this->subject = $subject;
         $this->recipientsTo = $recipientsTo;
@@ -52,6 +57,7 @@ class Template
         $this->text = $text;
         $this->html = $html;
         $this->sender = $sender;
+        $this->attachments = $attachments;
     }
 
     public function getSubject(): string
@@ -87,5 +93,10 @@ class Template
     public function getHtml(): string
     {
         return $this->html;
+    }
+
+    public function getAttachments(): AttachmentListTemplate
+    {
+        return $this->attachments;
     }
 }
