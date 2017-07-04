@@ -48,8 +48,6 @@ class OutboxController extends Controller
             ->setCc($swiftCc)
             ->setBcc($swiftBcc);
 
-//        var_dump($message->getAttachments());exit;
-
         foreach ($message->getAttachments() as $attachment) {
             $swiftMessage->attach(
                 \Swift_Attachment::newInstance($attachment->getData(), $attachment->getFilename())
