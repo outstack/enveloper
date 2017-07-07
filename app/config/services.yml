@@ -65,8 +65,12 @@ services:
             - '@enveloper.template_language'
             - '@enveloper.resolution.participant_list_resolver'
             - '@enveloepr.resolution.participant_resolver'
+            - '@Outstack\Enveloper\Resolution\AttachmentListResolver'
             - '%default_sender_email%'
             - '%default_sender_name%'
+
+    Outstack\Enveloper\Resolution\AttachmentListResolver: ~
+    Outstack\Enveloper\Resolution\AttachmentResolver: ~
 
 
     enveloper.templates.template_loader:
