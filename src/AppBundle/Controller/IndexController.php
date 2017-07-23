@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller;
 
+use Outstack\Enveloper\SwiftMailerBridge\SwiftMailerFactory;
+use Swift_Mailer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;

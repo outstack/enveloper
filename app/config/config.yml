@@ -6,8 +6,10 @@ imports:
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    env(SMTP_ENCRYPTION): ssl
     locale: en
     template_directory: "/app/data"
+    mailer_record_messages: false
 
 monolog:
     handlers:
@@ -50,12 +52,3 @@ twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
     exception_controller: AppBundle:Error:showException
-
-# Swiftmailer Configuration
-swiftmailer:
-    transport: '%mailer_transport%'
-    host: '%mailer_host%'
-    username: '%mailer_user%'
-    port: '%mailer_port%'
-    password: '%mailer_password%'
-    spool: { type: memory }

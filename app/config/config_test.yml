@@ -5,6 +5,7 @@ parameters:
     template_directory: "%kernel.root_dir%/../tests/fixtures/templates"
     default_sender_email: "test@example.com"
     default_sender_name: "Test Default Sender"
+    mailer_record_messages: true
 
 monolog:
     handlers:
@@ -24,7 +25,3 @@ framework:
 web_profiler:
     toolbar: false
     intercept_redirects: false
-
-swiftmailer:
-    disable_delivery: true
-    logging: true

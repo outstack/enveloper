@@ -6,10 +6,6 @@ parameters:
     database_user: root
     database_password: null
     mailer_transport: smtp
-    mailer_host:      "%env(ENVELOPER_SMTP_HOST)%"
-    mailer_user:      "%env(ENVELOPER_SMTP_USER)%"
-    mailer_password:  "%env(ENVELOPER_SMTP_PASSWORD)%"
-    mailer_port:      "%env(ENVELOPER_SMTP_PORT)%"
     secret: ThisTokenIsNotSoSecretChangeIt
 
     default_sender_email: "%env(ENVELOPER_DEFAULT_SENDER_EMAIL)%"
