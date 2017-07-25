@@ -98,12 +98,12 @@ services:
         arguments:
             - transport:  'smtp'
               record:     '%mailer_record_messages%'
-              host:       '%env(ENVELOPER_SMTP_HOST)%'
-              username:   '%env(ENVELOPER_SMTP_USER)%'
-              port:       '%env(ENVELOPER_SMTP_PORT)%'
-              password:   '%env(ENVELOPER_SMTP_PASSWORD)%'
-              encryption: '%env(SMTP_ENCRYPTION)%'
-              deliver_messages: false
+              host:       '%mailer_host%'
+              username:   '%mailer_username%'
+              port:       '%mailer_port%'
+              password:   '%mailer_password%'
+              encryption: '%mailer_encryption%'
+              deliver_messages: '%mailer_deliver_messages%'
 
     Outstack\Enveloper\SwiftMailerBridge\SwiftMailerInterface:
         factory: 'Outstack\Enveloper\SwiftMailerBridge\SwiftMailerFactory:create'
