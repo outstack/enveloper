@@ -7,6 +7,10 @@ parameters:
     default_sender_name: "Test Default Sender"
     mailer_record_messages: true
     mailer_deliver_messages: true
+    env(ENVELOPER_SMTP_HOST): mailhog
+    env(ENVELOPER_SMTP_USER): ~
+    env(ENVELOPER_SMTP_PASSWORD): ~
+    env(ENVELOPER_SMTP_PORT): 1025
 
 monolog:
     handlers:
