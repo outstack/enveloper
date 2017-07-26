@@ -10,6 +10,3 @@ framework:
 web_profiler:
     toolbar: true
     intercept_redirects: false
-
-#swiftmailer:
-#    delivery_addresses: ['me@example.com']

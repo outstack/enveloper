@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Outstack\Enveloper\SwiftMailerBridge\SwiftMailerInterface;
 use Outstack\Enveloper\Mail\Message;
 use Outstack\Enveloper\Mail\Participants\ParticipantList;
 use Outstack\Enveloper\Resolution\MessageResolver;
@@ -16,9 +17,8 @@ class OutboxController extends Controller
     /**
      * @Route("/outbox", name="homepage")
      */
-    public function indexAction(Request $request, MessageResolver $resolver, TemplateLoader $templateLoader)
+    public function indexAction(Request $request, MessageResolver $resolver, TemplateLoader $templateLoader, SwiftMailerInterface $mailer)
     {
-
         $payload = json_decode($request->getContent(), true);
 
         $message = $resolver->resolve(
@@ -26,7 +26,6 @@ class OutboxController extends Controller
             $payload['parameters']
         );
 
-        $mailer = $this->get('mailer');
         $mailer->send(
             $this->convertToSwiftMessage($message)
         );
@@ -41,7 +40,7 @@ class OutboxController extends Controller
         $swiftBcc   = $this->convertToSwiftRecipientArray($message->getBcc());
         $swiftFrom  = $this->convertToSwiftRecipientArray(new ParticipantList([$message->getSender()]));
 
-        $swiftMessage = \Swift_Message::newInstance()
+        $swiftMessage = (new \Swift_Message())
             ->setSubject($message->getSubject())
             ->setFrom($swiftFrom)
             ->setTo($swiftTo)
@@ -50,7 +49,7 @@ class OutboxController extends Controller
 
         foreach ($message->getAttachments() as $attachment) {
             $swiftMessage->attach(
-                \Swift_Attachment::newInstance($attachment->getData(), $attachment->getFilename())
+                new \Swift_Attachment($attachment->getData(), $attachment->getFilename())
             );
         }
         $swiftMessage

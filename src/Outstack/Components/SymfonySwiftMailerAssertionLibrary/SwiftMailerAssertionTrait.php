@@ -2,42 +2,27 @@
 
 namespace Outstack\Components\SymfonySwiftMailerAssertionLibrary;
 
-use Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector;
+use Outstack\Enveloper\SwiftMailerBridge\SwiftMailerRecordingDecorator;
 
 trait SwiftMailerAssertionTrait
 {
     /**
-     * @var MessageDataCollector
+     * @var SwiftMailerRecordingDecorator
      */
-    private $messageDataCollector;
-
-    protected function getMessageDataCollector(): MessageDataCollector
-    {
-        if (is_null($this->messageDataCollector)) {
-            throw new \LogicException("Cannot assert on messages sent without calling setMessageDataCollector first");
-        }
-        return $this->messageDataCollector;
-    }
-
-    public function setMessageDataCollector(MessageDataCollector $messageDataCollector)
-    {
-        $this->messageDataCollector = $messageDataCollector;
-    }
+    protected $mailerSpy;
 
     protected function assertCountSentMessages(int $expectedMessageCount)
     {
         $this->assertEquals(
             $expectedMessageCount,
-            $this->getMessageDataCollector()->getMessageCount()
+            $this->mailerSpy->getMessageCount()
         );
     }
 
     protected function assertMessageSent(callable $matcher)
     {
-        $collector = $this->getMessageDataCollector();
-
-        $this->assertGreaterThan(0, count($collector->getMessages()));
-        foreach ($collector->getMessages() as $message) {
+        $this->assertGreaterThan(0, count($this->mailerSpy->getMessages()));
+        foreach ($this->mailerSpy->getMessages() as $message) {
             if ($matcher($message)) {
                 return;
             }

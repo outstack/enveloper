@@ -13,20 +13,14 @@ Define your templates using simple template files and YAML, then send messages u
 
 See [Getting Started](./docs/01-getting-started.md) and [all docs](./docs)
 
-## Issues
+## Main features
 
- - [ ] Config/detection for SSL/TLS SMTP connections
+ - Simple setup with docker.
+ - Integration with most mail services like Mailgun, Mandrill, Amazon SES via SMTP
+ - Attachment support
+ - Powerful templating with [Twig](https://twig.sensiolabs.org/).
 
-## Roadmap
+## Issues / Roadmap
+Enveloper is currently in a workable and useful state, with minimal features. Things on the roadmap can be found at https://github.com/outstack/enveloper/issues . Those marked [High Priority](https://github.com/outstack/enveloper/issues?q=is%3Aopen+is%3Aissue+label%3A%22High+Priority%22) are likely to be worked on first. 
 
-Feel free to suggest other features we could add.
-
- - [x] Minimal alpha proof-of-concept
- - [ ] Good docker setup
- - [ ] Attachments
- - [ ] Setup instructions
- - [ ] Error pages, standardised content-types, etc..
- - [ ] API to view and reset sent messages, to enable integration tests within applications
- - [ ] Automatic generation of text/plain version from HTML
- - [ ] Automatic CSS inlining
- - [ ] MJML support
+Create an issue if there's something you'd like to see added, and feel free to tackle any already in the list. Any help is welcomed. 
