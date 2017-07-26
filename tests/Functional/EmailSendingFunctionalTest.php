@@ -2,6 +2,7 @@
 
 namespace Outstack\Enveloper\Tests\Functional;
 
+use Outstack\Enveloper\SwiftMailerBridge\SwiftMailerInterface;
 use Http\Client\Exception\HttpException;
 use Outstack\Components\SymfonySwiftMailerAssertionLibrary\SwiftMailerAssertionTrait;
 use Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector;
@@ -13,13 +14,13 @@ class EmailSendingFunctionalTest extends AbstractApiTestCase
 {
     use SwiftMailerAssertionTrait;
 
+    protected $mailerSpy;
+
     public function setUp()
     {
         parent::setUp();
 
-        $profiler = self::$kernel->getContainer()->get('profiler');
-        $profiler->enable();
-        $this->setMessageDataCollector($profiler->get('swiftmailer'));
+        $this->mailerSpy = self::$kernel->getContainer()->get(SwiftMailerInterface::class);
     }
 
     public function test_debugging_email_sent()

@@ -1,13 +1,27 @@
 imports:
-    - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    env(SMTP_ENCRYPTION): ~
     locale: en
     template_directory: "/app/data"
+    mailer_record_messages: false
+
+    secret: ThisTokenIsNotSoSecretChangeIt
+
+    default_sender_email: "%env(ENVELOPER_DEFAULT_SENDER_EMAIL)%"
+    default_sender_name: "%env(ENVELOPER_DEFAULT_SENDER_NAME)%"
+    mailer_host:       '%env(ENVELOPER_SMTP_HOST)%'
+    mailer_username:   '%env(ENVELOPER_SMTP_USER)%'
+    mailer_port:       '%env(ENVELOPER_SMTP_PORT)%'
+    mailer_password:   '%env(ENVELOPER_SMTP_PASSWORD)%'
+    mailer_encryption: '%env(SMTP_ENCRYPTION)%'
+    mailer_record_messages: false
+    mailer_deliver_messages: true
+
 
 monolog:
     handlers:
@@ -50,12 +64,3 @@ twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
     exception_controller: AppBundle:Error:showException
-
-# Swiftmailer Configuration
-swiftmailer:
-    transport: '%mailer_transport%'
-    host: '%mailer_host%'
-    username: '%mailer_user%'
-    port: '%mailer_port%'
-    password: '%mailer_password%'
-    spool: { type: memory }

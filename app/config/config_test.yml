@@ -5,6 +5,12 @@ parameters:
     template_directory: "%kernel.root_dir%/../tests/fixtures/templates"
     default_sender_email: "test@example.com"
     default_sender_name: "Test Default Sender"
+    mailer_record_messages: true
+    mailer_deliver_messages: false
+    env(ENVELOPER_SMTP_HOST): mailhog
+    env(ENVELOPER_SMTP_USER): ~
+    env(ENVELOPER_SMTP_PASSWORD): ~
+    env(ENVELOPER_SMTP_PORT): 1025
 
 monolog:
     handlers:
@@ -24,7 +30,3 @@ framework:
 web_profiler:
     toolbar: false
     intercept_redirects: false
-
-swiftmailer:
-    disable_delivery: true
-    logging: true

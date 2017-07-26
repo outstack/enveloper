@@ -93,3 +93,17 @@ services:
         class: League\Flysystem\Adapter\Local
         arguments:
             - '%template_directory%'
+
+    Outstack\Enveloper\SwiftMailerBridge\SwiftMailerFactory:
+        arguments:
+            - transport:  'smtp'
+              record:     '%mailer_record_messages%'
+              host:       '%mailer_host%'
+              username:   '%mailer_username%'
+              port:       '%mailer_port%'
+              password:   '%mailer_password%'
+              encryption: '%mailer_encryption%'
+              deliver_messages: '%mailer_deliver_messages%'
+
+    Outstack\Enveloper\SwiftMailerBridge\SwiftMailerInterface:
+        factory: 'Outstack\Enveloper\SwiftMailerBridge\SwiftMailerFactory:create'
