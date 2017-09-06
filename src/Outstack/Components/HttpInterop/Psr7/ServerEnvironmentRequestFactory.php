@@ -4,7 +4,6 @@ namespace Outstack\Components\HttpInterop\Psr7;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use function RingCentral\Psr7\parse_query;
 use Zend\Diactoros\ServerRequestFactory;
 
 /**
@@ -52,7 +51,8 @@ class ServerEnvironmentRequestFactory
         $server['QUERY_STRING']     = $request->getUri()->getQuery();
         $server['REQUEST_URI']      = $request->getUri()->getPath();
 
-        foreach (parse_query($request->getUri()->getQuery()) as $key => $value) {
+        parse_str($request->getUri()->getQuery(), $queryParams);
+        foreach ($queryParams as $key => $value) {
             $get[$key] = $value;
         }
 
