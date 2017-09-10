@@ -11,7 +11,7 @@ use Zend\Diactoros\Uri;
 
 class MessageHistoryFunctionalTest extends AbstractApiTestCase
 {
-    public function test_message_history_is_available_when_sent()
+    public function test_message_history_is_available_when_sent_and_can_be_reset()
     {
         $convertToStream = function($str) {
             $stream = fopen("php://temp", 'r+');
@@ -19,19 +19,83 @@ class MessageHistoryFunctionalTest extends AbstractApiTestCase
             rewind($stream);
             return $stream;
         };
-        $request = new Request(
+
+        $this->client->sendRequest(
+            new Request(
+                '/outbox',
+                'POST',
+                $convertToStream(json_encode([
+                    'template' => 'simplest-test-message',
+                    'parameters' => [
+                        'name' => 'Bob',
+                        'email' => 'bob@example.com'
+                    ]
+                ]))
+            )
+        );
+
+        $response = $this->client->sendRequest(
+            new Request(
             '/outbox',
-            'POST',
-            $convertToStream(json_encode([
+            'GET',
+            $convertToStream('')
+            )
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertEquals([
+            [
                 'template' => 'simplest-test-message',
                 'parameters' => [
                     'name' => 'Bob',
                     'email' => 'bob@example.com'
+                ],
+                'resolved' => [
+                    'subject' => 'Hello, Bob',
+                    'sender' => [
+                        'name' => 'Test Default Sender',
+                        'email' => 'test@example.com'
+                    ],
+                    'recipients' => [
+                        'to' => [
+                            [
+                                'name' => null,
+                                'email' => 'bob@example.com'
+                            ]
+                        ],
+                        'cc' => [],
+                        'bcc' => []
+                    ],
+                    'content' => [
+                        'text' => 'Hello, Bob',
+                        'html' => '<html>
+    <body>
+        <p>Hello, Bob</p>
+    </body>
+</html>'
+                    ]
                 ]
-            ]))
+            ]
+        ], json_decode((string) $response->getBody(), true));
+
+$this->client->sendRequest(
+            new Request(
+                '/outbox',
+                'DELETE',
+                $convertToStream('')
+            )
         );
 
-        $this->client->sendRequest($request);
+        $response = $this->client->sendRequest(
+            new Request(
+            '/outbox',
+            'GET',
+            $convertToStream('')
+            )
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertEquals([], json_decode((string) $response->getBody(), true));
 
     }
 }

@@ -21,6 +21,7 @@ parameters:
     mailer_encryption: '%env(SMTP_ENCRYPTION)%'
     mailer_record_messages: false
     mailer_deliver_messages: true
+    env(ENVELOPER_DB_DSN): "sqlite:///enveloper.sqlite"
 
 
 monolog:
@@ -58,6 +59,21 @@ framework:
     assets: ~
     php_errors:
         log: true
+
+doctrine:
+    dbal:
+        url: "%env(ENVELOPER_DB_DSN)%"
+
+    orm:
+        auto_generate_proxy_classes: '%kernel.debug%'
+        naming_strategy: doctrine.orm.naming_strategy.underscore
+        auto_mapping: true
+        mappings:
+            Outstack\Enveloper:
+                type: yml
+                dir: '%kernel.root_dir%/config/doctrine/orm'
+                alias: ~
+                prefix: Outstack\Enveloper
 
 # Twig Configuration
 twig:

@@ -11,6 +11,7 @@ parameters:
     env(ENVELOPER_SMTP_USER): ~
     env(ENVELOPER_SMTP_PASSWORD): ~
     env(ENVELOPER_SMTP_PORT): 1025
+    env(ENVELOPER_DB_DSN): "sqlite:///enveloper_test.sqlite"
 
 monolog:
     handlers:

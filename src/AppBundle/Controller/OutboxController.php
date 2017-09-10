@@ -2,78 +2,93 @@
 
 namespace AppBundle\Controller;
 
-use Outstack\Enveloper\SwiftMailerBridge\SwiftMailerInterface;
-use Outstack\Enveloper\Mail\Message;
-use Outstack\Enveloper\Mail\Participants\ParticipantList;
-use Outstack\Enveloper\Resolution\MessageResolver;
-use Outstack\Enveloper\Templates\Loader\TemplateLoader;
+use Outstack\Enveloper\Folders\SentMessagesFolder;
+use Outstack\Enveloper\Mail\Participants\Participant;
+use Outstack\Enveloper\Outbox;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class OutboxController extends Controller
 {
     /**
-     * @Route("/outbox", name="homepage")
+     * @var Outbox
      */
-    public function indexAction(Request $request, MessageResolver $resolver, TemplateLoader $templateLoader, SwiftMailerInterface $mailer)
+    private $outbox;
+    /**
+     * @var SentMessagesFolder
+     */
+    private $sentMessages;
+
+    public function __construct(Outbox $outbox, SentMessagesFolder $sentMessages)
     {
+        $this->outbox = $outbox;
+        $this->sentMessages = $sentMessages;
+    }
+
+    /**
+     * @Route("/outbox")
+     * @Method("POST")
+     */
+    public function postAction(Request $request)
+    {
+        $outbox = $this->outbox;
         $payload = json_decode($request->getContent(), true);
 
-        $message = $resolver->resolve(
-            $templateLoader->find($payload['template']),
-            $payload['parameters']
-        );
-
-        $mailer->send(
-            $this->convertToSwiftMessage($message)
-        );
+        $outbox->send($payload['template'], $payload['parameters']);
 
         return new Response('', 204);
     }
 
-    private function convertToSwiftMessage(Message $message)
+    /**
+     * @Route("/outbox")
+     * @Method("GET")
+     */
+    public function listAction(Request $request)
     {
-        $swiftTo    = $this->convertToSwiftRecipientArray($message->getTo());
-        $swiftCc    = $this->convertToSwiftRecipientArray($message->getCc());
-        $swiftBcc   = $this->convertToSwiftRecipientArray($message->getBcc());
-        $swiftFrom  = $this->convertToSwiftRecipientArray(new ParticipantList([$message->getSender()]));
-
-        $swiftMessage = (new \Swift_Message())
-            ->setSubject($message->getSubject())
-            ->setFrom($swiftFrom)
-            ->setTo($swiftTo)
-            ->setCc($swiftCc)
-            ->setBcc($swiftBcc);
-
-        foreach ($message->getAttachments() as $attachment) {
-            $swiftMessage->attach(
-                new \Swift_Attachment($attachment->getData(), $attachment->getFilename())
-            );
+        $data = [];
+        foreach ($this->sentMessages->listAll() as $sentMessage) {
+            $resolved = $sentMessage->getResolvedMessage();
+            $data[] = [
+                'template' => $sentMessage->getTemplate(),
+                'parameters' => $sentMessage->getParameters(),
+                'resolved' => [
+                    'subject' => $resolved->getSubject(),
+                    'sender' => $this->serialiseParticipant($resolved->getSender()),
+                    'content' => [
+                        'text' => $resolved->getText(),
+                        'html' => $resolved->getHtml()
+                    ],
+                    'recipients' => [
+                        'to' => array_map([$this, 'serialiseParticipant'], $resolved->getTo()->getIterator()->getArrayCopy()),
+                        'cc' => array_map([$this, 'serialiseParticipant'], $resolved->getCc()->getIterator()->getArrayCopy()),
+                        'bcc' => array_map([$this, 'serialiseParticipant'], $resolved->getBcc()->getIterator()->getArrayCopy()),
+                    ]
+                ]
+            ];
         }
-        $swiftMessage
-            ->setBody($message->getHtml(), 'text/html')
-            ->addPart($message->getText(), 'text/plain')
-        ;
-
-        return $swiftMessage;
-
+        return new Response(json_encode($data), 200);
     }
 
-    private function convertToSwiftRecipientArray(ParticipantList $recipientList)
+    /**
+     * @Route("/outbox")
+     * @Method("DELETE")
+     */
+    public function truncateAction()
     {
-        $swiftArray = [];
-        foreach ($recipientList->getIterator() as $recipient) {
+        $this->sentMessages->deleteAll();
+        return new Response('', 204);
+    }
 
-            if ($recipient->isNamed()) {
-                $swiftArray[(string) $recipient->getEmailAddress()] = $recipient->getName();
-            } else {
-                $swiftArray[] = (string) $recipient->getEmailAddress();
-            }
-        }
-
-        return $swiftArray;
-
+    private function serialiseParticipant(Participant $participant)
+    {
+        return [
+            'name'  => $participant->isNamed()
+                ? $participant->getName()
+                : null,
+            'email' => (string) $participant->getEmailAddress()
+        ];
     }
 }

@@ -106,4 +106,10 @@ services:
               deliver_messages: '%mailer_deliver_messages%'
 
     Outstack\Enveloper\SwiftMailerBridge\SwiftMailerInterface:
+        public: true
         factory: 'Outstack\Enveloper\SwiftMailerBridge\SwiftMailerFactory:create'
+
+    Outstack\Enveloper\Outbox: ~
+
+    Outstack\Enveloper\Folders\SentMessagesFolder: '@Outstack\Enveloper\Folders\DoctrineOrmSentMessagesFolder'
+    Outstack\Enveloper\Folders\DoctrineOrmSentMessagesFolder: ~

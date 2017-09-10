@@ -7,7 +7,10 @@ use Outstack\Components\HttpInterop\Psr7\ServerEnvironmentRequestFactory;
 use Outstack\Components\SymfonyKernelHttpClient\SymfonyKernelHttpClient;
 use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 abstract class AbstractApiTestCase extends KernelTestCase
@@ -30,5 +33,24 @@ abstract class AbstractApiTestCase extends KernelTestCase
             new DiactorosFactory(),
             new ServerEnvironmentRequestFactory([])
         );
+
+        $dbFile = self::$kernel->getRootDir() . '/../enveloper_test.sqlite';
+        if (file_exists($dbFile)) {
+            unlink($dbFile);
+        }
+
+        $this->executeConsoleCommand("doctrine:database:create");
+        $this->executeConsoleCommand("doctrine:schema:create");
+
+
     }
+
+    protected function executeConsoleCommand($cmd)
+    {
+        $application = new Application(self::$kernel);
+        $application->setAutoExit(false);
+        $application->setCatchExceptions(false);
+        $application->run(new StringInput("$cmd --env=test --no-interaction"), new NullOutput());
+    }
+
 }
