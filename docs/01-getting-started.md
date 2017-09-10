@@ -13,6 +13,8 @@ You'll also need to share a folder where Enveloper will look for your templates.
 Let's assume you've created a folder called `enveloper-data`. Run this to start the server
 
     docker run \
+        -d \
+        --name enveloper \
         -v $(pwd)/enveloper-data:/app/data \
         -e ENVELOPER_SMTP_HOST=smtp.mailgun.org \
         -e ENVELOPER_SMTP_USER=postmaster@example.com \
@@ -20,12 +22,17 @@ Let's assume you've created a folder called `enveloper-data`. Run this to start 
         -e ENVELOPER_SMTP_PORT=1025 \
         -e ENVELOPER_DEFAULT_SENDER_EMAIL=noreply@example.com \
         -e ENVELOPER_DEFAULT_SENDER_NAME=Your\ App \
+        -e ENVELOPER_DB_DSN=sqlite:////app/data/enveloper.sqlite
         -p 8080:80 \
         outstack/enveloper
 
+    docker exec -it enveloper
+
 ## Sending your first email
 
-If you're following this guide for the first time, `enveloper-data` will be empty and you'll have no templates to use. You can copy one from these docs at `docs/examples/hello-world` into `enveloper-data`. Make sure you take the whole folder, not just the files. 
+If you're following this guide for the first time, `enveloper-data` will be empty and you'll have no templates to use. 
+You can copy one from these docs at `docs/examples/hello-world` into `enveloper-data/templates`. 
+You should now have `enveloper-data/templates/hello-world/hello-world.meta.yml` 
 
 Test you can access the API:
 

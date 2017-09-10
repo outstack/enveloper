@@ -3,7 +3,6 @@ services:
     enveloper:
         volumes:
             - .:/app
-            - /app/vendor
         environment:
             - SYMFONY_ENV=dev
             - VIRTUAL_HOST=enveloper.dev

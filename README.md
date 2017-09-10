@@ -19,6 +19,7 @@ See [Getting Started](./docs/01-getting-started.md) and [all docs](./docs)
  - Integration with most mail services like Mailgun, Mandrill, Amazon SES via SMTP
  - Attachment support
  - Powerful templating with [Twig](https://twig.sensiolabs.org/).
+ - Records sent messages into [Relation DB supported by Doctrine ORM](http://docs.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/platforms.html). 
 
 ## Issues / Roadmap
 Enveloper is currently in a workable and useful state, with minimal features. Things on the roadmap can be found at https://github.com/outstack/enveloper/issues . Those marked [High Priority](https://github.com/outstack/enveloper/issues?q=is%3Aopen+is%3Aissue+label%3A%22High+Priority%22) are likely to be worked on first. 

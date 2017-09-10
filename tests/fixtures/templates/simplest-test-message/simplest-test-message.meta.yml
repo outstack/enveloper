@@ -1,9 +1,0 @@
----
-
-subject: "Hello, {{ name }}"
-recipients:
-  to:
-    - "{{ email }}"
-content:
-  html: "simplest-test-message.html.twig"
-  text: "simplest-test-message.text.twig"

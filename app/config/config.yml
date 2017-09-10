@@ -7,7 +7,7 @@ imports:
 parameters:
     env(SMTP_ENCRYPTION): ~
     locale: en
-    template_directory: "/app/data"
+    template_directory: "/app/data/templates"
     mailer_record_messages: false
 
     secret: ThisTokenIsNotSoSecretChangeIt
@@ -21,7 +21,7 @@ parameters:
     mailer_encryption: '%env(SMTP_ENCRYPTION)%'
     mailer_record_messages: false
     mailer_deliver_messages: true
-    env(ENVELOPER_DB_DSN): "sqlite:///enveloper.sqlite"
+    env(ENVELOPER_DB_DSN): "sqlite:////app/data/enveloper.sqlite"
 
 
 monolog:
