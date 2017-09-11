@@ -3,6 +3,7 @@
 namespace Outstack\Enveloper;
 
 use Outstack\Enveloper\Folders\SentMessagesFolder;
+use Outstack\Enveloper\Mail\Participants\Participant;
 use Outstack\Enveloper\Mail\SentMessage;
 use Outstack\Enveloper\Resolution\MessageResolver;
 use Outstack\Enveloper\Templates\Loader\TemplateLoader;
@@ -90,13 +91,13 @@ class Outbox
 
             if ($recipient->isNamed()) {
                 $swiftArray[(string) $recipient->getEmailAddress()] = $recipient->getName();
-            } else {
-                $swiftArray[] = (string) $recipient->getEmailAddress();
+                continue;
             }
+            $swiftArray[] = (string) $recipient->getEmailAddress();
+
         }
 
         return $swiftArray;
 
     }
-
 }

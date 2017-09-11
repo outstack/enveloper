@@ -34,7 +34,7 @@ abstract class AbstractApiTestCase extends KernelTestCase
             new ServerEnvironmentRequestFactory([])
         );
 
-        $dbFile = self::$kernel->getRootDir() . '/../enveloper_test.sqlite';
+        $dbFile = self::$kernel->getRootDir() . '/../tests/data/enveloper_test.sqlite';
         if (file_exists($dbFile)) {
             unlink($dbFile);
         }

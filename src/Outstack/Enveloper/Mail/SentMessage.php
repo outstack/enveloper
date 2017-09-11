@@ -26,6 +26,11 @@ class SentMessage
         $this->resolvedMessage = $resolvedMessage;
     }
 
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
     public function getTemplate(): string
     {
         return $this->template;

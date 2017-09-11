@@ -46,12 +46,13 @@ class OutboxController extends Controller
      * @Route("/outbox")
      * @Method("GET")
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         $data = [];
         foreach ($this->sentMessages->listAll() as $sentMessage) {
             $resolved = $sentMessage->getResolvedMessage();
             $data[] = [
+                'id' => $sentMessage->getId(),
                 'template' => $sentMessage->getTemplate(),
                 'parameters' => $sentMessage->getParameters(),
                 'resolved' => [
