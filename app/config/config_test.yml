@@ -2,7 +2,7 @@ imports:
     - { resource: config_dev.yml }
 
 parameters:
-    template_directory: "%kernel.root_dir%/../tests/fixtures/templates"
+    template_directory: "%kernel.root_dir%/../tests/data/templates"
     default_sender_email: "test@example.com"
     default_sender_name: "Test Default Sender"
     mailer_record_messages: true
@@ -11,6 +11,7 @@ parameters:
     env(ENVELOPER_SMTP_USER): ~
     env(ENVELOPER_SMTP_PASSWORD): ~
     env(ENVELOPER_SMTP_PORT): 1025
+    env(ENVELOPER_DB_DSN): "sqlite:///%kernel.root_dir%/../tests/data/enveloper_test.sqlite"
 
 monolog:
     handlers:

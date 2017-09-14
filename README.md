@@ -9,7 +9,7 @@
 
 Enveloper is a small service intended to be run in your infrastucture to speed up developing and testing transactional emails in your application.
 
-Define your templates using simple template files and YAML, then send messages using simple API requests. 
+Define your templates using simple template faciles and YAML, then send messages using simple API requests. 
 
 See [Getting Started](./docs/01-getting-started.md) and [all docs](./docs)
 
@@ -18,7 +18,9 @@ See [Getting Started](./docs/01-getting-started.md) and [all docs](./docs)
  - Simple setup with docker.
  - Integration with most mail services like Mailgun, Mandrill, Amazon SES via SMTP
  - Attachment support
+ - Simple API to send see sent messages
  - Powerful templating with [Twig](https://twig.sensiolabs.org/).
+ - Records sent messages into [Relational DB supported by Doctrine ORM](http://docs.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/platforms.html).
 
 ## Issues / Roadmap
 Enveloper is currently in a workable and useful state, with minimal features. Things on the roadmap can be found at https://github.com/outstack/enveloper/issues . Those marked [High Priority](https://github.com/outstack/enveloper/issues?q=is%3Aopen+is%3Aissue+label%3A%22High+Priority%22) are likely to be worked on first. 

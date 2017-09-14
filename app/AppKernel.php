@@ -13,6 +13,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new AppBundle\AppBundle(),
         ];
 

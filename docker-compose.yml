@@ -10,7 +10,9 @@ services:
             - ENVELOPER_SMTP_PORT=1025
             - ENVELOPER_SMTP_USER=test
             - ENVELOPER_SMTP_PASSWORD=test
+            - ENVELOPER_DEFAULT_SENDER_NAME=Default Sender
             - ENVELOPER_DEFAULT_SENDER_EMAIL=noreply@example.com
+            - ENVELOPER_DB_DSN=sqlite:////app/data/enveloper.sqlite
         links:
             - mailhog
     mailhog:

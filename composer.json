@@ -29,7 +29,9 @@
         "zendframework/zend-diactoros": "^1.4",
         "symfony/symfony": "^3.3",
         "psr/http-message": "^1.0",
-        "php-http/client-common": "^1.5"
+        "php-http/client-common": "^1.5",
+        "doctrine/orm": "^2.5",
+        "doctrine/doctrine-bundle": "^1.7"
     },
     "require-dev": {
         "symfony/phpunit-bridge": "^3.3"

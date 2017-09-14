@@ -1,0 +1,10 @@
+Outstack\Enveloper\Mail\Message:
+    type: embeddable
+    fields:
+        subject:
+            type: string
+            length: 1000
+        text:
+            type: text
+        html:
+            type: text

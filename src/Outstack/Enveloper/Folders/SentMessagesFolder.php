@@ -2,16 +2,17 @@
 
 namespace Outstack\Enveloper\Folders;
 
-
-use Outstack\Enveloper\ResolvedMessage;
+use Outstack\Enveloper\Mail\SentMessage;
 
 interface SentMessagesFolder
 {
-    public function record(ResolvedMessage $resolvedMessage);
+    public function record(SentMessage $resolvedMessage);
 
     /**
-     * @return \Generator|ResolvedMessage[]
+     * @return \Generator|SentMessage[]
      */
     public function listAll();
+
+    public function deleteAll(): void;
 
 }
