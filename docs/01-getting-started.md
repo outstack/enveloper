@@ -26,7 +26,10 @@ Let's assume you've created a folder called `enveloper-data`. Run this to start 
         -p 8080:80 \
         outstack/enveloper
 
-    docker exec -it enveloper
+If you haven't already done so, you will need to create the database and schema: 
+
+    docker exec -it enveloper /app/bin/console doctrine:database:create
+    docker exec -it enveloper /app/bin/console doctrine:schema:create
 
 ## Sending your first email
 
@@ -41,6 +44,13 @@ Test you can access the API:
 
 Send your first email using curl, like this:
 
-    curl -v http://localhost:8080/outbox \
+    curl http://localhost:8080/outbox \
         -X POST \
         -d '{"template":"hello-world","parameters":{"name":"Bob","email":"youremailaddresshere"}}'
+
+Now you can inspect your sent emails. This is useful in writing in your test-suite, for example:
+
+    curl -X GET http://localhost:8080/outbox
+        
+
+

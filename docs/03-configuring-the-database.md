@@ -12,3 +12,16 @@ By default, not all PHP DB extensions are available, so you may need to install 
 
 MySQL and SQLite are available by default.
 
+## DB lifecycle commands
+
+As the database uses the Symfony Doctrine ORM Bundle, you can use these commands to manage the DB. 
+
+Examples include:
+    
+To create the database if it does not exist:
+
+    docker exec -it enveloper /app/bin/console doctrine:database:create
+    
+To create the schema:
+
+    docker exec -it enveloper /app/bin/console doctrine:schema:create
