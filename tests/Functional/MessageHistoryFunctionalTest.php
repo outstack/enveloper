@@ -43,6 +43,14 @@ class MessageHistoryFunctionalTest extends AbstractApiTestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
+
+        $actual = json_decode((string)$response->getBody(), true);
+        $this->assertStringMatchesFormat(
+            '%x%x%x%x%x%x%x%x-%x%x%x%x-%x%x%x%x-%x%x%x%x-%x%x%x%x%x%x%x%x%x%x%x%x',
+            $actual[0]['id']
+        );
+        unset($actual[0]['id']);
+
         $this->assertEquals([
             [
                 'template' => 'simplest-test-message',
@@ -76,7 +84,7 @@ class MessageHistoryFunctionalTest extends AbstractApiTestCase
                     ]
                 ]
             ]
-        ], json_decode((string) $response->getBody(), true));
+        ], $actual);
 
 $this->client->sendRequest(
             new Request(
