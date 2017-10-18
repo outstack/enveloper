@@ -1,7 +1,7 @@
 version: '3.1'
 services:
     enveloper:
-        build: .
+        image: outstack/enveloper:test
         ports:
             - 80:80
         environment:

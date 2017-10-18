@@ -7,6 +7,7 @@ use Outstack\Enveloper\Mail\Message;
 use Outstack\Enveloper\Mail\Participants\EmailAddress;
 use Outstack\Enveloper\Mail\Participants\Participant;
 use Outstack\Enveloper\Templates\Template;
+use Outstack\Enveloper\Templates\TemplatePipeline;
 
 class MessageResolver
 {
@@ -34,9 +35,14 @@ class MessageResolver
      * @var null|string
      */
     private $defaultSenderName;
+    /**
+     * @var TemplatePipeline
+     */
+    private $pipeline;
 
     public function __construct(
         TemplateLanguage $language,
+        TemplatePipeline $pipeline,
         ParticipantListResolver $recipientListResolver,
         ParticipantResolver $recipientResolver,
         AttachmentListResolver $attachmentListResolver,
@@ -44,6 +50,7 @@ class MessageResolver
         ?string $defaultSenderName
     ) {
         $this->language = $language;
+        $this->pipeline = $pipeline;
         $this->recipientListResolver = $recipientListResolver;
         $this->recipientResolver = $recipientResolver;
         $this->defaultSenderEmail = $defaultSenderEmail;
@@ -66,8 +73,8 @@ class MessageResolver
             $this->recipientListResolver->resolveParticipantList($template->getRecipientsTo(), $parameters),
             $this->recipientListResolver->resolveParticipantList($template->getRecipientsCc(), $parameters),
             $this->recipientListResolver->resolveParticipantList($template->getRecipientsBcc(), $parameters),
-            $this->language->render($template->getText(), $parameters),
-            $this->language->render($template->getHtml(), $parameters),
+            $this->pipeline->render($template->getTextTemplateName(), $template->getText(), $parameters),
+            $this->pipeline->render($template->getHtmlTemplateName(), $template->getHtml(), $parameters),
             $this->attachmentListResolver->resolveAttachmentList($template->getAttachments(), $parameters)
         );
     }

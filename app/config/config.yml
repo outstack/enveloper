@@ -22,6 +22,8 @@ parameters:
     mailer_record_messages: false
     mailer_deliver_messages: true
     env(ENVELOPER_DB_DSN): "sqlite:////app/data/enveloper.sqlite"
+    pipeprint_url: '%env(ENVELOPER_PIPEPRINT_URL)%'
+    env(ENVELOPER_PIPEPRINT_URL): ~
 
 
 monolog:

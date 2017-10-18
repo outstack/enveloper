@@ -6,6 +6,7 @@ use Outstack\Enveloper\Mail\Attachments\Attachment;
 use Outstack\Enveloper\Mail\Participants\EmailAddress;
 use Outstack\Enveloper\Mail\Participants\Participant;
 use Outstack\Enveloper\Mail\Participants\ParticipantList;
+use Outstack\Enveloper\PipeprintBridge\TwigTemplatePipeline;
 use Outstack\Enveloper\Resolution\AttachmentListResolver;
 use Outstack\Enveloper\Resolution\AttachmentResolver;
 use Outstack\Enveloper\Resolution\MessageResolver;
@@ -38,6 +39,7 @@ class MessageResolverTest extends AbstractResolutionUnitTest
         $recipientResolver = new ParticipantResolver($this->language);
         $this->sut = new MessageResolver(
             $this->language,
+            new TwigTemplatePipeline(new \Twig_Environment(new \Twig_Loader_Chain())),
             new ParticipantListResolver($recipientResolver),
             $recipientResolver,
             $this->attachmentListResolver,
@@ -52,7 +54,9 @@ class MessageResolverTest extends AbstractResolutionUnitTest
                 new ParticipantListTemplate([new ParticipantTemplate(null, '{{ user.email }}')]),
                 new ParticipantListTemplate([]),
                 new ParticipantListTemplate([]),
+                'template.txt.twig',
                 'Welcome to app, {{ user.name }}',
+                'template.html.twig',
                 '<p>Welcome to app {{ user.name }}',
                 new AttachmentListTemplate([])
             ),
@@ -71,6 +75,7 @@ class MessageResolverTest extends AbstractResolutionUnitTest
         $recipientResolver = new ParticipantResolver($this->language);
         $this->sut = new MessageResolver(
             $this->language,
+            new TwigTemplatePipeline(new \Twig_Environment(new \Twig_Loader_Chain())),
             new ParticipantListResolver($recipientResolver),
             $recipientResolver,
             $this->attachmentListResolver,
@@ -85,7 +90,9 @@ class MessageResolverTest extends AbstractResolutionUnitTest
                 new ParticipantListTemplate([new ParticipantTemplate(null, '{{ user.email }}')]),
                 new ParticipantListTemplate([]),
                 new ParticipantListTemplate([]),
+                'template.txt.twig',
                 'Welcome to app, {{ user.name }}',
+                'template.html.twig',
                 '<p>Welcome to app {{ user.name }}',
                 new AttachmentListTemplate([
                     new AttachmentTemplate('attachment {{ number }}', 'a{{ number }}.txt')
@@ -109,6 +116,7 @@ class MessageResolverTest extends AbstractResolutionUnitTest
         $recipientResolver = new ParticipantResolver($this->language);
         $this->sut = new MessageResolver(
             $this->language,
+            new TwigTemplatePipeline(new \Twig_Environment(new \Twig_Loader_Chain())),
             new ParticipantListResolver($recipientResolver),
             $recipientResolver,
             $this->attachmentListResolver,
@@ -123,7 +131,9 @@ class MessageResolverTest extends AbstractResolutionUnitTest
                 new ParticipantListTemplate([new ParticipantTemplate(null, '{{ user.email }}')]),
                 new ParticipantListTemplate([]),
                 new ParticipantListTemplate([]),
+                'template.txt.twig',
                 'Welcome to app, {{ user.name }}',
+                'template.html.twig',
                 '<p>Welcome to app {{ user.name }}',
                 new AttachmentListTemplate([])
             ),
@@ -143,6 +153,7 @@ class MessageResolverTest extends AbstractResolutionUnitTest
         $recipientResolver = new ParticipantResolver($this->language);
         $this->sut = new MessageResolver(
             $this->language,
+            new TwigTemplatePipeline(new \Twig_Environment(new \Twig_Loader_Chain())),
             new ParticipantListResolver($recipientResolver),
             $recipientResolver,
             $this->attachmentListResolver,
@@ -157,7 +168,9 @@ class MessageResolverTest extends AbstractResolutionUnitTest
                 new ParticipantListTemplate([new ParticipantTemplate(null, '{{ user.email }}')]),
                 new ParticipantListTemplate([new ParticipantTemplate('{{ name }}', '{{ email }}', 'administrators')]),
                 new ParticipantListTemplate([]),
+                'template.txt.twig',
                 'Welcome to app, {{ user.name }}',
+                'template.html.twig',
                 '<p>Welcome to app {{ user.name }}',
                 new AttachmentListTemplate([])
             ),

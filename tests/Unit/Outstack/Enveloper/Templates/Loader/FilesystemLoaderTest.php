@@ -77,6 +77,8 @@ class FilesystemLoaderTest extends \PHPUnit_Framework_TestCase
                 new ParticipantListTemplate([]),
                 new ParticipantListTemplate([]),
                 null,
+                null,
+                'new-user-welcome.html.twig',
                 $html,
                 new AttachmentListTemplate([])
             ),
@@ -114,6 +116,8 @@ class FilesystemLoaderTest extends \PHPUnit_Framework_TestCase
                 new ParticipantListTemplate([]),
                 new ParticipantListTemplate([]),
                 null,
+                null,
+                'new-user-welcome.html.twig',
                 $html,
                 new AttachmentListTemplate([
                     new AttachmentTemplate('{{ contents }}', '{{ filename }}')
@@ -154,6 +158,8 @@ class FilesystemLoaderTest extends \PHPUnit_Framework_TestCase
                 new ParticipantListTemplate([]),
                 new ParticipantListTemplate([]),
                 null,
+                null,
+                'new-user-welcome.html.twig',
                 $html,
                 new AttachmentListTemplate([
                     new AttachmentTemplate('{{ item.contents }}', '{{ item.filename }}', 'attachments')
@@ -202,6 +208,8 @@ class FilesystemLoaderTest extends \PHPUnit_Framework_TestCase
                 ),
                 new ParticipantListTemplate([]),
                 null,
+                null,
+                'new-user-welcome.html.twig',
                 $html,
                 new AttachmentListTemplate([])
             ),

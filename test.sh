@@ -1,7 +1,12 @@
 #!/bin/bash
-./composer.phar install --no-scripts --no-interaction --no-autoloader
+set -e
+
+# Cleanup
 echo "" > var/logs/test.log
-./bin/console cache:clear --no-warmup --env=test && \
-./bin/console cache:warmup  --env=test && \
-./vendor/bin/simple-phpunit --filter=Unit && \
-./vendor/bin/simple-phpunit --filter=Functional || cat var/logs/test.log
+
+COMPOSE="docker-compose -f ./docker-compose.yml -f ./docker-compose.test.yml"
+
+$COMPOSE run enveloper ./vendor/bin/simple-phpunit --filter=Unit
+$COMPOSE run enveloper \
+    sh -c "./bin/console --env=test cache:warmup && ./vendor/bin/simple-phpunit --filter=Functional || cat var/logs/test.log"
+

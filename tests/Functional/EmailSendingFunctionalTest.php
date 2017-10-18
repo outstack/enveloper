@@ -56,6 +56,41 @@ class EmailSendingFunctionalTest extends AbstractApiTestCase
         );
     }
 
+    public function test_mjml_email_sent()
+    {
+        $convertToStream = function($str) {
+            $stream = fopen("php://temp", 'r+');
+            fputs($stream, $str);
+            rewind($stream);
+            return $stream;
+        };
+        $request = new Request(
+            '/outbox',
+            'POST',
+            $convertToStream(json_encode([
+                'template' => 'mjml-example',
+                'parameters' => [
+                    'name' => 'Bob',
+                    'email' => 'bob@example.com'
+                ]
+            ]))
+        );
+
+        $response = $this->client->sendRequest($request);
+        $this->assertEquals(204, $response->getStatusCode());
+
+        $this->assertCountSentMessages(1);
+        $this->assertMessageSent(
+            function(\Swift_Message $message) {
+                return
+                    false !== strpos($message->getBody(), '<!doctype html>') &&
+                    1 === count($message->getTo()) &&
+                    $this->doesToIncludeEmailAddress($message, 'bob@example.com') &&
+                    $this->messageWasFromContact($message, 'test@example.com', 'Test Default Sender');
+            }
+        );
+    }
+
     public function test_attachments_sent()
     {
         $convertToStream = function($str) {
