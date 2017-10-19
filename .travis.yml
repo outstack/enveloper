@@ -9,7 +9,7 @@ jobs:
     - stage: test
       install: docker build -t outstack/enveloper:$TRAVIS_COMMIT .
       script: echo "" > var/logs/test.log
-      script: docker-compose -f ./docker-compose.yml -f ./docker-compose.test.yml run enveloper composer install --no-scripts --no-interaction --no-autoloader
+      script: docker-compose -f ./docker-compose.yml -f ./docker-compose.test.yml run enveloper composer install --no-scripts --no-interaction --optimize-autoloader
       script: docker-compose -f ./docker-compose.yml -f ./docker-compose.test.yml run enveloper ./vendor/bin/simple-phpunit --filter=Unit
       script: docker-compose -f ./docker-compose.yml -f ./docker-compose.test.yml run enveloper sh -c "./bin/console --env=test cache:warmup && ./vendor/bin/simple-phpunit --filter=Functional || cat var/logs/test.log"
       after_script: cat /app/var/logs/test.log
