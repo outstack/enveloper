@@ -8,5 +8,5 @@ jobs:
   include:
     - stage: test
       install: docker build -t outstack/enveloper:$TRAVIS_COMMIT .
-      script: ./test.sh
+      script: ./test_travis.sh
       after_script: cat /app/var/logs/test.log
