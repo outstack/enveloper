@@ -9,5 +9,5 @@ COMPOSE="docker-compose -f ./docker-compose.yml -f ./docker-compose.travis.yml"
 
 $COMPOSE run enveloper ./vendor/bin/simple-phpunit --filter=Unit
 $COMPOSE run enveloper \
-    sh -c "./bin/console --env=test cache:warmup && ./vendor/bin/simple-phpunit --filter=Functional || cat var/logs/test.log"
+    sh -c "./bin/console --env=test cache:warmup && ./vendor/bin/simple-phpunit --filter=Functional"
 

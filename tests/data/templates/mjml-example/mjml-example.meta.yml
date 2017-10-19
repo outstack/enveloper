@@ -1,0 +1,9 @@
+---
+
+subject: "Hello, {{ name }}"
+recipients:
+  to:
+    - "{{ email }}"
+content:
+  html: "mjml-example.mjml.twig"
+  text: "mjml-example.text.twig"

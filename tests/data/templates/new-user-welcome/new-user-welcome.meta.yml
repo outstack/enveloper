@@ -1,0 +1,9 @@
+---
+
+subject: "Welcome, {{ user.handle }}"
+from: "noreply@example.com"
+recipients:
+  to: "{{ user.emailAddress }}"
+  cc:
+    template: "{{ item.name }} <{{ item.emailAddress }}>"
+    with: "administrators" # Could use expression language, any real need?
