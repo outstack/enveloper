@@ -2,6 +2,7 @@
 set -ev
 
 # Cleanup
+mkdir -p var/logs
 echo "" > var/logs/test.log
 
 COMPOSE="docker-compose -f ./docker-compose.yml -f ./docker-compose.test.yml"
