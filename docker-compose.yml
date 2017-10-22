@@ -27,8 +27,10 @@ services:
 
     twig:
         image: outstack/pipeprint-engine-twig
+        restart: on-failure
     mjml:
         image: outstack/pipeprint-engine-mjml
+        restart: on-failure
 
     mailhog:
         image: mailhog/mailhog

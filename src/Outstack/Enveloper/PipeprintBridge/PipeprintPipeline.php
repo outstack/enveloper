@@ -2,6 +2,7 @@
 
 namespace Outstack\Enveloper\PipeprintBridge;
 
+use Outstack\Enveloper\PipeprintBridge\Exceptions\PipelineFailed;
 use Outstack\Enveloper\Templates\TemplatePipeline;
 
 class PipeprintPipeline implements TemplatePipeline
@@ -59,11 +60,17 @@ class PipeprintPipeline implements TemplatePipeline
 
         $response = curl_exec($curl);
         $err = curl_error($curl);
+        $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        $contentType = curl_getinfo($curl, CURLINFO_CONTENT_TYPE);
 
         curl_close($curl);
 
-        if ($err) {
-            throw new \LogicException("Templating failed: $err");
+        if ($err || $statusCode < 200 || $statusCode > 299) {
+            $errorData = null;
+            if ($contentType == 'application/problem+json') {
+                $errorData = json_decode($response, true);
+            }
+            throw new PipelineFailed($err, $errorData);
         } else {
             return $response;
         }
