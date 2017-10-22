@@ -5,7 +5,7 @@ set -e
 mkdir -p var/logs
 echo "" > var/logs/test.log
 
-COMPOSE="docker-compose -f ./docker-compose.yml -f ./docker-compose.test.yml"
+COMPOSE="docker-compose -f ./docker-compose.yml -f ./docker-compose.tests.yml"
 
 $COMPOSE run enveloper composer install --no-scripts --no-interaction --optimize-autoloader
 $COMPOSE run enveloper ./vendor/bin/simple-phpunit --filter=Unit
