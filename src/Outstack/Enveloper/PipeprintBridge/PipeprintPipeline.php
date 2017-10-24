@@ -71,8 +71,7 @@ class PipeprintPipeline implements TemplatePipeline
                 $errorData = json_decode($response, true);
             }
             throw new PipelineFailed($err, $errorData);
-        } else {
-            return $response;
         }
+        return $response;
     }
 }
