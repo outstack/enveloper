@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 abstract class AbstractApiTestCase extends KernelTestCase
@@ -24,7 +25,7 @@ abstract class AbstractApiTestCase extends KernelTestCase
     {
         parent::setUp();
 
-        self::$kernel = static::createKernel();
+        self::$kernel = static::createKernel(['environment' => 'test']);
         self::$kernel->boot();
 
         $this->client = new SymfonyKernelHttpClient(
@@ -39,8 +40,8 @@ abstract class AbstractApiTestCase extends KernelTestCase
             unlink($dbFile);
         }
 
-        $this->executeConsoleCommand("doctrine:database:create");
-        $this->executeConsoleCommand("doctrine:schema:create");
+        $this->executeConsoleCommand("doctrine:database:create -v");
+        $this->executeConsoleCommand("doctrine:schema:create -v");
 
 
     }

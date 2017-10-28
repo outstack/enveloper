@@ -2,9 +2,11 @@
 
 namespace AppBundle\Controller;
 
+use Outstack\Components\ApiProvider\ApiProblemDetails\ApiProblemFactory;
 use Outstack\Enveloper\Folders\SentMessagesFolder;
 use Outstack\Enveloper\Mail\Participants\Participant;
 use Outstack\Enveloper\Outbox;
+use Outstack\Enveloper\PipeprintBridge\Exceptions\PipelineFailed;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,11 +23,16 @@ class OutboxController extends Controller
      * @var SentMessagesFolder
      */
     private $sentMessages;
+    /**
+     * @var ApiProblemFactory
+     */
+    private $problemFactory;
 
-    public function __construct(Outbox $outbox, SentMessagesFolder $sentMessages)
+    public function __construct(Outbox $outbox, SentMessagesFolder $sentMessages, ApiProblemFactory $problemFactory)
     {
         $this->outbox = $outbox;
         $this->sentMessages = $sentMessages;
+        $this->problemFactory = $problemFactory;
     }
 
     /**
@@ -37,9 +44,16 @@ class OutboxController extends Controller
         $outbox = $this->outbox;
         $payload = json_decode($request->getContent(), true);
 
-        $outbox->send($payload['template'], $payload['parameters']);
-
-        return new Response('', 204);
+        try {
+            $outbox->send($payload['template'], $payload['parameters']);
+            return new Response('', 204);
+        } catch (PipelineFailed $e) {
+            return $this->problemFactory
+                ->createProblem(500, 'Pipeline failed')
+                ->setDetail($e->getMessage())
+                ->addField('pipeprintError', $e->getErrorData())
+                ->buildJsonResponse();
+        }
     }
 
     /**

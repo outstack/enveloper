@@ -19,6 +19,10 @@ recipients:
   cc:
     template: "{{ item.name }} <{{ item.emailAddress }}>"
     with: "administrators"
+content:
+  html: "new-user-welcome.html.twig"
+  text: "new-user-welcome.text.twig"
+
 
 ```
 

@@ -1,7 +1,9 @@
-var
-vendor
-phpunit.phar
-supervisord.log
-composer.phar
-.DS_Store
-data/
+/var
+/vendor
+/phpunit.phar
+/supervisord.log
+/composer.phar
+/.DS_Store
+/data/
+/tests/data/enveloper_test.sqlite
+/docker-compose.override.yml

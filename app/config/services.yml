@@ -46,6 +46,15 @@ services:
         class: Outstack\Enveloper\Resolution\Twig\TwigTemplateLanguage
         arguments:
             - '@twig'
+    enveloper.template_pipeline:
+        factory: 'Outstack\Enveloper\PipeprintBridge\TemplatePipelineFactory:create'
+        class: Outstack\Enveloper\Templates\TemplatePipeline
+        arguments:
+            - '%pipeprint_url%'
+
+    Outstack\Enveloper\PipeprintBridge\TemplatePipelineFactory:
+        arguments:
+            - '@twig'
 
     enveloepr.resolution.participant_resolver:
         public: false
@@ -63,6 +72,7 @@ services:
         class: Outstack\Enveloper\Resolution\MessageResolver
         arguments:
             - '@enveloper.template_language'
+            - '@enveloper.template_pipeline'
             - '@enveloper.resolution.participant_list_resolver'
             - '@enveloepr.resolution.participant_resolver'
             - '@Outstack\Enveloper\Resolution\AttachmentListResolver'

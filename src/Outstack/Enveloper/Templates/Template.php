@@ -2,8 +2,6 @@
 
 namespace Outstack\Enveloper\Templates;
 
-use Outstack\Enveloper\Mail\Participants\Participant;
-
 class Template
 {
     /**
@@ -39,6 +37,14 @@ class Template
      * @var AttachmentListTemplate
      */
     private $attachments;
+    /**
+     * @var null|string
+     */
+    private $textTemplateName;
+    /**
+     * @var string
+     */
+    private $htmlTemplateName;
 
     public function __construct(
         string $subject,
@@ -46,7 +52,9 @@ class Template
         ParticipantListTemplate $recipientsTo,
         ParticipantListTemplate $recipientsCc,
         ParticipantListTemplate $recipientsBcc,
+        ?string $textTemplateName,
         ?string $text,
+        string $htmlTemplateName,
         string $html,
         AttachmentListTemplate $attachments
     ) {
@@ -55,9 +63,27 @@ class Template
         $this->recipientsCc = $recipientsCc;
         $this->recipientsBcc = $recipientsBcc;
         $this->text = $text;
+        $this->textTemplateName = $textTemplateName;
         $this->html = $html;
+        $this->htmlTemplateName = $htmlTemplateName;
         $this->sender = $sender;
         $this->attachments = $attachments;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getTextTemplateName()
+    {
+        return $this->textTemplateName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHtmlTemplateName(): string
+    {
+        return $this->htmlTemplateName;
     }
 
     public function getSubject(): string

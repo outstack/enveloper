@@ -17,6 +17,7 @@ class ApiProblemBuilder
     private $status;
     private $detail;
     private $instance;
+    private $fields = [];
 
     public function __construct(ResponseFactory $responseFactory)
     {
@@ -67,6 +68,10 @@ class ApiProblemBuilder
             $problemData['detail'] = $this->detail;
         }
 
+        foreach ($this->fields as $field => $data) {
+            $problemData[$field] = $data;
+        }
+
         return $this
             ->responseFactory
             ->createResponse(
@@ -77,5 +82,12 @@ class ApiProblemBuilder
                 ],
                 json_encode($problemData)
             );
+    }
+
+    public function addField(string $field, ?array $data)
+    {
+        $builder = clone $this;
+        $builder->fields[$field] = $data;
+        return $builder;
     }
 }

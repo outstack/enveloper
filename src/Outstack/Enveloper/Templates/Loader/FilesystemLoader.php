@@ -57,7 +57,9 @@ class FilesystemLoader implements TemplateLoader
             $this->parseRecipientListTemplate($config['recipients']['to']),
             $this->parseRecipientListTemplate($config['recipients']['cc']),
             $this->parseRecipientListTemplate($config['recipients']['bcc']),
+            $config['content']['text'],
             $textTemplate,
+            $config['content']['html'],
             $htmlTemplate,
             $this->parseAttachmentListTemplate($config['attachments'])
         );

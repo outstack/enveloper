@@ -1,7 +1,7 @@
 version: '3.1'
 services:
     enveloper:
-        build: .
+        image: outstack/enveloper:test
         ports:
             - 80:80
         environment:
@@ -27,10 +27,8 @@ services:
 
     twig:
         image: outstack/pipeprint-engine-twig
-        restart: on-failure
     mjml:
         image: outstack/pipeprint-engine-mjml
-        restart: on-failure
 
     mailhog:
         image: mailhog/mailhog
