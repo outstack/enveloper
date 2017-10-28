@@ -19,7 +19,7 @@ See [Getting Started](./docs/01-getting-started.md) and [all docs](./docs)
  - Integration with most mail services like Mailgun, Mandrill, Amazon SES via SMTP
  - Attachment support
  - Simple API to send see sent messages
- - Powerful templating with [Twig](https://twig.sensiolabs.org/).
+ - Support for Twig, MJML out of the box, [easily extensible for other languages](./docs/04-advanced-templating.md).
  - Records sent messages into [Relational DB supported by Doctrine ORM](http://docs.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/platforms.html).
 
 ## Issues / Roadmap
