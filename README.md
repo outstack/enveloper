@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/outstack/enveloper.svg?branch=master)](https://travis-ci.org/outstack/enveloper)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/93720c538eac41c78502805bfa6c04d2)](https://www.codacy.com/app/outstack/enveloper?utm_source=github.com&utm_medium=referral&utm_content=outstack/enveloper&utm_campaign=badger)
 
-**WWe've not yet reached version 1. You're still encouraged to use it, but if you find something amiss let us know. If you're not sure about something, just ask! To keep updated when we release new things, follow us on [Twitter](https://twitter.com/_outstack)**
+**We've not yet reached version 1. You're still encouraged to use it, but if you find something amiss let us know. If you're not sure about something, just ask! To keep updated when we release new things, follow us on [Twitter](https://twitter.com/_outstack)**
 
 ## What is it? 
 
