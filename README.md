@@ -9,6 +9,8 @@
 
 Enveloper is a small service intended to be run in your infrastucture to speed up developing and testing transactional emails in your application.
 
+<img src="https://i.imgur.com/y2bhAd3.gif" alt="Enveloper GIF Demo" />
+
 Define your templates using template files and YAML, then send messages using simple API requests. 
 
 See [Getting Started](./docs/01-getting-started.md) and [all docs](./docs)
