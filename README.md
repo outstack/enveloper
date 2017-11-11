@@ -13,7 +13,7 @@ Define your templates using template files and YAML, then send messages using si
 
 See [Getting Started](./docs/01-getting-started.md) and [all docs](./docs)
 
-<img src="https://i.imgur.com/Mq5ji1E.gif" width="800" height="594" />
+<img src="https://i.imgur.com/y2bhAd3.gif" alt="Enveloper GIF Demo" />
 
 ## Main features
 
