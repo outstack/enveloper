@@ -13,6 +13,8 @@ Define your templates using template files and YAML, then send messages using si
 
 See [Getting Started](./docs/01-getting-started.md) and [all docs](./docs)
 
+<img src="https://i.imgur.com/nUoOjMZ.gifv" />
+
 ## Main features
 
  - Simple setup with docker.
