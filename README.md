@@ -18,7 +18,7 @@ See [Getting Started](./docs/01-getting-started.md) and [all docs](./docs)
 ## Main features
 
  - Simple setup with docker.
- - Integration with most mail services like Mailgun, Mandrill, Amazon SES via SMTP
+ - Configurable to send to any SMTP server, e.g. Mailgun, Mandrill, Amazon SES or your private email server
  - Attachment support
  - Simple API to send see sent messages
  - Support for Twig, MJML out of the box, [easily extensible for other languages](./docs/04-advanced-templating.md).
