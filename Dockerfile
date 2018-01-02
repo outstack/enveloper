@@ -11,6 +11,7 @@ RUN apk update --no-cache \
     && apk add unzip \
     && docker-php-source extract \
     && docker-php-ext-install zip \
+    && docker-php-ext-install bcmath \
     && docker-php-source delete \
     && wget https://raw.githubusercontent.com/chrismytton/shoreman/380e745d1c2cd7bc163a1485ee57b20c76395198/shoreman.sh && chmod +x shoreman.sh && mv shoreman.sh /usr/local/bin/shoreman
 

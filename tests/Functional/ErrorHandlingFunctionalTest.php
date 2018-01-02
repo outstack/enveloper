@@ -68,4 +68,56 @@ class ErrorHandlingFunctionalTest extends AbstractApiTestCase
 
         throw new \LogicException("Expected HttpException, none caught");
     }
+
+    public function test_syntax_error_is_nicely_formatted()
+    {
+        $convertToStream = function($str) {
+            $stream = fopen("php://temp", 'r+');
+            fputs($stream, $str);
+            rewind($stream);
+            return $stream;
+        };
+
+        $request = new Request(
+            '/outbox',
+            'POST',
+            $convertToStream(json_encode([
+                'template-typo' => 'message-with-attachments',
+                'parameters' => [
+                    'email' => 'bob@example.com',
+                    'attachments' => [
+                        ['contents' => 'This is a note', 'filename' => 'note.txt']
+                    ]
+                ]
+            ]))
+        );
+
+        try {
+            $this->client->sendRequest($request);
+        } catch (HttpException $e) {
+
+            $response   = $e->getResponse();
+            $body       = (string) $response->getBody();
+
+            $this->assertEquals(400, $response->getStatusCode());
+            $this->assertJson($body);
+            $this->assertEquals([
+                'title' => 'Syntax Error',
+                'detail' => 'Request failed JSON schema validation',
+                'status' => 400,
+                'errors' => [
+                    [
+                        'error' => 'The object must contain the properties ["template"].',
+                        'path' => '/required'
+                    ]
+                ]
+            ], json_decode($body, true));
+            $this->assertEquals('application/problem+json', $response->getHeaderLine('Content-type'));
+
+            return;
+        }
+
+        throw new \LogicException("Expected HttpException, none caught");
+
+    }
 }
