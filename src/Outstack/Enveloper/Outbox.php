@@ -40,7 +40,7 @@ class Outbox
         $this->sentMessages = $sentMessages;
     }
 
-    public function send(string $templateName, array $parameters)
+    public function send(string $templateName, object $parameters)
     {
         $message = $this->messageResolver->resolve(
             $this->templateLoader->find($templateName),

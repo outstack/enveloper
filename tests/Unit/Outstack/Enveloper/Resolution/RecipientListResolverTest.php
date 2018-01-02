@@ -39,7 +39,7 @@ class RecipientListResolverTest extends AbstractResolutionUnitTest
                         new ParticipantTemplate(null, 'admin{{ number }}@{{ domain}}')
                     ]
                 ),
-                [
+                (object) [
                     'number' => 1,
                     'domain' => 'example.com'
                 ]
@@ -65,7 +65,7 @@ class RecipientListResolverTest extends AbstractResolutionUnitTest
                         new ParticipantTemplate('{{ name }}', '{{ email }}', 'administrators')
                     ]
                 ),
-                [
+                (object) [
                     'number' => 1,
                     'domain' => 'example.com',
                     'administrators' => [

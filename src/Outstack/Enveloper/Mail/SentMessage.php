@@ -19,7 +19,7 @@ class SentMessage
 
     private $id;
 
-    public function __construct(string $template, array $parameters, Message $resolvedMessage)
+    public function __construct(string $template, object $parameters, Message $resolvedMessage)
     {
         $this->template = $template;
         $this->parameters = $parameters;
@@ -36,9 +36,9 @@ class SentMessage
         return $this->template;
     }
 
-    public function getParameters(): array
+    public function getParameters(): object
     {
-        return $this->parameters;
+        return (object) $this->parameters;
     }
 
     public function getResolvedMessage(): Message

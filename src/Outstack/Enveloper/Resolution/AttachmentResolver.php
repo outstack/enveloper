@@ -17,7 +17,7 @@ class AttachmentResolver
         $this->language = $language;
     }
 
-    public function resolve(AttachmentTemplate $template, array $parameters)
+    public function resolve(AttachmentTemplate $template, object $parameters)
     {
         return new Attachment(
             $this->language->render(

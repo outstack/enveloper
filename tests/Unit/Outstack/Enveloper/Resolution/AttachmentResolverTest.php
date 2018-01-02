@@ -8,6 +8,9 @@ use Outstack\Enveloper\Templates\AttachmentTemplate;
 
 class AttachmentResolverTest extends AbstractResolutionUnitTest
 {
+    /**
+     * @var AttachmentResolver
+     */
     private $sut;
 
     public function setUp()
@@ -29,7 +32,7 @@ class AttachmentResolverTest extends AbstractResolutionUnitTest
                     '{{ string3 }}.txt',
                     null
                 ),
-                [
+                (object) [
                     'string1' => 'part 1',
                     'string2' => 'part 2',
                     'string3' => '2part'
