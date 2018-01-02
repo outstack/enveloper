@@ -31,7 +31,9 @@
         "psr/http-message": "^1.0",
         "php-http/client-common": "^1.5",
         "doctrine/orm": "^2.5",
-        "doctrine/doctrine-bundle": "^1.7"
+        "doctrine/doctrine-bundle": "^1.7",
+        "league/json-guard": "^1.0",
+        "league/json-reference": "^1.0"
     },
     "require-dev": {
         "symfony/phpunit-bridge": "^3.3"

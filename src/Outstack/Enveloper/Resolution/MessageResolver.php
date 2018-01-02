@@ -58,7 +58,7 @@ class MessageResolver
         $this->attachmentListResolver = $attachmentListResolver;
     }
 
-    public function resolve(Template $template, $parameters): Message
+    public function resolve(Template $template, object $parameters): Message
     {
         if (is_null($template->getSender())) {
             $from = new Participant($this->defaultSenderName, new EmailAddress($this->defaultSenderEmail));

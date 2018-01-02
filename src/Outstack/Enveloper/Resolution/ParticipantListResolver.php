@@ -18,7 +18,7 @@ class ParticipantListResolver
     }
 
 
-    public function resolveParticipantList(ParticipantListTemplate $template, array $parameters)
+    public function resolveParticipantList(ParticipantListTemplate $template, object $parameters)
     {
         $resolvedParticipants = [];
         foreach ($template->getParticipantTemplates() as $participantTemplate) {
@@ -26,12 +26,12 @@ class ParticipantListResolver
             $iterateOver = $participantTemplate->getIterateOver();
 
             if (is_null($iterateOver)) {
-                $resolvedParticipants[] = $this->recipientResolver->resolveRecipient($participantTemplate, $parameters);
+                $resolvedParticipants[] = $this->recipientResolver->resolveRecipient($participantTemplate, (object) $parameters);
                 continue;
             }
 
-            foreach ($parameters[$iterateOver] as $item) {
-                $resolvedParticipants[] = $this->recipientResolver->resolveRecipient($participantTemplate, $item);
+            foreach ($parameters->$iterateOver as $item) {
+                $resolvedParticipants[] = $this->recipientResolver->resolveRecipient($participantTemplate, (object) $item);
             }
         }
 

@@ -27,7 +27,7 @@ class RecipientResolverTest extends AbstractResolutionUnitTest
 
             $this->sut->resolveRecipient(
                 new ParticipantTemplate(null, 'admin{{ number }}@{{ domain}}'),
-                [
+                (object) [
                     'number' => 1,
                     'domain' => 'example.com'
                 ]
@@ -41,7 +41,7 @@ class RecipientResolverTest extends AbstractResolutionUnitTest
 
             $this->sut->resolveRecipient(
                 new ParticipantTemplate('Admin Number {{ number }}', 'admin1@example.com'),
-                [
+                (object) [
                     'number' => 1
                 ]
             )

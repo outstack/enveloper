@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use League\JsonGuard\ValidationError;
 use Outstack\Components\ApiProvider\ApiProblemDetails\ApiProblemFactory;
 use Outstack\Enveloper\Folders\SentMessagesFolder;
 use Outstack\Enveloper\Mail\Participants\Participant;
@@ -42,10 +43,30 @@ class OutboxController extends Controller
     public function postAction(Request $request)
     {
         $outbox = $this->outbox;
-        $payload = json_decode($request->getContent(), true);
+        $payload = json_decode($request->getContent());
+
+        $dereferencer  = \League\JsonReference\Dereferencer::draft4();
+        $schema        = $dereferencer->dereference('file://' . $this->container->getParameter('kernel.root_dir'). '/../schemata/outbox_post.json');
+
+        $validator     = new \League\JsonGuard\Validator($payload, $schema);
+
+        if ($validator->fails()) {
+            return $this->problemFactory
+                ->createProblem(400, 'Syntax Error')
+                ->setDetail('Request failed JSON schema validation')
+                ->addField('errors', array_map(
+                    function(ValidationError $e) {
+                        return [
+                            'error' => $e->getMessage(),
+                            'path' => $e->getSchemaPath()
+                        ];
+                    }, $validator->errors())
+                )
+                ->buildJsonResponse();
+        }
 
         try {
-            $outbox->send($payload['template'], $payload['parameters']);
+            $outbox->send($payload->template, $payload->parameters);
             return new Response('', 204);
         } catch (PipelineFailed $e) {
             return $this->problemFactory

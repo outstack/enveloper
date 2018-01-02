@@ -21,9 +21,9 @@ class TwigTemplatePipeline implements TemplatePipeline
         $this->twig = $twig;
     }
 
-    public function render(string $templateName, string $templateContents, array $parameters): string
+    public function render(string $templateName, string $templateContents, object $parameters): string
     {
-        return $this->twig->createTemplate($templateContents)->render($parameters);
+        return $this->twig->createTemplate($templateContents)->render((array) $parameters);
     }
 
 }

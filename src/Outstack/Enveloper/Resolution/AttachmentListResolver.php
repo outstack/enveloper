@@ -18,11 +18,11 @@ class AttachmentListResolver
         $this->attachmentResolver = $attachmentResolver;
     }
 
-    public function resolveAttachmentList(AttachmentListTemplate $attachmentListTemplate, array $params): AttachmentList
+    public function resolveAttachmentList(AttachmentListTemplate $attachmentListTemplate, object $parameters): AttachmentList
     {
         $resolved = [];
         foreach ($attachmentListTemplate->getAttachmentTemplates() as $template) {
-            foreach ($this->resolveTemplate($template, $params) as $attachment) {
+            foreach ($this->resolveTemplate($template, $parameters) as $attachment) {
                 $resolved[] = $attachment;
             }
         }
@@ -30,23 +30,23 @@ class AttachmentListResolver
         return new AttachmentList($resolved);
     }
 
-    private function resolveTemplate(AttachmentTemplate $template, array $params)
+    private function resolveTemplate(AttachmentTemplate $template, object $parameters)
     {
         if ($template->getIterateOver()) {
-            foreach ($this->resolveIteratively($template, $params) as $template) {
+            foreach ($this->resolveIteratively($template, $parameters) as $template) {
                 yield $template;
             }
 
             return;
         }
 
-        yield $this->attachmentResolver->resolve($template, $params);
+        yield $this->attachmentResolver->resolve($template, $parameters);
     }
 
-    private function resolveIteratively(AttachmentTemplate $template, array $params)
+    private function resolveIteratively(AttachmentTemplate $template, object $parameters)
     {
-        foreach ($params[$template->getIterateOver()] as $item) {
-            yield $this->attachmentResolver->resolve($template, ['item' => $item]);
+        foreach ($parameters->{$template->getIterateOver()} as $item) {
+            yield $this->attachmentResolver->resolve($template, (object) ['item' => $item]);
         }
     }
 }

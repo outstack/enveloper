@@ -4,5 +4,5 @@ namespace Outstack\Enveloper\Resolution;
 
 interface TemplateLanguage
 {
-    public function render(string $templateContents, array $parameters): string;
+    public function render(string $templateContents, object $parameters): string;
 }

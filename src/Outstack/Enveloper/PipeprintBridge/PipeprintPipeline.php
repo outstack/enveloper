@@ -19,7 +19,7 @@ class PipeprintPipeline implements TemplatePipeline
         $this->pipeprintUrl = $pipeprintUrl;
     }
 
-    public function render(string $templateName, string $templateContents, array $parameters): string
+    public function render(string $templateName, string $templateContents, object $parameters): string
     {
         $pipeline = [];
         $parts = explode('.', $templateName);

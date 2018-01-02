@@ -39,7 +39,7 @@ class AttachmentListResolverTest extends AbstractResolutionUnitTest
                         new AttachmentTemplate('{{ item.data }}', '{{ item.filename }}', 'attachments')
                     ]
                 ),
-                [
+                (object) [
                     'attachments' => [
                         ['data' => 'attachment 1', 'filename' => 'a1.txt'],
                         ['data' => 'attachment 2', 'filename' => 'a2.txt']
@@ -65,7 +65,7 @@ class AttachmentListResolverTest extends AbstractResolutionUnitTest
                         new AttachmentTemplate('{{ attachments[1].data }}', '{{ attachments[1].filename }}')
                     ]
                 ),
-                [
+                (object) [
                     'attachments' => [
                         ['data' => 'attachment 1', 'filename' => 'a1.txt'],
                         ['data' => 'attachment 2', 'filename' => 'a2.txt']

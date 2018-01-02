@@ -60,7 +60,7 @@ class MessageResolverTest extends AbstractResolutionUnitTest
                 '<p>Welcome to app {{ user.name }}',
                 new AttachmentListTemplate([])
             ),
-            [
+            (object) [
                 'user' => [
                     'name'  => 'john',
                     'email' => 'john@example.com'
@@ -98,7 +98,7 @@ class MessageResolverTest extends AbstractResolutionUnitTest
                     new AttachmentTemplate('attachment {{ number }}', 'a{{ number }}.txt')
                 ])
             ),
-            [
+            (object) [
                 'user' => [
                     'name'  => 'john',
                     'email' => 'john@example.com',
@@ -137,7 +137,7 @@ class MessageResolverTest extends AbstractResolutionUnitTest
                 '<p>Welcome to app {{ user.name }}',
                 new AttachmentListTemplate([])
             ),
-            [
+            (object) [
                 'user' => [
                     'name'  => 'john',
                     'email' => 'john@example.com'
@@ -174,7 +174,7 @@ class MessageResolverTest extends AbstractResolutionUnitTest
                 '<p>Welcome to app {{ user.name }}',
                 new AttachmentListTemplate([])
             ),
-            [
+            (object) [
                 'user' => [
                     'name'  => 'john',
                     'email' => 'john@example.com'

@@ -18,7 +18,7 @@ class ParticipantResolver
         $this->language = $language;
     }
 
-    public function resolveRecipient(ParticipantTemplate $participantTemplate, array $parameters)
+    public function resolveRecipient(ParticipantTemplate $participantTemplate, object $parameters)
     {
         $participantName = $participantTemplate->getName();
 
