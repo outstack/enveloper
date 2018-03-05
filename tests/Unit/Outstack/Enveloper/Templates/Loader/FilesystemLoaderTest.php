@@ -276,8 +276,7 @@ SCHEMA;
                 'Welcome, {{ user.handle }}',
                 new ParticipantTemplate(null, 'noreply@example.com'),
                 new ParticipantListTemplate([new ParticipantTemplate(null, '{{ user.email }}')]),
-                new ParticipantListTemplate([]
-                ),
+                new ParticipantListTemplate([]),
                 new ParticipantListTemplate([]),
                 null,
                 null,

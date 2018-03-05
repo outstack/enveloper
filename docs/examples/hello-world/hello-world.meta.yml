@@ -1,10 +1,9 @@
-{
-  "$schema": "http://json-schema.org/draft-06/schema#",
-  "properties": {
-    "email": {
-      "type": "string",
-      "format": "email"
-    },
-    "required": ["email"]
-  }
-}
+---
+
+subject: "Hello, {{ name }}"
+recipients:
+  to:
+    - "{{ email }}"
+content:
+  html: "hello-world.html.twig"
+  text: "hello-world.text.twig"
