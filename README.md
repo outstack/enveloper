@@ -28,3 +28,11 @@ See [Getting Started](./docs/01-getting-started.md) and [all docs](./docs)
 Enveloper is currently in a workable and useful state, with minimal features. Things on the roadmap can be found at https://github.com/outstack/enveloper/issues . Those marked [High Priority](https://github.com/outstack/enveloper/issues?q=is%3Aopen+is%3Aissue+label%3A%22High+Priority%22) are likely to be worked on first. 
 
 Create an issue if there's something you'd like to see added, and feel free to tackle any already in the list. Any help is welcomed. 
+
+## Running the tests / developing Enveloper
+
+There is a helper script in the root of the project, `test.sh` which will run all the tests. Inspect this file to see how to run a subset of the tests.
+
+Prerequisites:
+
+ - First you must download and install composer into the project root as `composer.phar`. Give it executable permissions.
