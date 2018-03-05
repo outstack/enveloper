@@ -32,6 +32,7 @@ class FilesystemLoader implements TemplateLoader
     public function find(string $name): Template
     {
         $configPath = "$name/$name.meta.yml";
+        $schemaPath = "$name/$name.schema.json";
 
         try {
             $config = Yaml::parse(
@@ -45,6 +46,11 @@ class FilesystemLoader implements TemplateLoader
 
         $config = $this->normaliseConfig($config);
 
+        $schema = null;
+        if ($this->filesystem->has($schemaPath)) {
+            $schema = json_decode($this->filesystem->read($schemaPath));
+        }
+
         $textTemplate = null;
         if (!is_null($config['content']['text'])) {
             $textTemplate = $this->filesystem->read("$name/{$config['content']['text']}");
@@ -52,6 +58,7 @@ class FilesystemLoader implements TemplateLoader
 
         $htmlTemplate = $this->filesystem->read("$name/{$config['content']['html']}");
         return new Template(
+            $schema,
             $config['subject'],
             array_key_exists('from', $config) ? $this->parseRecipientTemplate($config['from']) : null,
             $this->parseRecipientListTemplate($config['recipients']['to']),

@@ -8,6 +8,7 @@ use Outstack\Enveloper\Folders\SentMessagesFolder;
 use Outstack\Enveloper\Mail\Participants\Participant;
 use Outstack\Enveloper\Outbox;
 use Outstack\Enveloper\PipeprintBridge\Exceptions\PipelineFailed;
+use Outstack\Enveloper\Resolution\ParametersFailedSchemaValidation;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,7 +46,7 @@ class OutboxController extends Controller
         $outbox = $this->outbox;
         $payload = json_decode($request->getContent());
 
-        $dereferencer  = \League\JsonReference\Dereferencer::draft4();
+        $dereferencer  = \League\JsonReference\Dereferencer::draft6();
         $schema        = $dereferencer->dereference('file://' . $this->container->getParameter('kernel.root_dir'). '/../schemata/outbox_post.json');
 
         $validator     = new \League\JsonGuard\Validator($payload, $schema);
@@ -74,6 +75,20 @@ class OutboxController extends Controller
                 ->setDetail($e->getMessage())
                 ->addField('pipeprintError', $e->getErrorData())
                 ->buildJsonResponse();
+        } catch (ParametersFailedSchemaValidation $e) {
+            return $this->problemFactory
+                ->createProblem(400, 'Parameters failed JSON schema validation')
+                ->setDetail('A template was found but the parameters submitted to it do not validate against the configured JSON schema')
+                ->addField('errors', array_map(
+                        function(ValidationError $e) {
+                            return [
+                                'error' => $e->getMessage(),
+                                'path' => $e->getSchemaPath()
+                            ];
+                        }, $e->getErrors())
+                )
+                ->buildJsonResponse();
+
         }
     }
 
