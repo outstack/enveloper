@@ -70,6 +70,7 @@ class SymfonyKernelHttpClient implements HttpClient
         $psrResponse = $this->httpMessageFactory->createResponse($foundationResponse);
 
         if (!$foundationResponse->isSuccessful()) {
+            echo $foundationResponse->getContent();
             throw new HttpException(
                 "Kernel returned non-successful status code {$foundationResponse->getStatusCode()}",
                 $psrRequest,
