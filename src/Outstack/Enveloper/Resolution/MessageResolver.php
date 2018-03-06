@@ -60,6 +60,17 @@ class MessageResolver
 
     public function resolve(Template $template, object $parameters): Message
     {
+        if (!is_null($template->getSchema())) {
+            $dereferencer  = \League\JsonReference\Dereferencer::draft6();
+            $schema        = $dereferencer->dereference($template->getSchema());
+
+            $validator     = new \League\JsonGuard\Validator($parameters, $schema);
+            if ($validator->fails()) {
+                throw new ParametersFailedSchemaValidation($validator->errors());
+            }
+
+        }
+
         if (is_null($template->getSender())) {
             $from = new Participant($this->defaultSenderName, new EmailAddress($this->defaultSenderEmail));
         } else {

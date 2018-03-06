@@ -49,6 +49,7 @@ class MessageResolverTest extends AbstractResolutionUnitTest
 
         $message = $this->sut->resolve(
             new Template(
+                null,
                 'Welcome, {{ user.name }}',
                 new ParticipantTemplate(null, 'noreply@example.com'),
                 new ParticipantListTemplate([new ParticipantTemplate(null, '{{ user.email }}')]),
@@ -85,6 +86,7 @@ class MessageResolverTest extends AbstractResolutionUnitTest
 
         $message = $this->sut->resolve(
             new Template(
+                null,
                 'Welcome, {{ user.name }}',
                 new ParticipantTemplate(null, 'noreply@example.com'),
                 new ParticipantListTemplate([new ParticipantTemplate(null, '{{ user.email }}')]),
@@ -126,6 +128,7 @@ class MessageResolverTest extends AbstractResolutionUnitTest
 
         $message = $this->sut->resolve(
             new Template(
+                null,
                 'Welcome, {{ user.name }}',
                 null,
                 new ParticipantListTemplate([new ParticipantTemplate(null, '{{ user.email }}')]),
@@ -163,6 +166,7 @@ class MessageResolverTest extends AbstractResolutionUnitTest
 
         $message = $this->sut->resolve(
             new Template(
+                null,
                 'Welcome, {{ user.name }}',
                 new ParticipantTemplate(null, 'noreply@example.com'),
                 new ParticipantListTemplate([new ParticipantTemplate(null, '{{ user.email }}')]),

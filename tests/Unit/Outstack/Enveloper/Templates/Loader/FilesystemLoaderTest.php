@@ -71,6 +71,7 @@ class FilesystemLoaderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             new Template(
+                null,
                 'Welcome, {{ user.handle }}',
                 null,
                 new ParticipantListTemplate([new ParticipantTemplate(null, '{{ user.email }}')]),
@@ -110,6 +111,7 @@ class FilesystemLoaderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             new Template(
+                null,
                 'Welcome, {{ user.handle }}',
                 null,
                 new ParticipantListTemplate([new ParticipantTemplate(null, '{{ user.email }}')]),
@@ -152,6 +154,7 @@ class FilesystemLoaderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             new Template(
+                null,
                 'Welcome, {{ user.handle }}',
                 null,
                 new ParticipantListTemplate([new ParticipantTemplate(null, '{{ user.email }}')]),
@@ -196,6 +199,7 @@ class FilesystemLoaderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             new Template(
+                null,
                 'Welcome, {{ user.handle }}',
                 new ParticipantTemplate(null, 'noreply@example.com'),
                 new ParticipantListTemplate([new ParticipantTemplate(null, '{{ user.email }}')]),
@@ -206,6 +210,73 @@ class FilesystemLoaderTest extends \PHPUnit_Framework_TestCase
                         new ParticipantTemplate(null, '{{ item.email }}', 'administrators'),
                     ]
                 ),
+                new ParticipantListTemplate([]),
+                null,
+                null,
+                'new-user-welcome.html.twig',
+                $html,
+                new AttachmentListTemplate([])
+            ),
+            $this->sut->find('new-user-welcome')
+        );
+    }
+
+    public function test_schema_is_loaded()
+    {
+        $meta = Yaml::dump([
+            'subject' => 'Welcome, {{ user.handle }}',
+            'from' => 'noreply@example.com',
+            'recipients' => [
+                'to' => [
+                    '{{ user.email }}'
+                ]
+            ],
+            'content' => [
+                'html' => 'new-user-welcome.html.twig'
+            ]
+        ]);
+
+        $schema = <<<SCHEMA
+{
+  "properties": {
+    "user": {
+      "type": "object",
+      "properties": {
+        "handle": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
+SCHEMA;
+
+
+        $html = '<!DOCTYPE html><html><body><p>Welcome, {{ user.handle }}.</p></body></html>';
+
+        $this->filesystem->write("new-user-welcome/new-user-welcome.html.twig", $html);
+        $this->filesystem->write("new-user-welcome/new-user-welcome.meta.yml", $meta);
+        $this->filesystem->write("new-user-welcome/new-user-welcome.schema.json", $schema);
+
+
+        $this->assertEquals(
+            new Template(
+                (object) [
+                    'properties' => (object) [
+                        'user' => (object) [
+                            'type' => 'object',
+                            'properties' => (object) [
+                                'handle' => (object) [
+                                    'type' => 'string'
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'Welcome, {{ user.handle }}',
+                new ParticipantTemplate(null, 'noreply@example.com'),
+                new ParticipantListTemplate([new ParticipantTemplate(null, '{{ user.email }}')]),
+                new ParticipantListTemplate([]),
                 new ParticipantListTemplate([]),
                 null,
                 null,

@@ -45,8 +45,13 @@ class Template
      * @var string
      */
     private $htmlTemplateName;
+    /**
+     * @var object
+     */
+    private $schema;
 
     public function __construct(
+        ?object $schema,
         string $subject,
         ?ParticipantTemplate $sender,
         ParticipantListTemplate $recipientsTo,
@@ -68,6 +73,12 @@ class Template
         $this->htmlTemplateName = $htmlTemplateName;
         $this->sender = $sender;
         $this->attachments = $attachments;
+        $this->schema = $schema;
+    }
+
+    public function getSchema(): ?object
+    {
+        return $this->schema;
     }
 
     /**

@@ -120,4 +120,56 @@ class ErrorHandlingFunctionalTest extends AbstractApiTestCase
         throw new \LogicException("Expected HttpException, none caught");
 
     }
+
+    public function test_parameters_sent_to_template_are_validated_by_schema()
+    {
+        $convertToStream = function($str) {
+            $stream = fopen("php://temp", 'r+');
+            fputs($stream, $str);
+            rewind($stream);
+            return $stream;
+        };
+
+        $request = new Request(
+            '/outbox',
+            'POST',
+            $convertToStream(json_encode([
+                'template' => 'message-with-attachments',
+                'parameters' => [
+                    'email' => 'bob@example.com',
+                    'attachments' => [
+                        ['contents' => 'This is a note', 'filename' => '']
+                    ]
+                ]
+            ]))
+        );
+
+        try {
+            $this->client->sendRequest($request);
+        } catch (HttpException $e) {
+
+            $response   = $e->getResponse();
+            $body       = (string) $response->getBody();
+
+            $this->assertEquals(400, $response->getStatusCode());
+            $this->assertJson($body);
+            $this->assertEquals([
+                'title' => 'Parameters failed JSON schema validation',
+                'detail' => 'A template was found but the parameters submitted to it do not validate against the configured JSON schema',
+                'status' => 400,
+                'errors' => [
+                    [
+                        'error' => 'The string must be at least 1 characters long.',
+                        'path' => '/properties/attachments/items/0/properties/filename/minLength'
+                    ]
+                ]
+            ], json_decode($body, true));
+            $this->assertEquals('application/problem+json', $response->getHeaderLine('Content-type'));
+
+            return;
+        }
+
+        throw new \LogicException("Expected HttpException, none caught");
+
+    }
 }
