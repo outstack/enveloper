@@ -5,6 +5,9 @@
       "type": "string",
       "format": "email"
     },
-    "required": ["email"]
-  }
+    "name": {
+      "type": "string"
+    }
+  },
+  "required": ["email"]
 }
