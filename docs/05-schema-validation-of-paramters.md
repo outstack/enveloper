@@ -6,7 +6,6 @@ your template language throwing an error, and a 500 response.
 
 In order to minimise this, you can optionally define a JSON schema which runtime parameters will be validated against.
 
-So you've got the hello world working, and you want to try a real template.
 
 Simply define your JSON schema next to your template's meta file, e.g. `hello-world/hello-world.schema.json`:
 
@@ -18,7 +17,10 @@ Simply define your JSON schema next to your template's meta file, e.g. `hello-wo
       "type": "string",
       "format": "email"
     },
-    "required": ["email"]
-  }
+    "name": {
+      "type": "string"
+    }
+  },
+  "required": ["email"]
 }
 ```
