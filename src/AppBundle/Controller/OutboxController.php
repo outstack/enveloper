@@ -10,6 +10,7 @@ use Outstack\Enveloper\Outbox;
 use Outstack\Enveloper\PipeprintBridge\Exceptions\PipelineFailed;
 use Outstack\Enveloper\Resolution\ParametersFailedSchemaValidation;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -91,6 +92,73 @@ class OutboxController extends Controller
 
         }
     }
+
+    /**
+     * @Route("/outbox/preview")
+     * @Method("POST")
+     */
+    public function previewAction(Request $request)
+    {
+        $outbox = $this->outbox;
+        $payload = json_decode($request->getContent());
+
+        $dereferencer  = \League\JsonReference\Dereferencer::draft6();
+        $schema        = $dereferencer->dereference('file://' . $this->container->getParameter('kernel.root_dir'). '/../schemata/outbox_post.json');
+
+        $validator     = new \League\JsonGuard\Validator($payload, $schema);
+
+        if ($validator->fails()) {
+            return $this->problemFactory
+                ->createProblem(400, 'Syntax Error')
+                ->setDetail('Request failed JSON schema validation')
+                ->addField('errors', array_map(
+                    function(ValidationError $e) {
+                        return [
+                            'error' => $e->getMessage(),
+                            'path' => $e->getSchemaPath()
+                        ];
+                    }, $validator->errors())
+                )
+                ->buildJsonResponse();
+        }
+
+        try {
+            $message = $outbox->preview($payload->template, $payload->parameters);
+
+            foreach ($request->getAcceptableContentTypes() as $contentType) {
+                if ($contentType == 'text/plain' && $message->getText()) {
+
+                    return new Response($message->getText(), 200, ['Content-type' => 'text/plain']);
+                }
+                if ($contentType == 'text/html') {
+                    return new Response($message->getHtml(), 200, ['Content-type' => 'text/html']);
+                }
+            }
+            return new JsonResponse(['html' => $message->getHtml(), 'text' => $message->getText()], 200, ['Content-type' => 'application/json']);
+
+        } catch (PipelineFailed $e) {
+            return $this->problemFactory
+                ->createProblem(500, 'Pipeline failed')
+                ->setDetail($e->getMessage())
+                ->addField('pipeprintError', $e->getErrorData())
+                ->buildJsonResponse();
+        } catch (ParametersFailedSchemaValidation $e) {
+            return $this->problemFactory
+                ->createProblem(400, 'Parameters failed JSON schema validation')
+                ->setDetail('A template was found but the parameters submitted to it do not validate against the configured JSON schema')
+                ->addField('errors', array_map(
+                        function(ValidationError $e) {
+                            return [
+                                'error' => $e->getMessage(),
+                                'path' => $e->getSchemaPath()
+                            ];
+                        }, $e->getErrors())
+                )
+                ->buildJsonResponse();
+        }
+    }
+
+
 
     /**
      * @Route("/outbox")

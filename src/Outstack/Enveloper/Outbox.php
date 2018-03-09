@@ -56,6 +56,15 @@ class Outbox
         );
     }
 
+    public function preview(string $templateName, object $parameters): Message
+    {
+        return $this->messageResolver->resolve(
+            $this->templateLoader->find($templateName),
+            $parameters
+        );
+    }
+
+
     private function convertToSwiftMessage(Message $message)
     {
         $swiftTo    = $this->convertToSwiftRecipientArray($message->getTo());
