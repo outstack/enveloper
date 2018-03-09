@@ -36,15 +36,14 @@ class PipeprintPipeline implements TemplatePipeline
             $pipeline[] = ['engine' => $part];
         }
 
-        $pipeline[0]['template'] = $templateName;
+        $pipeline[0]['template'] = "template/$templateName";
 
         $files = [
-            $templateName => $templateContents
+            "template/$templateName" => $templateContents
         ];
-        foreach ($this->templateFilesystem->listContents('./_includes/') as $include) {
+        foreach ($this->templateFilesystem->listContents('./_includes/') as ['path' => $include]) {
             $files[$include] = $this->templateFilesystem->read($include);
         }
-        var_dump($files);
 
         $pipeprintRequest = json_encode(
             [

@@ -79,9 +79,9 @@ class EmailSendingFunctionalTest extends AbstractApiTestCase
         $this->assertCountSentMessages(1);
         $this->assertMessageSent(
             function(\Swift_Message $message) {
-                var_dump($message);exit;
                 return
                     1 === count($message->getTo()) &&
+                    false !== strpos($message->getBody(), 'Included file') &&
                     $this->doesToIncludeEmailAddress($message, 'test@example.com') &&
                     $this->messageWasFromContact($message, 'test@example.com', 'Test Default Sender');
             }
