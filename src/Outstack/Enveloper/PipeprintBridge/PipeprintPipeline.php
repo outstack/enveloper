@@ -2,6 +2,7 @@
 
 namespace Outstack\Enveloper\PipeprintBridge;
 
+use League\Flysystem\Filesystem;
 use Outstack\Enveloper\PipeprintBridge\Exceptions\PipelineFailed;
 use Outstack\Enveloper\Templates\TemplatePipeline;
 
@@ -13,10 +14,15 @@ class PipeprintPipeline implements TemplatePipeline
      * @var string
      */
     private $pipeprintUrl;
+    /**
+     * @var Filesystem
+     */
+    private $templateFilesystem;
 
-    public function __construct(string $pipeprintUrl)
+    public function __construct(Filesystem $templateFilesystem, string $pipeprintUrl)
     {
         $this->pipeprintUrl = $pipeprintUrl;
+        $this->templateFilesystem = $templateFilesystem;
     }
 
     public function render(string $templateName, string $templateContents, object $parameters): string
@@ -30,13 +36,18 @@ class PipeprintPipeline implements TemplatePipeline
             $pipeline[] = ['engine' => $part];
         }
 
-        $pipeline[0]['template'] = $templateName;
+        $pipeline[0]['template'] = "template/$templateName";
+
+        $files = [
+            "template/$templateName" => $templateContents
+        ];
+        foreach ($this->templateFilesystem->listContents('./_includes/') as ['path' => $include]) {
+            $files[$include] = $this->templateFilesystem->read($include);
+        }
 
         $pipeprintRequest = json_encode(
             [
-                'files' => [
-                    $templateName => $templateContents
-                ],
+                'files' => $files,
                 'pipeline' => $pipeline,
                 'parameters' => $parameters
             ]

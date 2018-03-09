@@ -1,0 +1,9 @@
+---
+
+subject: "Template with include"
+recipients:
+  to:
+    - "test@example.com"
+content:
+  html: "template-with-include.html.twig"
+  text: "template-with-include.text.twig"

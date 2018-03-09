@@ -56,6 +56,38 @@ class EmailSendingFunctionalTest extends AbstractApiTestCase
         );
     }
 
+    public function test_email_with_include()
+    {
+        $convertToStream = function($str) {
+            $stream = fopen("php://temp", 'r+');
+            fputs($stream, $str);
+            rewind($stream);
+            return $stream;
+        };
+        $request = new Request(
+            '/outbox',
+            'POST',
+            $convertToStream(json_encode([
+                'template' => 'template-with-include',
+                'parameters' => (object) []
+            ]))
+        );
+
+        $response = $this->client->sendRequest($request);
+        $this->assertEquals(204, $response->getStatusCode());
+
+        $this->assertCountSentMessages(1);
+        $this->assertMessageSent(
+            function(\Swift_Message $message) {
+                return
+                    1 === count($message->getTo()) &&
+                    false !== strpos($message->getBody(), 'Included file') &&
+                    $this->doesToIncludeEmailAddress($message, 'test@example.com') &&
+                    $this->messageWasFromContact($message, 'test@example.com', 'Test Default Sender');
+            }
+        );
+    }
+
     public function test_mjml_email_sent()
     {
         $convertToStream = function($str) {

@@ -54,6 +54,7 @@ services:
 
     Outstack\Enveloper\PipeprintBridge\TemplatePipelineFactory:
         arguments:
+            - '@enveloper.templates.template_loader.filesystem.flysystem'
             - '@twig'
 
     enveloepr.resolution.participant_resolver:
