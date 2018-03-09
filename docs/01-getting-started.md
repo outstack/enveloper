@@ -52,5 +52,16 @@ Now you can inspect your sent emails. This is useful in writing in your test-sui
 
     curl -X GET http://localhost:8080/outbox
         
+You can also preview the content of a rendered message without sending it, for example:
 
+    curl http://localhost:8080/outbox/preview \
+        -X POST \
+        -d '{"template":"hello-world","parameters":{"name":"Bob","email":"youremailaddresshere"}}'
+        -H 'Accept: text/html'
 
+or
+
+    curl http://localhost:8080/outbox/preview \
+        -X POST \
+        -d '{"template":"hello-world","parameters":{"name":"Bob","email":"youremailaddresshere"}}'
+        -H 'Accept: text/plain'
