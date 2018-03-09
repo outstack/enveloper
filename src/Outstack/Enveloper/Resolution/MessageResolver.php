@@ -84,7 +84,7 @@ class MessageResolver
             $this->recipientListResolver->resolveParticipantList($template->getRecipientsTo(), $parameters),
             $this->recipientListResolver->resolveParticipantList($template->getRecipientsCc(), $parameters),
             $this->recipientListResolver->resolveParticipantList($template->getRecipientsBcc(), $parameters),
-            $this->pipeline->render($template->getTextTemplateName(), $template->getText(), $parameters),
+            $template->getTextTemplateName() ? $this->pipeline->render($template->getTextTemplateName(), $template->getText(), $parameters) : null,
             $this->pipeline->render($template->getHtmlTemplateName(), $template->getHtml(), $parameters),
             $this->attachmentListResolver->resolveAttachmentList($template->getAttachments(), $parameters)
         );

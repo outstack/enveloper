@@ -75,10 +75,10 @@ class Outbox
                 new \Swift_Attachment($attachment->getData(), $attachment->getFilename())
             );
         }
-        $swiftMessage
-            ->setBody($message->getHtml(), 'text/html')
-            ->addPart($message->getText(), 'text/plain')
-        ;
+        $swiftMessage->setBody($message->getHtml(), 'text/html');
+        if ($message->getText()) {
+            $message->addPart($message->getText(), 'text/plain');
+        }
 
         return $swiftMessage;
 

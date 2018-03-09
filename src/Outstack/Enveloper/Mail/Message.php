@@ -17,7 +17,7 @@ class Message
      */
     private $subject;
     /**
-     * @var string
+     * @var ?string
      */
     private $text;
 
@@ -53,7 +53,7 @@ class Message
         ParticipantList $to,
         ParticipantList $cc,
         ParticipantList $bcc,
-        string $text,
+        ?string $text,
         string $html,
         AttachmentList $attachments
     )
@@ -108,7 +108,7 @@ class Message
         return $this->sender;
     }
 
-    public function getText(): string
+    public function getText(): ?string
     {
         return $this->text;
     }
