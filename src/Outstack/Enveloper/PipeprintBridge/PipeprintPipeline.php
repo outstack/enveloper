@@ -29,7 +29,7 @@ class PipeprintPipeline implements TemplatePipeline
     {
         $pipeline = [];
         $parts = explode('.', $templateName);
-        foreach (array_slice($parts, 1) as $part) {
+        foreach (array_reverse(array_slice($parts, 1)) as $part) {
             if (in_array($part, $this->extensionsWithoutSemantics)) {
                 continue;
             }
