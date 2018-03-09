@@ -13,18 +13,11 @@ class MessageHistoryFunctionalTest extends AbstractApiTestCase
 {
     public function test_message_history_is_available_when_sent_and_can_be_reset()
     {
-        $convertToStream = function($str) {
-            $stream = fopen("php://temp", 'r+');
-            fputs($stream, $str);
-            rewind($stream);
-            return $stream;
-        };
-
         $this->client->sendRequest(
             new Request(
                 '/outbox',
                 'POST',
-                $convertToStream(json_encode([
+                $this->convertToStream(json_encode([
                     'template' => 'simplest-test-message',
                     'parameters' => [
                         'name' => 'Bob',
@@ -38,7 +31,7 @@ class MessageHistoryFunctionalTest extends AbstractApiTestCase
             new Request(
             '/outbox',
             'GET',
-            $convertToStream('')
+                $this->convertToStream('')
             )
         );
 
@@ -90,7 +83,7 @@ $this->client->sendRequest(
             new Request(
                 '/outbox',
                 'DELETE',
-                $convertToStream('')
+                $this->convertToStream('')
             )
         );
 
@@ -98,7 +91,7 @@ $this->client->sendRequest(
             new Request(
             '/outbox',
             'GET',
-            $convertToStream('')
+                $this->convertToStream('')
             )
         );
 

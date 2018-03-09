@@ -71,17 +71,10 @@ class ErrorHandlingFunctionalTest extends AbstractApiTestCase
 
     public function test_syntax_error_is_nicely_formatted()
     {
-        $convertToStream = function($str) {
-            $stream = fopen("php://temp", 'r+');
-            fputs($stream, $str);
-            rewind($stream);
-            return $stream;
-        };
-
         $request = new Request(
             '/outbox',
             'POST',
-            $convertToStream(json_encode([
+            $this->convertToStream(json_encode([
                 'template-typo' => 'message-with-attachments',
                 'parameters' => [
                     'email' => 'bob@example.com',
@@ -123,17 +116,10 @@ class ErrorHandlingFunctionalTest extends AbstractApiTestCase
 
     public function test_parameters_sent_to_template_are_validated_by_schema()
     {
-        $convertToStream = function($str) {
-            $stream = fopen("php://temp", 'r+');
-            fputs($stream, $str);
-            rewind($stream);
-            return $stream;
-        };
-
         $request = new Request(
             '/outbox',
             'POST',
-            $convertToStream(json_encode([
+            $this->convertToStream(json_encode([
                 'template' => 'message-with-attachments',
                 'parameters' => [
                     'email' => 'bob@example.com',

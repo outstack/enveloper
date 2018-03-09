@@ -1,0 +1,8 @@
+---
+
+subject: "Hello, {{ name }}"
+recipients:
+  to:
+    - "{{ email }}"
+content:
+  html: "without-text-version.html.twig"

@@ -54,4 +54,12 @@ abstract class AbstractApiTestCase extends KernelTestCase
         $application->run(new StringInput("$cmd --env=test --no-interaction"), new NullOutput());
     }
 
+    protected function convertToStream(string $str)
+    {
+        $stream = fopen("php://temp", 'r+');
+        fputs($stream, $str);
+        rewind($stream);
+        return $stream;
+    }
+
 }
