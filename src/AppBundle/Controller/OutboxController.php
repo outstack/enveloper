@@ -125,7 +125,12 @@ class OutboxController extends Controller
         try {
             $message = $outbox->preview($payload->template, $payload->parameters);
 
-            foreach ($request->getAcceptableContentTypes() as $contentType) {
+            $acceptableContentTypes = $request->getAcceptableContentTypes();
+            if (empty($acceptableContentTypes)) {
+                $acceptableContentTypes[] = 'application/json';
+            }
+
+            foreach ($acceptableContentTypes as $contentType) {
                 if ($contentType == 'text/plain' && $message->getText()) {
 
                     return new Response($message->getText(), 200, ['Content-type' => 'text/plain']);
@@ -133,8 +138,26 @@ class OutboxController extends Controller
                 if ($contentType == 'text/html') {
                     return new Response($message->getHtml(), 200, ['Content-type' => 'text/html']);
                 }
+
+                if ($contentType == 'application/json') {
+                    return new JsonResponse(['html' => $message->getHtml(), 'text' => $message->getText()], 200, ['Content-type' => 'application/json']);
+                }
             }
-            return new JsonResponse(['html' => $message->getHtml(), 'text' => $message->getText()], 200, ['Content-type' => 'application/json']);
+
+            $availableContentTypes = [
+                'application/json',
+                'text/html'
+            ];
+            if ($message->getText()) {
+                $availableContentTypes[] = 'text/plain';
+            }
+
+            return $this->problemFactory
+                ->createProblem(406, 'Not Acceptable')
+                ->setDetail('No version of this email matching your Accept header could be found')
+                ->addField('availableContentTypes', $availableContentTypes)
+                ->buildJsonResponse();
+
 
         } catch (PipelineFailed $e) {
             return $this->problemFactory

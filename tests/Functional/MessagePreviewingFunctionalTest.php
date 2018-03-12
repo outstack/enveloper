@@ -109,4 +109,41 @@ HTML;
 
         $this->assertCountSentMessages(0);
     }
+
+    public function test_asking_for_unavailable_type_fails()
+    {
+        $request = new Request(
+            '/outbox/preview',
+            'POST',
+            $this->convertToStream(json_encode([
+                'template' => 'without-text-version',
+                'parameters' => [
+                    'name' => 'Bob',
+                    'email' => 'bob@example.com'
+                ]
+            ])),
+            [
+                'HTTP_ACCEPT' => 'text/plain'
+            ]
+        );
+        try {
+            $this->client->sendRequest($request);
+        } catch (HttpException $exception) {
+            $this->assertEquals(406, $exception->getResponse()->getStatusCode());
+            $this->assertEquals(
+                [
+                    'title' => 'Not Acceptable',
+                    'status' => 406,
+                    'detail' => 'No version of this email matching your Accept header could be found',
+                    'availableContentTypes' => [
+                        'application/json',
+                        'text/html'
+                    ]
+                ],
+                json_decode($exception->getResponse()->getBody(), true));
+            return;
+        }
+
+        throw new \LogicException("Expected HTTP exception but did not find one");
+    }
 }
