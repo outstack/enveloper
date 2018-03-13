@@ -15,4 +15,6 @@ interface SentMessagesFolder
 
     public function deleteAll(): void;
 
+    public function find(string $id): SentMessage;
+
 }

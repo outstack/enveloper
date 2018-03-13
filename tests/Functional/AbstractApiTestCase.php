@@ -2,6 +2,7 @@
 
 namespace Outstack\Enveloper\Tests\Functional;
 
+use Helmich\JsonAssert\JsonAssertions;
 use Http\Client\HttpClient;
 use Outstack\Components\HttpInterop\Psr7\ServerEnvironmentRequestFactory;
 use Outstack\Components\SymfonyKernelHttpClient\SymfonyKernelHttpClient;
@@ -20,6 +21,20 @@ abstract class AbstractApiTestCase extends KernelTestCase
      * @var HttpClient
      */
     protected $client;
+
+    use JsonAssertions;
+
+    protected function getSchema(string $name)
+    {
+        $projectDir = self::$kernel->getContainer()->getParameter('kernel.project_dir');
+
+        return json_decode(
+            file_get_contents(
+                "{$projectDir}/schemata/$name"
+            ),
+            true
+        );
+    }
 
     public function setUp()
     {
