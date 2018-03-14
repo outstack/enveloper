@@ -6,7 +6,7 @@ RUN apk update --no-cache \
     && apk add ca-certificates \
     && apk add zlib-dev \
     && apk add bash \
-    && apk add caddy \
+    && apk add nginx \
     && apk add zip \
     && apk add unzip \
     && docker-php-source extract \
@@ -26,7 +26,11 @@ RUN infrastructure/scripts/install-composer.sh && \
 
 COPY . /app
 RUN cp /app/infrastructure/php-fpm/php-fpm.conf /usr/local/etc/php-fpm.conf && \
-    cp /app/infrastructure/php-fpm/www.conf     /usr/local/etc/php-fpm.d/www.conf
+    cp /app/infrastructure/php-fpm/www.conf     /usr/local/etc/php-fpm.d/www.conf && \
+    cp /app/infrastructure/nginx/nginx.conf     /etc/nginx/conf.d/default.conf
+
+RUN ln -sf /dev/stdout /var/log/nginx/access.log && ln -sf /dev/stderr /var/log/nginx/error.log
+
 RUN chown -R www-data composer.phar var vendor
 
 ENV SYMFONY_ENV prod
