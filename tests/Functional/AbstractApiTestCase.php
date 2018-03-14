@@ -4,6 +4,7 @@ namespace Outstack\Enveloper\Tests\Functional;
 
 use Helmich\JsonAssert\JsonAssertions;
 use Http\Client\HttpClient;
+use League\JsonGuard\ValidationError;
 use Outstack\Components\HttpInterop\Psr7\ServerEnvironmentRequestFactory;
 use Outstack\Components\SymfonyKernelHttpClient\SymfonyKernelHttpClient;
 use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
@@ -22,19 +23,30 @@ abstract class AbstractApiTestCase extends KernelTestCase
      */
     protected $client;
 
-    use JsonAssertions;
+    protected $baseUri = "http://enveloper.test";
 
-    protected function getSchema(string $name)
+    protected function assertJsonDocumentMatchesSchema($document, $schema)
     {
-        $projectDir = self::$kernel->getContainer()->getParameter('kernel.project_dir');
+        $projectDir = __DIR__.'/../../';
+        $dereferencer = \League\JsonReference\Dereferencer::draft6();
+        $schema = $dereferencer->dereference("file://{$projectDir}/schemata/$schema");
 
-        return json_decode(
-            file_get_contents(
-                "{$projectDir}/schemata/$name"
-            ),
-            true
+        $validator = new \League\JsonGuard\Validator($document, $schema);
+
+        $this->assertFalse(
+            $validator->fails(),
+            implode(
+                "\n",
+                array_map(
+                    function(ValidationError $error) {
+                        return $error->getDataPath() . ": " . $error->getMessage() . json_encode($error->getData());
+                    },
+                    $validator->errors()
+                )
+            )
         );
     }
+
 
     public function setUp()
     {

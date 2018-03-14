@@ -15,7 +15,7 @@ class MessageHistoryFunctionalTest extends AbstractApiTestCase
     {
         $this->client->sendRequest(
             new Request(
-                '/outbox',
+                "{$this->baseUri}/outbox",
                 'POST',
                 $this->convertToStream(json_encode([
                     'template' => 'simplest-test-message',
@@ -29,7 +29,7 @@ class MessageHistoryFunctionalTest extends AbstractApiTestCase
 
         $response = $this->client->sendRequest(
             new Request(
-            '/outbox',
+                "{$this->baseUri}/outbox",
             'GET',
                 $this->convertToStream('')
             )
@@ -37,53 +37,39 @@ class MessageHistoryFunctionalTest extends AbstractApiTestCase
 
         $this->assertSame(200, $response->getStatusCode());
 
-        $actual = json_decode((string)$response->getBody(), true);
+        $actual = json_decode((string)$response->getBody());
 
-        $this->assertJsonDocumentMatchesSchema($actual['items'][0], $this->getSchema('outbox_sent_message.json'));
-        $this->assertStringMatchesFormat(
-            '%x%x%x%x%x%x%x%x-%x%x%x%x-%x%x%x%x-%x%x%x%x-%x%x%x%x%x%x%x%x%x%x%x%x',
-            $actual[0]['id']
+        $this->assertJsonDocumentMatchesSchema($actual, 'outbox_sent_messages_list.json');
+        $this->assertCount(1, $actual->items);
+        $this->assertSame('Hello, Bob',             $actual->items[0]->resolved->subject);
+        $this->assertSame('simplest-test-message',  $actual->items[0]->template);
+        $this->assertEquals(
+            (object) [
+                'name' => 'Bob',
+                'email' => 'bob@example.com'
+            ],
+            $actual->items[0]->parameters
         );
-        unset($actual[0]['id']);
 
-        $this->assertEquals([
-            [
-                'template' => 'simplest-test-message',
-                'parameters' => [
-                    'name' => 'Bob',
-                    'email' => 'bob@example.com'
-                ],
-                'resolved' => [
-                    'subject' => 'Hello, Bob',
-                    'sender' => [
-                        'name' => 'Test Default Sender',
-                        'email' => 'test@example.com'
-                    ],
-                    'recipients' => [
-                        'to' => [
-                            [
-                                'name' => null,
-                                'email' => 'bob@example.com'
-                            ]
-                        ],
-                        'cc' => [],
-                        'bcc' => []
-                    ],
-                    'content' => [
-                        'text' => 'Hello, Bob',
-                        'html' => '<html>
+        $this->assertEquals(
+            '<html>
     <body>
         <p>Hello, Bob</p>
     </body>
-</html>'
-                    ]
-                ]
-            ]
-        ], $actual);
+</html>',
+            $this->client->sendRequest(
+                new Request(
+                    $actual->items[0]->resolved->content->{'@id'},
+                    'GET',
+                    $this->convertToStream(''),
+                    ['HTTP_ACCEPT' => 'text/html']
+                )
+            )->getBody()->__toString()
+        );
 
 $this->client->sendRequest(
             new Request(
-                '/outbox',
+                "{$this->baseUri}/outbox",
                 'DELETE',
                 $this->convertToStream('')
             )
@@ -91,14 +77,17 @@ $this->client->sendRequest(
 
         $response = $this->client->sendRequest(
             new Request(
-            '/outbox',
+                "{$this->baseUri}/outbox",
             'GET',
                 $this->convertToStream('')
             )
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertEquals([], json_decode((string) $response->getBody(), true));
+        $this->assertEquals(
+            (object) ['items' => []],
+            json_decode((string) $response->getBody())
+        );
 
     }
 }

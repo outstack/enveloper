@@ -13,9 +13,10 @@
       "type": "object"
     },
     "resolved": {
-      "type": "object"
+      "type": "object",
+      "$ref": "./resolved_message.json"
     }
 
   },
-  "required": ["@id", "template", "paramters", "resolved"]
+  "required": ["@id", "template", "parameters", "resolved"]
 }

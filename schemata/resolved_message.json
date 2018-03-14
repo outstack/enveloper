@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "type": "object",
+  "properties": {
+    "subject": {
+      "type": "string"
+    },
+    "content": {
+      "type": "object"
+    },
+    "sender": {
+      "$ref": "./participant.json"
+    },
+    "recipients": {
+      "type": "object",
+      "properties": {
+        "to": {
+          "type": "array",
+          "items": {
+            "$ref": "./participant.json"
+          }
+        },
+        "cc": {
+          "type": "array",
+          "items": {
+            "$ref": "./participant.json"
+          }
+        },
+        "bcc": {
+          "type": "array",
+          "items": {
+            "$ref": "./participant.json"
+          }
+        }
+      }
+    }
+
+  },
+  "required": ["subject", "content", "sender", "recipients"]
+}
