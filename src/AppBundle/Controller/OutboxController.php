@@ -5,7 +5,9 @@ namespace AppBundle\Controller;
 use League\JsonGuard\ValidationError;
 use Outstack\Components\ApiProvider\ApiProblemDetails\ApiProblemFactory;
 use Outstack\Enveloper\Folders\SentMessagesFolder;
+use Outstack\Enveloper\Mail\Message;
 use Outstack\Enveloper\Mail\Participants\Participant;
+use Outstack\Enveloper\Mail\SentMessage;
 use Outstack\Enveloper\Outbox;
 use Outstack\Enveloper\PipeprintBridge\Exceptions\PipelineFailed;
 use Outstack\Enveloper\Resolution\ParametersFailedSchemaValidation;
@@ -15,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class OutboxController extends Controller
 {
@@ -125,39 +128,7 @@ class OutboxController extends Controller
         try {
             $message = $outbox->preview($payload->template, $payload->parameters);
 
-            $acceptableContentTypes = $request->getAcceptableContentTypes();
-            if (empty($acceptableContentTypes)) {
-                $acceptableContentTypes[] = 'application/json';
-            }
-
-            foreach ($acceptableContentTypes as $contentType) {
-                if ($contentType == 'text/plain' && $message->getText()) {
-
-                    return new Response($message->getText(), 200, ['Content-type' => 'text/plain']);
-                }
-                if ($contentType == 'text/html') {
-                    return new Response($message->getHtml(), 200, ['Content-type' => 'text/html']);
-                }
-
-                if ($contentType == 'application/json') {
-                    return new JsonResponse(['html' => $message->getHtml(), 'text' => $message->getText()], 200, ['Content-type' => 'application/json']);
-                }
-            }
-
-            $availableContentTypes = [
-                'application/json',
-                'text/html'
-            ];
-            if ($message->getText()) {
-                $availableContentTypes[] = 'text/plain';
-            }
-
-            return $this->problemFactory
-                ->createProblem(406, 'Not Acceptable')
-                ->setDetail('No version of this email matching your Accept header could be found')
-                ->addField('availableContentTypes', $availableContentTypes)
-                ->buildJsonResponse();
-
+            return $this->serialiseMessageContentsNegotiatingType($request, $message);
 
         } catch (PipelineFailed $e) {
             return $this->problemFactory
@@ -184,34 +155,37 @@ class OutboxController extends Controller
 
 
     /**
-     * @Route("/outbox")
+     * @Route("/outbox", name="app.outbox.list")
      * @Method("GET")
      */
     public function listAction()
     {
-        $data = [];
+        $data = (object) [
+            'items' => []
+        ];
         foreach ($this->sentMessages->listAll() as $sentMessage) {
-            $resolved = $sentMessage->getResolvedMessage();
-            $data[] = [
-                'id' => $sentMessage->getId(),
-                'template' => $sentMessage->getTemplate(),
-                'parameters' => $sentMessage->getParameters(),
-                'resolved' => [
-                    'subject' => $resolved->getSubject(),
-                    'sender' => $this->serialiseParticipant($resolved->getSender()),
-                    'content' => [
-                        'text' => $resolved->getText(),
-                        'html' => $resolved->getHtml()
-                    ],
-                    'recipients' => [
-                        'to' => array_map([$this, 'serialiseParticipant'], $resolved->getTo()->getIterator()->getArrayCopy()),
-                        'cc' => array_map([$this, 'serialiseParticipant'], $resolved->getCc()->getIterator()->getArrayCopy()),
-                        'bcc' => array_map([$this, 'serialiseParticipant'], $resolved->getBcc()->getIterator()->getArrayCopy()),
-                    ]
-                ]
-            ];
+            $data->items[] = $this->serialiseSentMessage($sentMessage);
         }
+        return new JsonResponse($data, 200);
+    }
+
+    /**
+     * @Route("/outbox/{id}", name="app.outbox.view", requirements={"id"="[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}"})
+     * @Method("GET")
+     */
+    public function findAction(string $id)
+    {
+        $data = $this->serialiseSentMessage($this->sentMessages->find($id));
         return new Response(json_encode($data), 200);
+    }
+
+    /**
+     * @Route("/outbox/{id}/content", name="app.outbox.view.content", requirements={"id"="[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}"})
+     * @Method("GET")
+     */
+    public function viewContentAction(Request $request, string $id)
+    {
+        return $this->serialiseMessageContentsNegotiatingType($request, $this->sentMessages->find($id)->getResolvedMessage());
     }
 
     /**
@@ -232,5 +206,82 @@ class OutboxController extends Controller
                 : null,
             'email' => (string) $participant->getEmailAddress()
         ];
+    }
+
+    private function serialiseSentMessage(SentMessage $sentMessage): array
+    {
+        $resolved = $sentMessage->getResolvedMessage();
+        $messageData = [
+            '@id' => $this->generateUrl(
+                'app.outbox.view',
+                [
+                    'id' => $sentMessage->getId()
+                ],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            ),
+            'template' => $sentMessage->getTemplate(),
+            'parameters' => $sentMessage->getParameters(),
+            'resolved' => [
+                'subject' => $resolved->getSubject(),
+                'sender' => $this->serialiseParticipant($resolved->getSender()),
+                'content' => [
+                    '@id' => $this->generateUrl('app.outbox.view.content', ['id' => $sentMessage->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
+                    'availableContentTypes' => $this->serialiseAvailableContentTypes($sentMessage->getResolvedMessage())
+                ],
+                'recipients' => [
+                    'to' => array_map([$this, 'serialiseParticipant'],
+                        $resolved->getTo()->getIterator()->getArrayCopy()),
+                    'cc' => array_map([$this, 'serialiseParticipant'],
+                        $resolved->getCc()->getIterator()->getArrayCopy()),
+                    'bcc' => array_map([$this, 'serialiseParticipant'],
+                        $resolved->getBcc()->getIterator()->getArrayCopy()),
+                ]
+            ]
+        ];
+        return $messageData;
+    }
+
+    private function serialiseAvailableContentTypes(Message $message)
+    {
+        $availableContentTypes = [
+            'application/json',
+            'text/html'
+        ];
+        if ($message->getText()) {
+            $availableContentTypes[] = 'text/plain';
+        }
+
+        return $availableContentTypes;
+    }
+
+    private function serialiseMessageContentsNegotiatingType(Request $request, Message $message)
+    {
+        $acceptableContentTypes = $request->getAcceptableContentTypes();
+        if (empty($acceptableContentTypes)) {
+            $acceptableContentTypes[] = 'application/json';
+        }
+
+        foreach ($acceptableContentTypes as $contentType) {
+            if ($contentType == 'text/plain' && $message->getText()) {
+
+                return new Response($message->getText(), 200, ['Content-type' => 'text/plain']);
+            }
+            if ($contentType == 'text/html') {
+                return new Response($message->getHtml(), 200, ['Content-type' => 'text/html']);
+            }
+
+            if ($contentType == 'application/json') {
+                return new JsonResponse(['html' => $message->getHtml(), 'text' => $message->getText()], 200, ['Content-type' => 'application/json']);
+            }
+        }
+
+        $availableContentTypes = $this->serialiseAvailableContentTypes($message);
+
+        return $this->problemFactory
+            ->createProblem(406, 'Not Acceptable')
+            ->setDetail('No version of this email matching your Accept header could be found')
+            ->addField('availableContentTypes', $availableContentTypes)
+            ->buildJsonResponse();
+
     }
 }

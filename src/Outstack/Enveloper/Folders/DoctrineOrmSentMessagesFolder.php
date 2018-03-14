@@ -35,4 +35,9 @@ class DoctrineOrmSentMessagesFolder implements SentMessagesFolder
     {
         $this->manager->createQuery("DELETE FROM " . SentMessage::class)->execute();
     }
+
+    public function find(string $id): SentMessage
+    {
+        return $this->manager->getRepository(SentMessage::class)->find($id);
+    }
 }
