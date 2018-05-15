@@ -68,19 +68,26 @@ class FilesystemLoader implements TemplateLoader
             $textTemplate,
             $config['content']['html'],
             $htmlTemplate,
-            $this->parseAttachmentListTemplate($config['attachments'])
+            $this->parseAttachmentListTemplate($config['attachments'], $name)
         );
     }
 
-    private function parseAttachmentListTemplate(array $attachments)
+    private function parseAttachmentListTemplate(array $attachments, string $templateName)
     {
         return new AttachmentListTemplate(
-            array_map([$this, 'parseAttachmentTemplate'], $attachments)
+            array_map(
+                function($attachment) use ($templateName) {
+                    return $this->parseAttachmentTemplate($attachment, $templateName);
+                },
+                $attachments)
         );
     }
 
-    private function parseAttachmentTemplate(array $template)
+    private function parseAttachmentTemplate(array $template, string $templateName)
     {
+        if (!array_key_exists('content', $template) && array_key_exists('source', $template)) {
+            $template['contents'] = '{% verbatim %}' . $this->filesystem->read("$templateName/{$template['source']}") . '{% endverbatim %}';
+        }
         return new AttachmentTemplate($template['contents'], $template['filename'], $template['iterateOver'] ?? null);
     }
 
