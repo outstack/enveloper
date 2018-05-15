@@ -85,10 +85,12 @@ class FilesystemLoader implements TemplateLoader
 
     private function parseAttachmentTemplate(array $template, string $templateName)
     {
+        $static = false;
         if (!array_key_exists('content', $template) && array_key_exists('source', $template)) {
-            $template['contents'] = '{% verbatim %}' . $this->filesystem->read("$templateName/{$template['source']}") . '{% endverbatim %}';
+            $static = true;
+            $template['contents'] = $this->filesystem->read("$templateName/{$template['source']}");
         }
-        return new AttachmentTemplate($template['contents'], $template['filename'], $template['iterateOver'] ?? null);
+        return new AttachmentTemplate($static, $template['contents'], $template['filename'], $template['iterateOver'] ?? null);
     }
 
     private function parseRecipientListTemplate(array $recipients): ParticipantListTemplate

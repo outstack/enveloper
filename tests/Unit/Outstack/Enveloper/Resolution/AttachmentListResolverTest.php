@@ -36,7 +36,7 @@ class AttachmentListResolverTest extends AbstractResolutionUnitTest
             $this->sut->resolveAttachmentList(
                 new AttachmentListTemplate(
                     [
-                        new AttachmentTemplate('{{ item.data }}', '{{ item.filename }}', 'attachments')
+                        new AttachmentTemplate(false, '{{ item.data }}', '{{ item.filename }}', 'attachments')
                     ]
                 ),
                 (object) [
@@ -61,8 +61,8 @@ class AttachmentListResolverTest extends AbstractResolutionUnitTest
             $this->sut->resolveAttachmentList(
                 new AttachmentListTemplate(
                     [
-                        new AttachmentTemplate('{{ attachments[0].data }}', '{{ attachments[0].filename }}'),
-                        new AttachmentTemplate('{{ attachments[1].data }}', '{{ attachments[1].filename }}')
+                        new AttachmentTemplate(false, '{{ attachments[0].data }}', '{{ attachments[0].filename }}'),
+                        new AttachmentTemplate(false, '{{ attachments[1].data }}', '{{ attachments[1].filename }}')
                     ]
                 ),
                 (object) [
