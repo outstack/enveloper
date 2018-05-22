@@ -1,6 +1,14 @@
+FROM php:7.2-fpm-alpine as deps
+COPY --from=composer:1.6 /usr/bin/composer /usr/bin/composer
+WORKDIR /app
+COPY app/AppKernel.php /app/app/
+COPY app/AppCache.php /app/app/
+COPY composer.json /app/
+COPY composer.lock /app/
+RUN composer install --optimize-autoloader --no-interaction --ignore-platform-reqs --no-scripts
+
 FROM php:7.2-fpm-alpine
 MAINTAINER Adam Quaile <adamquaile@gmail.com>
-
 RUN apk update --no-cache \
     && apk add openssl \
     && apk add ca-certificates \
@@ -16,14 +24,7 @@ RUN apk update --no-cache \
     && wget https://raw.githubusercontent.com/chrismytton/shoreman/380e745d1c2cd7bc163a1485ee57b20c76395198/shoreman.sh && chmod +x shoreman.sh && mv shoreman.sh /usr/local/bin/shoreman
 
 WORKDIR /app
-COPY composer.json /app/
-COPY composer.lock /app/
-COPY app/AppKernel.php /app/app/
-COPY app/AppCache.php /app/app/
-COPY infrastructure/scripts/install-composer.sh /app/infrastructure/scripts/
-RUN infrastructure/scripts/install-composer.sh && \
-    ./composer.phar install --optimize-autoloader --no-interaction --no-scripts
-
+COPY --from=deps /app/vendor /app/vendor
 COPY . /app
 RUN cp /app/infrastructure/php-fpm/php-fpm.conf /usr/local/etc/php-fpm.conf && \
     cp /app/infrastructure/php-fpm/www.conf     /usr/local/etc/php-fpm.d/www.conf && \
@@ -31,8 +32,7 @@ RUN cp /app/infrastructure/php-fpm/php-fpm.conf /usr/local/etc/php-fpm.conf && \
 
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && ln -sf /dev/stderr /var/log/nginx/error.log
 
-RUN chown -R www-data composer.phar var vendor
-
 ENV SYMFONY_ENV prod
 EXPOSE 80
+RUN addgroup enveloper && adduser -D -G enveloper enveloper && chown -R enveloper:enveloper /app
 CMD ["/usr/local/bin/shoreman"]
