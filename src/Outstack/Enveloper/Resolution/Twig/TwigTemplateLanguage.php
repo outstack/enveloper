@@ -18,6 +18,7 @@ class TwigTemplateLanguage implements TemplateLanguage
             $twig = new Twig_Environment(new \Twig_Loader_Chain());
         }
 
+        $twig->addExtension(new TwigEnveloperExtension());
         $this->twig = $twig;
     }
 

@@ -122,7 +122,7 @@ class FilesystemLoaderTest extends \PHPUnit_Framework_TestCase
                 'new-user-welcome.html.twig',
                 $html,
                 new AttachmentListTemplate([
-                    new AttachmentTemplate('{{ contents }}', '{{ filename }}')
+                    new AttachmentTemplate(false, '{{ contents }}', '{{ filename }}')
                 ])
             ),
             $this->sut->find('new-user-welcome')
@@ -165,7 +165,7 @@ class FilesystemLoaderTest extends \PHPUnit_Framework_TestCase
                 'new-user-welcome.html.twig',
                 $html,
                 new AttachmentListTemplate([
-                    new AttachmentTemplate('{{ item.contents }}', '{{ item.filename }}', 'attachments')
+                    new AttachmentTemplate(false, '{{ item.contents }}', '{{ item.filename }}', 'attachments')
                 ])
             ),
             $this->sut->find('new-user-welcome')

@@ -20,10 +20,9 @@ class AttachmentResolver
     public function resolve(AttachmentTemplate $template, object $parameters)
     {
         return new Attachment(
-            $this->language->render(
-                $template->getContents(),
-                $parameters
-            ),
+            $template->isStatic()
+                ? $template->getContents()
+                : $this->language->render($template->getContents(), $parameters),
             $this->language->render(
                 $template->getFilename(),
                 $parameters

@@ -1,0 +1,11 @@
+---
+
+subject: "Message with attachments"
+recipients:
+  to:
+    - "{{ email }}"
+content:
+  html: "message-with-static-attachments.mjml.twig"
+  text: "message-with-static-attachments.text.twig"
+attachments:
+  - { source: "static-attachment.txt", filename: "attachment.txt" }

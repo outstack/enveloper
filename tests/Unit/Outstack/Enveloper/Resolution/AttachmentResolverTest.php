@@ -28,6 +28,7 @@ class AttachmentResolverTest extends AbstractResolutionUnitTest
             ),
             $this->sut->resolve(
                 new AttachmentTemplate(
+                    false,
                     '{{ string1 }} - {{ string2 }}',
                     '{{ string3 }}.txt',
                     null
