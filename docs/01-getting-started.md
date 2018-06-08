@@ -23,7 +23,7 @@ Let's assume you've created a folder called `enveloper-data`. Run this to start 
         -e ENVELOPER_DEFAULT_SENDER_EMAIL=noreply@example.com \
         -e ENVELOPER_DEFAULT_SENDER_NAME=Your\ App \
         -e ENVELOPER_DB_DSN=sqlite:////app/data/enveloper.sqlite
-        -p 8080:80 \
+        -p 8080:8080 \
         outstack/enveloper
 
 If you haven't already done so, you will need to create the database and schema: 

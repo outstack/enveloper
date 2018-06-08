@@ -28,11 +28,19 @@ COPY --from=deps /app/vendor /app/vendor
 COPY . /app
 RUN cp /app/infrastructure/php-fpm/php-fpm.conf /usr/local/etc/php-fpm.conf && \
     cp /app/infrastructure/php-fpm/www.conf     /usr/local/etc/php-fpm.d/www.conf && \
-    cp /app/infrastructure/nginx/nginx.conf     /etc/nginx/conf.d/default.conf
+    cp /app/infrastructure/nginx/nginx.conf     /etc/nginx/nginx.conf && \
+    cp /app/infrastructure/nginx/vhost.conf     /etc/nginx/conf.d/default.conf
 
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && ln -sf /dev/stderr /var/log/nginx/error.log
 
 ENV SYMFONY_ENV prod
-EXPOSE 80
-RUN addgroup enveloper && adduser -D -G enveloper enveloper && chown -R enveloper:enveloper /app
+EXPOSE 8080
+RUN addgroup enveloper && adduser -D -G enveloper enveloper && \
+    chown -R enveloper:enveloper \
+        /app \
+        /var/lib/nginx/ \
+        /etc/nginx \
+        /var/tmp/nginx
+
+USER enveloper
 CMD ["/usr/local/bin/shoreman"]
