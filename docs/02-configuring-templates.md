@@ -15,10 +15,12 @@ Imagine you're writing the welcome email for your onboarding process, you create
 subject: "Welcome, {{ user.handle }}"
 from: "noreply@example.com"
 recipients:
-  to: "{{ user.emailAddress }}"
+  to:
+    - "{{ user.email }}"
   cc:
-    template: "{{ item.name }} <{{ item.emailAddress }}>"
-    with: "administrators"
+    - name: "{{ item.name }}"
+      email: "{{ item.email }}>"
+      iterateOver: "administrators"
 content:
   html: "new-user-welcome.html.twig"
   text: "new-user-welcome.text.twig"

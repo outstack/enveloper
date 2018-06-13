@@ -31,7 +31,7 @@ class ParticipantListResolver
             }
 
             foreach ($parameters->$iterateOver as $item) {
-                $resolvedParticipants[] = $this->recipientResolver->resolveRecipient($participantTemplate, (object) $item);
+                $resolvedParticipants[] = $this->recipientResolver->resolveRecipient($participantTemplate, (object) ['item' => $item]);
             }
         }
 
