@@ -19,7 +19,7 @@ recipients:
     - "{{ user.email }}"
   cc:
     - name: "{{ item.name }}"
-      email: "{{ item.email }}>"
+      email: "{{ item.email }}"
       iterateOver: "administrators"
 content:
   html: "new-user-welcome.html.twig"
