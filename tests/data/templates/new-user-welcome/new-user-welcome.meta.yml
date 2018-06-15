@@ -3,7 +3,12 @@
 subject: "Welcome, {{ user.handle }}"
 from: "noreply@example.com"
 recipients:
-  to: "{{ user.emailAddress }}"
+  to:
+    - "{{ user.email }}"
   cc:
-    template: "{{ item.name }} <{{ item.emailAddress }}>"
-    with: "administrators" # Could use expression language, any real need?
+    - name: "{{ item.name }}"
+      email: "{{ item.email }}"
+      iterateOver: "administrators" # Could use expression language, any real need?
+content:
+  html: "new-user-welcome.mjml.twig"
+  text: "new-user-welcome.text.twig"

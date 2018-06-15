@@ -49,6 +49,49 @@ class EmailSendingFunctionalTest extends AbstractApiTestCase
             }
         );
     }
+
+    public function test_email_with_multiple_ccs()
+    {
+        $request = new Request(
+            '/outbox',
+            'POST',
+            $this->convertToStream(json_encode([
+                'template' => 'new-user-welcome',
+                'parameters' => [
+                    'user' => [
+                        'handle' => 'bobtheuser',
+                        'email' => 'bob@example.com',
+                    ],
+                    'administrators' => [
+                        [
+                            'name' => 'Jane',
+                            'email' => 'janetheadmin@example.com'
+                        ],
+                        [
+                            'name' => 'Sonia',
+                            'email' => 'soniatheadmin@example.com'
+                        ],
+                    ]
+                ]
+            ]))
+        );
+
+        $response = $this->client->sendRequest($request);
+        $this->assertEquals(204, $response->getStatusCode());
+
+        $this->assertCountSentMessages(1);
+        $this->assertMessageSent(
+            function(\Swift_Message $message) {
+                return
+                    2 === count($message->getCc()) &&
+                    array_key_exists('janetheadmin@example.com', $message->getCc()) &&
+                    array_key_exists('soniatheadmin@example.com', $message->getCc()) &&
+                    $message->getCc()['janetheadmin@example.com'] == 'Jane' &&
+                    $message->getCc()['soniatheadmin@example.com'] == 'Sonia';
+            }
+        );
+    }
+
     public function test_debugging_email_sent()
     {
         $request = new Request(

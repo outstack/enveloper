@@ -62,7 +62,7 @@ class RecipientListResolverTest extends AbstractResolutionUnitTest
                 new ParticipantListTemplate(
                     [
                         new ParticipantTemplate(null, 'admin{{ number }}@{{ domain}}'),
-                        new ParticipantTemplate('{{ name }}', '{{ email }}', 'administrators')
+                        new ParticipantTemplate('{{ item.name }}', '{{ item.email }}', 'administrators')
                     ]
                 ),
                 (object) [
