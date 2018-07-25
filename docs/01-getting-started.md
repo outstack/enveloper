@@ -22,7 +22,7 @@ Let's assume you've created a folder called `enveloper-data`. Run this to start 
         -e ENVELOPER_SMTP_PORT=1025 \
         -e ENVELOPER_DEFAULT_SENDER_EMAIL=noreply@example.com \
         -e ENVELOPER_DEFAULT_SENDER_NAME=Your\ App \
-        -e ENVELOPER_DB_DSN=sqlite:////app/data/enveloper.sqlite
+        -e ENVELOPER_DB_DSN=sqlite:////app/data/enveloper.sqlite \
         -p 8080:8080 \
         outstack/enveloper
 
@@ -46,7 +46,7 @@ Send your first email using curl, like this:
 
     curl http://localhost:8080/outbox \
         -X POST \
-        -d '{"template":"hello-world","parameters":{"name":"Bob","email":"youremailaddresshere"}}'
+        -d '{"template":"hello-world","parameters":{"name":"Bob","email":"youremailaddresshere@example.com"}}'
 
 Now you can inspect your sent emails. This is useful in writing in your test-suite, for example:
 
@@ -56,12 +56,12 @@ You can also preview the content of a rendered message without sending it, for e
 
     curl http://localhost:8080/outbox/preview \
         -X POST \
-        -d '{"template":"hello-world","parameters":{"name":"Bob","email":"youremailaddresshere"}}'
+        -d '{"template":"hello-world","parameters":{"name":"Bob","email":"youremailaddresshere@example.com"}}' \
         -H 'Accept: text/html'
 
 or
 
     curl http://localhost:8080/outbox/preview \
         -X POST \
-        -d '{"template":"hello-world","parameters":{"name":"Bob","email":"youremailaddresshere"}}'
+        -d '{"template":"hello-world","parameters":{"name":"Bob","email":"youremailaddresshere@example.com"}}' \
         -H 'Accept: text/plain'
