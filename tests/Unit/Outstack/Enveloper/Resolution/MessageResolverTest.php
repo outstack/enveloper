@@ -97,7 +97,7 @@ class MessageResolverTest extends AbstractResolutionUnitTest
                 'template.html.twig',
                 '<p>Welcome to app {{ user.name }}',
                 new AttachmentListTemplate([
-                    new AttachmentTemplate('attachment {{ number }}', 'a{{ number }}.txt')
+                    new AttachmentTemplate(false, 'attachment {{ number }}', 'a{{ number }}.txt')
                 ])
             ),
             (object) [
@@ -170,7 +170,7 @@ class MessageResolverTest extends AbstractResolutionUnitTest
                 'Welcome, {{ user.name }}',
                 new ParticipantTemplate(null, 'noreply@example.com'),
                 new ParticipantListTemplate([new ParticipantTemplate(null, '{{ user.email }}')]),
-                new ParticipantListTemplate([new ParticipantTemplate('{{ name }}', '{{ email }}', 'administrators')]),
+                new ParticipantListTemplate([new ParticipantTemplate('{{ item.name }}', '{{ item.email }}', 'administrators')]),
                 new ParticipantListTemplate([]),
                 'template.txt.twig',
                 'Welcome to app, {{ user.name }}',
