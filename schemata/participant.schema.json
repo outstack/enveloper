@@ -4,8 +4,8 @@
   "properties": {
     "name": {
       "oneOf": [
-        {"type": "null" },
-        {"type": "string", "minLength": 1 }
+        {"type": "string", "minLength": 1, "example": "John Smith" },
+        {"type": "null" }
       ]
     },
     "email": {

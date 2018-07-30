@@ -3,13 +3,14 @@
   "type": "object",
   "properties": {
     "subject": {
-      "type": "string"
+      "type": "string",
+      "example": "📦 Your order has shipped!"
     },
     "content": {
       "type": "object"
     },
     "sender": {
-      "$ref": "./participant.json"
+      "$ref": "./participant.schema.json"
     },
     "recipients": {
       "type": "object",
@@ -17,19 +18,19 @@
         "to": {
           "type": "array",
           "items": {
-            "$ref": "./participant.json"
+            "$ref": "./participant.schema.json"
           }
         },
         "cc": {
           "type": "array",
           "items": {
-            "$ref": "./participant.json"
+            "$ref": "./participant.schema.json"
           }
         },
         "bcc": {
           "type": "array",
           "items": {
-            "$ref": "./participant.json"
+            "$ref": "./participant.schema.json"
           }
         }
       }

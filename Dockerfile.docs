@@ -1,0 +1,14 @@
+FROM node:10-alpine as build
+COPY schemata/ /app/schemata
+COPY docs/api/yarn.lock /app/docs/api/yarn.lock
+COPY docs/api/package.json /app/docs/api/package.json
+WORKDIR /app/docs/api
+RUN yarn install
+COPY docs /app/docs
+RUN node build.js
+
+FROM nginx:alpine
+COPY --from=build /app/docs/api/build /usr/share/nginx/html/build
+COPY docs/api/index.html /usr/share/nginx/html/index.html
+COPY docs/api/openapi.yaml /usr/share/nginx/html/openapi.yaml
+

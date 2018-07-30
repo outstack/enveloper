@@ -1,0 +1,64 @@
+openapi: 3.0.0
+info:
+  description: |
+
+    # Introduction
+    Enveloper is a small service intended to be run in your infrastucture to speed up developing and testing
+    transactional emails in your application.
+
+    This document describes the API, its endpoints and their structure. For information on getting started,
+    take a look at the [project on github](https://github.com/outstack/enveloper) or the
+    [getting started guide](https://github.com/outstack/enveloper/blob/master/docs/01-getting-started.md).
+
+    # Authentication
+    There is currently no authentication mechanism for Enveloper. You should either avoid exposing it publicly over
+    the internet or place it behind an API gateway such as Tyk, Kong or Amazon API Gateway.
+
+  version: 1.0.0
+  title: Enveloper API
+  contact:
+    email: adamquaile@gmail.com
+  license:
+    name: No Licence
+    url: 'https://github.com/outstack/enveloper/blob/master/LICENSE.md'
+externalDocs:
+  description: View the Enveloper Github repository
+  url: 'https://github.com/outstack/enveloper'
+tags:
+  - name: Outbox
+    description: List and send messages
+paths:
+  /outbox:
+    post:
+      tags:
+        - Outbox
+      summary: Send a templated message
+    get:
+      summary: Lists recently sent messages
+      tags:
+        - Outbox
+      responses:
+        '200':
+          description: 'List loaded successfully'
+          content:
+            application/json:
+              schema:
+                $ref: './build/outbox_sent_messages_list.schema.openapi'
+  /outbox/{id}:
+    get:
+      summary: Finds sent message by ID
+      tags:
+        - Outbox
+      responses:
+        '200':
+          description: 'Message Found'
+          content:
+            application/json:
+              schema:
+                $ref: './build/outbox_sent_message.schema.openapi'
+        '404':
+          description: 'No such message'
+servers:
+  - url: 'https://enveloper.example.com'
+components:
+  schemas: {}

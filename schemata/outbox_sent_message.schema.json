@@ -14,7 +14,7 @@
     },
     "resolved": {
       "type": "object",
-      "$ref": "./resolved_message.json"
+      "$ref": "./resolved_message.schema.json"
     }
 
   },
