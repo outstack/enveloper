@@ -39,7 +39,7 @@ class MessageHistoryFunctionalTest extends AbstractApiTestCase
 
         $actual = json_decode((string)$response->getBody());
 
-        $this->assertJsonDocumentMatchesSchema($actual, 'outbox_sent_messages_list.json');
+        $this->assertJsonDocumentMatchesSchema($actual, 'endpoints/outbox/get.responseBody.schema.json');
         $this->assertCount(1, $actual->items);
         $this->assertSame('Hello, Bob',             $actual->items[0]->resolved->subject);
         $this->assertSame('simplest-test-message',  $actual->items[0]->template);
