@@ -28,11 +28,51 @@ tags:
   - name: Outbox
     description: List and send messages
 paths:
+  /outbox/preview:
+    post:
+      tags:
+        - Outbox
+      summary: Preview a templated message, without sending
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './build/endpoints/outbox/preview/post.requestBody.schema.openapi'
+      responses:
+        '200':
+          description: 'Preview successfully rendered'
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |
+                Your order has shipped
+                ----------------------
+
+                Thanks for your order - it's on its way!
+            text/html:
+              schema:
+                type: string
+              example: |
+                <h1>Your order has shipped</h1>
+                <p>Thanks for your order - it's on its way!</p>
+        '406':
+          description: Not acceptable
+          content:
+            a
   /outbox:
     post:
       tags:
         - Outbox
       summary: Send a templated message
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './build/endpoints/outbox/post.requestBody.schema.openapi'
+      responses:
+        '204':
+          description: 'Message Sent'
     get:
       summary: Lists recently sent messages
       tags:
@@ -43,9 +83,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './build/outbox_sent_messages_list.schema.openapi'
+                $ref: './build/endpoints/outbox/get.responseBody.schema.openapi'
   /outbox/{id}:
     get:
+      operationId: getSentMessageById
       summary: Finds sent message by ID
       tags:
         - Outbox
@@ -55,7 +96,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './build/outbox_sent_message.schema.openapi'
+                $ref: './build/endpoints/outbox/getSentMessageById.responseBody.schema.openapi'
         '404':
           description: 'No such message'
 servers:

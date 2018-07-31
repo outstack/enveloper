@@ -10,7 +10,7 @@ const buildSchemaDir = path.resolve(__dirname, './build');
 const jsonSchemaSuffix = '.schema.json';
 const openApiSchemaSuffix = '.schema.openapi';
 
-glob(sourceSchemaDir + '/*' + jsonSchemaSuffix, function(err, files) {
+glob(sourceSchemaDir + '/**/*' + jsonSchemaSuffix, function(err, files) {
 
   files.forEach(function(file) {
     $RefParser.dereference(file, function(err, schema) {

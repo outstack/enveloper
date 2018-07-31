@@ -6,3 +6,13 @@ services:
         environment:
             - SYMFONY_ENV=dev
             - VIRTUAL_HOST=enveloper.dev
+    docs:
+        build:
+            context: .
+            dockerfile: Dockerfile.docs
+        environment:
+            - VIRTUAL_HOST=enveloper-docs.dev
+        volumes:
+            - ./docs/api/openapi.yaml:/usr/share/nginx/html/openapi.yaml
+        ports:
+            - 8081:80

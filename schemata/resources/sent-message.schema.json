@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "type": "object",
+  "allOf": [
+    { "$ref": "../model/message-request.schema.json" },
+    {
+      "properties": {
+        "@id": {
+          "type": "string",
+          "format": "uri"
+        },
+        "resolved": {
+          "type": "object",
+          "$ref": "../model/resolved-message.schema.json"
+        }
+
+      },
+      "required": ["@id", "template", "parameters", "resolved"]
+    }
+  ]
+}

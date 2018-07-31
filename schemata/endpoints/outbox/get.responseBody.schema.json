@@ -5,7 +5,7 @@
     "items": {
       "type": "array",
       "items": {
-        "$ref": "./outbox_sent_message.schema.json"
+        "$ref": "../../resources/sent-message.schema.json"
       }
     }
   },
