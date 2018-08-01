@@ -18,6 +18,7 @@ info:
   title: Enveloper API
   contact:
     email: adamquaile@gmail.com
+    url: https://enveloper.io
   license:
     name: No Licence
     url: 'https://github.com/outstack/enveloper/blob/master/LICENSE.md'
