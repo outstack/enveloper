@@ -1,5 +1,6 @@
 {
   "type": "string",
   "minLength": 1,
+  "description": "Template identifier. Corresponds to template files e.g. `my-template/my-template.meta.yml`",
   "example": "order-dispatch-notification"
 }

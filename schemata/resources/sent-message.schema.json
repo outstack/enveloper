@@ -1,21 +1,22 @@
 {
   "$schema": "http://json-schema.org/draft-06/schema#",
   "type": "object",
-  "allOf": [
-    { "$ref": "../model/message-request.schema.json" },
-    {
-      "properties": {
-        "@id": {
-          "type": "string",
-          "format": "uri"
-        },
-        "resolved": {
-          "type": "object",
-          "$ref": "../model/resolved-message.schema.json"
-        }
-
-      },
-      "required": ["@id", "template", "parameters", "resolved"]
+  "properties": {
+    "@id": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL of message resource"
+    },
+    "template": {
+      "$ref": "../model/template-identifier.schema.json"
+    },
+    "parameters": {
+      "$ref": "../model/template-parameters.schema.json"
+    },
+    "resolved": {
+      "type": "object",
+      "$ref": "./resolved-message.schema.json"
     }
-  ]
+  },
+  "required": ["@id", "template", "parameters", "resolved"]
 }

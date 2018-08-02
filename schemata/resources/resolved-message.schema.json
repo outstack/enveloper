@@ -7,10 +7,24 @@
       "example": "📦 Your order has shipped!"
     },
     "content": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "@id": {
+          "type": "string",
+          "format": "uri",
+          "description": "The URL where rendered content can be accessed"
+        },
+        "availableContentTypes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["text/plain", "text/html", "application/json"]
+          }
+        }
+      }
     },
     "sender": {
-      "$ref": "./participant.schema.json"
+      "$ref": "../model/participant.schema.json"
     },
     "recipients": {
       "type": "object",
@@ -18,19 +32,19 @@
         "to": {
           "type": "array",
           "items": {
-            "$ref": "./participant.schema.json"
+            "$ref": "../model/participant.schema.json"
           }
         },
         "cc": {
           "type": "array",
           "items": {
-            "$ref": "./participant.schema.json"
+            "$ref": "../model/participant.schema.json"
           }
         },
         "bcc": {
           "type": "array",
           "items": {
-            "$ref": "./participant.schema.json"
+            "$ref": "../model/participant.schema.json"
           }
         }
       }

@@ -1,0 +1,17 @@
+{
+  "type": "object",
+  "properties": {
+    "html": {
+      "oneOf": [
+        { "type": "string", "example": "<html><body>Hello, world!</body></html>" },
+        { "type": "null" }
+      ]
+    },
+    "text": {
+      "oneOf": [
+        { "type": "string", "example": "Hello, world!" },
+        { "type": "null" }
+      ]
+    }
+  }
+}

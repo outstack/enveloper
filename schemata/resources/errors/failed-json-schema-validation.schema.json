@@ -1,0 +1,52 @@
+{
+  "allOf": [
+    { "$ref": "./base-error.schema.json" },
+    {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "example": "Parameters failed JSON schema validation"
+        },
+        "detail": {
+          "type": "string",
+          "example": "A template was found but the parameters submitted to it do not validate against the configured JSON schema"
+        },
+        "status": {
+          "enum": [400]
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "string",
+                "example": "The object must contain the properties [\"name\"]."
+              },
+              "path": {
+                "type": "string",
+                "example": "\/required"
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "example": {
+    "title": "Parameters failed JSON schema validation",
+    "status": 400,
+    "detail": "A template was found but the parameters submitted to it do not validate against the configured JSON schema",
+    "errors": [
+      {
+        "error": "The object must contain the properties [\"name\"].",
+        "path": "\/required"
+      },
+      {
+        "error": "The object must not contain additional properties ([\"namde\"]).",
+        "path": "\/additionalProperties"
+      }
+    ]
+  }
+}

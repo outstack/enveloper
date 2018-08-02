@@ -1,0 +1,22 @@
+{
+  "allOf": [
+    { "$ref": "./base-error.schema.json" },
+    {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "example": "Server Error"
+        },
+        "detail": {
+          "type": "string",
+          "example": "An unexpected error has occurred"
+        },
+        "status": {
+          "minimum": 500,
+          "maximum": 599
+        }
+      }
+    }
+  ]
+}

@@ -26,14 +26,18 @@ externalDocs:
   description: View the Enveloper Github repository
   url: 'https://github.com/outstack/enveloper'
 tags:
-  - name: Outbox
-    description: List and send messages
+  - name: Messages
+    description: |
+      A message is the result of a template and a set of parameters combined.
 paths:
   /outbox/preview:
     post:
       tags:
-        - Outbox
-      summary: Preview a templated message, without sending
+        - Messages
+      summary: Preview message
+      description: |
+        Useful for testing how certain parameters will affect the layout of an email, or how changes to an email
+        template will appear visually.
       requestBody:
         content:
           application/json:
@@ -57,15 +61,41 @@ paths:
               example: |
                 <h1>Your order has shipped</h1>
                 <p>Thanks for your order - it's on its way!</p>
+            application/json:
+              schema:
+                $ref: './build/endpoints/outbox/preview/post.responseBody.schema.openapi'
+        '400':
+          description: 'Bad Request'
+          content:
+            application/problem+json:
+              schema:
+                type: object
+                discriminator:
+                  propertyName: title
+                  mapping:
+                    'Syntax Error': '#/Components/schemas/syntax-error'
+                    'Parameters failed JSON schema validation': '#/Components/schemas/failed-json-schema-validation'
+                properties:
+                  title:
+                    description: Brief title for the error
+                    type: string
         '406':
           description: Not acceptable
           content:
-            a
+            application/problem+json:
+              schema:
+                $ref: './build/resources/errors/not-acceptable.schema.openapi'
+        '500':
+          description: Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: './build/resources/errors/server-error.schema.openapi'
   /outbox:
     post:
       tags:
-        - Outbox
-      summary: Send a templated message
+        - Messages
+      summary: Send message
       requestBody:
         content:
           application/json:
@@ -74,10 +104,22 @@ paths:
       responses:
         '204':
           description: 'Message Sent'
+        '400':
+          description: Parameters failed JSON schema validation
+          content:
+            application/problem+json:
+              schema:
+                $ref: './build/resources/errors/failed-json-schema-validation.schema.openapi'
+        '500':
+          description: Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: './build/resources/errors/server-error.schema.openapi'
     get:
-      summary: Lists recently sent messages
+      summary: List sent messages
       tags:
-        - Outbox
+        - Messages
       responses:
         '200':
           description: 'List loaded successfully'
@@ -88,9 +130,9 @@ paths:
   /outbox/{id}:
     get:
       operationId: getSentMessageById
-      summary: Finds sent message by ID
+      summary: Get message details
       tags:
-        - Outbox
+        - Messages
       responses:
         '200':
           description: 'Message Found'
@@ -102,5 +144,7 @@ paths:
           description: 'No such message'
 servers:
   - url: 'https://enveloper.example.com'
-components:
-  schemas: {}
+Components:
+  schemas:
+    syntax-error: { $ref: './build/resources/errors/syntax-error.schema.openapi' }
+    failed-json-schema-validation: { $ref: './build/resources/errors/failed-json-schema-validation.schema.openapi' }
