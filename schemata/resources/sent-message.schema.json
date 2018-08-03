@@ -16,7 +16,11 @@
     "resolved": {
       "type": "object",
       "$ref": "./resolved-message.schema.json"
+    },
+    "sentAt": {
+      "type": "string",
+      "format": "date-time"
     }
   },
-  "required": ["@id", "template", "parameters", "resolved"]
+  "required": ["@id", "template", "parameters", "resolved", "sentAt"]
 }

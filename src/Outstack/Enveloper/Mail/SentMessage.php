@@ -18,11 +18,16 @@ class SentMessage
     private $resolvedMessage;
 
     private $id;
+    /**
+     * @var \DateTimeImmutable
+     */
+    private $sentAt;
 
-    public function __construct(string $template, object $parameters, Message $resolvedMessage)
+    public function __construct(string $template, object $parameters, \DateTimeImmutable $sentAt, Message $resolvedMessage)
     {
         $this->template = $template;
         $this->parameters = $parameters;
+        $this->sentAt = $sentAt;
         $this->resolvedMessage = $resolvedMessage;
     }
 
@@ -39,6 +44,11 @@ class SentMessage
     public function getParameters(): object
     {
         return (object) $this->parameters;
+    }
+
+    public function getSentAt(): \DateTimeImmutable
+    {
+        return $this->sentAt;
     }
 
     public function getResolvedMessage(): Message

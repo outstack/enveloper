@@ -10,5 +10,8 @@ Outstack\Enveloper\Mail\SentMessage:
             length: 200
         parameters:
             type: json_array
+        sentAt:
+            type: datetime_immutable
+            nullable: true
         resolvedMessage:
             type: object

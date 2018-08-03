@@ -221,6 +221,7 @@ class OutboxController extends Controller
             ),
             'template' => $sentMessage->getTemplate(),
             'parameters' => $sentMessage->getParameters(),
+            'sentAt' => $sentMessage->getSentAt()->format(\DateTimeImmutable::RFC3339),
             'resolved' => [
                 'subject' => $resolved->getSubject(),
                 'sender' => $this->serialiseParticipant($resolved->getSender()),
