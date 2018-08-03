@@ -3,7 +3,7 @@ services:
     enveloper:
         build: .
         ports:
-            - 8080
+            - 8080:8080
         environment:
             - SYMFONY_ENV=prod
             - ENVELOPER_SMTP_HOST=mailhog

@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "type": "object",
+  "properties": {
+    "subject": {
+      "type": "string",
+      "example": "📦 Your order has shipped!"
+    },
+    "content": {
+      "type": "object",
+      "properties": {
+        "@id": {
+          "type": "string",
+          "format": "uri",
+          "description": "The URL where rendered content can be accessed"
+        },
+        "availableContentTypes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["text/plain", "text/html", "application/json"]
+          }
+        }
+      }
+    },
+    "sender": {
+      "$ref": "../model/participant.schema.json"
+    },
+    "recipients": {
+      "type": "object",
+      "properties": {
+        "to": {
+          "type": "array",
+          "items": {
+            "$ref": "../model/participant.schema.json"
+          }
+        },
+        "cc": {
+          "type": "array",
+          "items": {
+            "$ref": "../model/participant.schema.json"
+          }
+        },
+        "bcc": {
+          "type": "array",
+          "items": {
+            "$ref": "../model/participant.schema.json"
+          }
+        }
+      }
+    }
+
+  },
+  "required": ["subject", "content", "sender", "recipients"]
+}

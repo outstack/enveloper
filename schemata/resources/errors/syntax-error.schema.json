@@ -1,0 +1,48 @@
+{
+  "allOf": [
+    { "$ref": "./base-error.schema.json" },
+    {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "example": "Syntax Error"
+        },
+        "detail": {
+          "type": "string",
+          "example": "Request failed JSON schema validation"
+        },
+        "status": {
+          "enum": [400]
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "string",
+                "example": "The data must be a(n) object."
+              },
+              "path": {
+                "type": "string",
+                "example": "\/type"
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "example": {
+    "title": "Syntax Error",
+    "status": 400,
+    "detail": "Request failed JSON schema validation",
+    "errors": [
+      {
+        "error": "The data must be a(n) object.",
+        "path": "\/type"
+      }
+    ]
+  }
+}

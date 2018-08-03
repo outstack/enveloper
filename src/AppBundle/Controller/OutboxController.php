@@ -51,7 +51,7 @@ class OutboxController extends Controller
         $payload = json_decode($request->getContent());
 
         $dereferencer  = \League\JsonReference\Dereferencer::draft6();
-        $schema        = $dereferencer->dereference('file://' . $this->container->getParameter('kernel.root_dir'). '/../schemata/outbox_post.json');
+        $schema        = $dereferencer->dereference('file://' . $this->container->getParameter('kernel.root_dir'). '/../schemata/endpoints/outbox/post.requestBody.schema.json');
 
         $validator     = new \League\JsonGuard\Validator($payload, $schema);
 
@@ -106,7 +106,7 @@ class OutboxController extends Controller
         $payload = json_decode($request->getContent());
 
         $dereferencer  = \League\JsonReference\Dereferencer::draft6();
-        $schema        = $dereferencer->dereference('file://' . $this->container->getParameter('kernel.root_dir'). '/../schemata/outbox_post.json');
+        $schema        = $dereferencer->dereference('file://' . $this->container->getParameter('kernel.root_dir'). '/../schemata/endpoints/outbox/preview/post.requestBody.schema.json');
 
         $validator     = new \League\JsonGuard\Validator($payload, $schema);
 

@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Brief title for the error",
+      "example": "Bad Request"
+    },
+    "detail": {
+      "type": "string"
+    },
+    "status": {
+      "minimum": 400,
+      "maximum": 499
+    }
+  },
+  "discriminator": {
+    "propertyName": "title",
+    "mapping": {
+      "Parameters failed JSON schema validation": {
+        "$ref": "./failed-json-schema-validation.schema.json"
+      },
+      "Syntax Error": {
+        "$ref": "./syntax-error.schema.json"
+      }
+    }
+  }
+}

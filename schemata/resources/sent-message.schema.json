@@ -4,19 +4,19 @@
   "properties": {
     "@id": {
       "type": "string",
-      "format": "uri"
+      "format": "uri",
+      "description": "URL of message resource"
     },
     "template": {
-      "type": "string"
+      "$ref": "../model/template-identifier.schema.json"
     },
     "parameters": {
-      "type": "object"
+      "$ref": "../model/template-parameters.schema.json"
     },
     "resolved": {
       "type": "object",
-      "$ref": "./resolved_message.json"
+      "$ref": "./resolved-message.schema.json"
     }
-
   },
   "required": ["@id", "template", "parameters", "resolved"]
 }

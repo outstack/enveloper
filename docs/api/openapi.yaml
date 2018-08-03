@@ -1,0 +1,150 @@
+openapi: 3.0.0
+info:
+  description: |
+
+    # Introduction
+    Enveloper is a small service intended to be run in your infrastucture to speed up developing and testing
+    transactional emails in your application.
+
+    This document describes the API, its endpoints and their structure. For information on getting started,
+    take a look at the [project on github](https://github.com/outstack/enveloper) or the
+    [getting started guide](https://github.com/outstack/enveloper/blob/master/docs/01-getting-started.md).
+
+    # Authentication
+    There is currently no authentication mechanism for Enveloper. You should either avoid exposing it publicly over
+    the internet or place it behind an API gateway such as Tyk, Kong or Amazon API Gateway.
+
+  version: 1.0.0
+  title: Enveloper API
+  contact:
+    email: adamquaile@gmail.com
+    url: https://enveloper.io
+  license:
+    name: No Licence
+    url: 'https://github.com/outstack/enveloper/blob/master/LICENSE.md'
+externalDocs:
+  description: View the Enveloper Github repository
+  url: 'https://github.com/outstack/enveloper'
+tags:
+  - name: Messages
+    description: |
+      A message is the result of a template and a set of parameters combined.
+paths:
+  /outbox/preview:
+    post:
+      tags:
+        - Messages
+      summary: Preview message
+      description: |
+        Useful for testing how certain parameters will affect the layout of an email, or how changes to an email
+        template will appear visually.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './build/endpoints/outbox/preview/post.requestBody.schema.openapi'
+      responses:
+        '200':
+          description: 'Preview successfully rendered'
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: |
+                Your order has shipped
+                ----------------------
+
+                Thanks for your order - it's on its way!
+            text/html:
+              schema:
+                type: string
+              example: |
+                <h1>Your order has shipped</h1>
+                <p>Thanks for your order - it's on its way!</p>
+            application/json:
+              schema:
+                $ref: './build/endpoints/outbox/preview/post.responseBody.schema.openapi'
+        '400':
+          description: 'Bad Request'
+          content:
+            application/problem+json:
+              schema:
+                type: object
+                discriminator:
+                  propertyName: title
+                  mapping:
+                    'Syntax Error': '#/Components/schemas/syntax-error'
+                    'Parameters failed JSON schema validation': '#/Components/schemas/failed-json-schema-validation'
+                properties:
+                  title:
+                    description: Brief title for the error
+                    type: string
+        '406':
+          description: Not acceptable
+          content:
+            application/problem+json:
+              schema:
+                $ref: './build/resources/errors/not-acceptable.schema.openapi'
+        '500':
+          description: Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: './build/resources/errors/server-error.schema.openapi'
+  /outbox:
+    post:
+      tags:
+        - Messages
+      summary: Send message
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './build/endpoints/outbox/post.requestBody.schema.openapi'
+      responses:
+        '204':
+          description: 'Message Sent'
+        '400':
+          description: Parameters failed JSON schema validation
+          content:
+            application/problem+json:
+              schema:
+                $ref: './build/resources/errors/failed-json-schema-validation.schema.openapi'
+        '500':
+          description: Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: './build/resources/errors/server-error.schema.openapi'
+    get:
+      summary: List sent messages
+      tags:
+        - Messages
+      responses:
+        '200':
+          description: 'List loaded successfully'
+          content:
+            application/json:
+              schema:
+                $ref: './build/endpoints/outbox/get.responseBody.schema.openapi'
+  /outbox/{id}:
+    get:
+      operationId: getSentMessageById
+      summary: Get message details
+      tags:
+        - Messages
+      responses:
+        '200':
+          description: 'Message Found'
+          content:
+            application/json:
+              schema:
+                $ref: './build/endpoints/outbox/getSentMessageById.responseBody.schema.openapi'
+        '404':
+          description: 'No such message'
+servers:
+  - url: 'https://enveloper.example.com'
+Components:
+  schemas:
+    syntax-error: { $ref: './build/resources/errors/syntax-error.schema.openapi' }
+    failed-json-schema-validation: { $ref: './build/resources/errors/failed-json-schema-validation.schema.openapi' }

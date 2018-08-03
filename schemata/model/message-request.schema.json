@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "properties": {
+    "template": {
+      "$ref": "./template-identifier.schema.json"
+    },
+    "parameters": {
+      "$ref": "./template-parameters.schema.json"
+    }
+  },
+  "required": [
+    "template",
+    "parameters"
+  ]
+}

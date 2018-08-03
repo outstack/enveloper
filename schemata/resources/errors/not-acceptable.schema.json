@@ -1,0 +1,43 @@
+{
+  "allOf": [
+    { "$ref": "./base-error.schema.json" },
+    {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "example": "Not Acceptable"
+        },
+        "detail": {
+          "type": "string",
+          "example": "No version of this email matching your Accept header could be found"
+        },
+        "status": {
+          "enum": [406]
+        },
+        "availableContentTypes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "text/plain",
+              "text/html",
+              "application/json"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "example": {
+    "title": "Syntax Error",
+    "status": 400,
+    "detail": "Request failed JSON schema validation",
+    "errors": [
+      {
+        "error": "The data must be a(n) object.",
+        "path": "\/type"
+      }
+    ]
+  }
+}
