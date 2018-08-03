@@ -51,7 +51,6 @@ class Outbox
             $this->convertToSwiftMessage($message)
         );
 
-        sleep(30);
         $this->sentMessages->record(
             new SentMessage($templateName, $parameters, \DateTimeImmutable::createFromFormat('U', time()), $message)
         );
