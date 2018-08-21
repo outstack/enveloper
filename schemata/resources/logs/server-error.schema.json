@@ -1,0 +1,8 @@
+{
+  "allOf": [
+    { "$ref": "./base-log.schema.json" },
+    {
+      "type": "object"
+    }
+  ]
+}

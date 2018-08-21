@@ -1,0 +1,9 @@
+---
+
+subject: "Hello, {{ name }}"
+recipients:
+  to:
+    - "{{ email }}"
+content:
+  html: "message-with-schema.html.twig"
+  text: "message-with-schema.text.twig"

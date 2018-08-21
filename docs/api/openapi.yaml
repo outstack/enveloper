@@ -29,6 +29,11 @@ tags:
   - name: Messages
     description: |
       A message is the result of a template and a set of parameters combined.
+  - name: Logs
+    description: |
+      Logs include a history of useful events. It includes all the messages sending attempts, whether successful or not.
+
+      If a message was not successfully sent, it should provide a useful indication as to why.
 paths:
   /outbox/preview:
     post:
@@ -73,8 +78,8 @@ paths:
                 discriminator:
                   propertyName: title
                   mapping:
-                    'Syntax Error': '#/Components/schemas/syntax-error'
-                    'Parameters failed JSON schema validation': '#/Components/schemas/failed-json-schema-validation'
+                    'Syntax Error': '#/Components/errors/syntax-error'
+                    'Parameters failed JSON schema validation': '#/Components/errors/failed-json-schema-validation'
                 properties:
                   title:
                     description: Brief title for the error
@@ -142,9 +147,51 @@ paths:
                 $ref: './build/endpoints/outbox/getSentMessageById.responseBody.schema.openapi'
         '404':
           description: 'No such message'
+  /logs:
+    get:
+      summary: Find all log entries
+      tags:
+        - Logs
+      responses:
+        '200':
+          description: List of matching log entries
+          content:
+            application/json:
+              schema:
+                $ref: './build/endpoints/logs/get.responseBody.schema.openapi'
+  /logs/{id}:
+    get:
+      summary: Log details
+      tags:
+        - Logs
+      responses:
+        '200':
+          description: Log entry found
+          content:
+            application/json:
+              schema:
+                type: object
+                discriminator:
+                  propertyName: event
+                  mapping:
+                    message-sent: '#/Components/logs/message-sent'
+                    json-schema-validation-failed: '#/Components/logs/failed-json-schema-validation'
+                    pipeline-failed: '#/Components/logs/pipeline-failed'
+                    server-error: '#/Components/logs/server-error'
+                properties:
+                  event:
+                    description: Describes the type of log entry
+                    type: string
+        '404':
+          description: 'No such log entry'
 servers:
   - url: 'https://enveloper.example.com'
 Components:
-  schemas:
+  errors:
     syntax-error: { $ref: './build/resources/errors/syntax-error.schema.openapi' }
     failed-json-schema-validation: { $ref: './build/resources/errors/failed-json-schema-validation.schema.openapi' }
+  logs:
+    message-sent: { $ref: './build/resources/logs/message-sent.schema.openapi' }
+    json-schema-validation-failed: { $ref: './build/resources/logs/failed-json-schema-validation.schema.openapi' }
+    pipeline-failed: { $ref: './build/resources/logs/pipeline-failed.schema.openapi' }
+    server-error: { $ref: './build/resources/logs/server-error.schema.openapi' }

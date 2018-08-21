@@ -1,0 +1,22 @@
+{
+  "allOf": [
+    { "$ref": "./base-log.schema.json" },
+    {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "object",
+          "properties": {
+            "@id": {
+              "type": "string",
+              "format": "uri",
+              "description": "URL of message resource"
+            }
+          },
+          "required": ["@id"]
+        }
+      },
+      "required": ["message"]
+    }
+  ]
+}

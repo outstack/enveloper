@@ -1,0 +1,24 @@
+{
+  "allOf": [
+    { "$ref": "./base-log.schema.json" },
+    {
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

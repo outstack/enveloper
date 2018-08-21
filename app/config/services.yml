@@ -124,3 +124,6 @@ services:
 
     Outstack\Enveloper\Folders\SentMessagesFolder: '@Outstack\Enveloper\Folders\DoctrineOrmSentMessagesFolder'
     Outstack\Enveloper\Folders\DoctrineOrmSentMessagesFolder: ~
+
+    Outstack\Enveloper\Logging\EventLog: '@Outstack\Enveloper\Logging\DoctrineOrmEventLog'
+    Outstack\Enveloper\Logging\DoctrineOrmEventLog: ~

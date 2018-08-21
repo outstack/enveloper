@@ -2,10 +2,15 @@
 
 namespace Outstack\Enveloper;
 
+use League\JsonGuard\ValidationError;
 use Outstack\Enveloper\Folders\SentMessagesFolder;
+use Outstack\Enveloper\Logging\EventLog;
+use Outstack\Enveloper\Logging\LogTypes\FailedSchemaValidationLog;
+use Outstack\Enveloper\Logging\LogTypes\MessageSentLog;
 use Outstack\Enveloper\Mail\Participants\Participant;
 use Outstack\Enveloper\Mail\SentMessage;
 use Outstack\Enveloper\Resolution\MessageResolver;
+use Outstack\Enveloper\Resolution\ParametersFailedSchemaValidation;
 use Outstack\Enveloper\Templates\Loader\TemplateLoader;
 use Outstack\Enveloper\Templates\Template;
 use Outstack\Enveloper\SwiftMailerBridge\SwiftMailerInterface;
@@ -31,28 +36,61 @@ class Outbox
      * @var SwiftMailerInterface
      */
     private $mailer;
+    /**
+     * @var EventLog
+     */
+    private $log;
 
-    public function __construct(MessageResolver $messageResolver, TemplateLoader $templateLoader, SwiftMailerInterface $mailer, SentMessagesFolder $sentMessages)
-    {
+    public function __construct(
+        MessageResolver $messageResolver,
+        TemplateLoader $templateLoader,
+        SwiftMailerInterface $mailer,
+        SentMessagesFolder $sentMessages,
+        EventLog $log
+    ) {
         $this->messageResolver = $messageResolver;
         $this->templateLoader = $templateLoader;
         $this->mailer = $mailer;
         $this->sentMessages = $sentMessages;
+        $this->log = $log;
     }
 
     public function send(string $templateName, object $parameters)
     {
-        $message = $this->messageResolver->resolve(
-            $this->templateLoader->find($templateName),
-            $parameters
-        );
+        $now = \DateTimeImmutable::createFromFormat('U', time());
+        try {
+            $message = $this->messageResolver->resolve(
+                $this->templateLoader->find($templateName),
+                $parameters
+            );
+
+        } catch (ParametersFailedSchemaValidation $exception) {
+            $errors = [];
+            foreach ($exception->getErrors() as $error) {
+                /**
+                 * @var ValidationError $error
+                 */
+                $errors[] = [
+                    'path' => $error->getDataPath(),
+                    'error' => $error->getMessage()
+                ];
+            }
+            $this->log->append(
+                new FailedSchemaValidationLog($now, $templateName, $errors)
+            );
+
+            throw $exception;
+        }
 
         $this->mailer->send(
             $this->convertToSwiftMessage($message)
         );
 
         $this->sentMessages->record(
-            new SentMessage($templateName, $parameters, \DateTimeImmutable::createFromFormat('U', time()), $message)
+            new SentMessage($templateName, $parameters, $now, $message)
+        );
+        $this->log->append(
+            new MessageSentLog($now, $message->getId())
         );
     }
 

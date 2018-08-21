@@ -1,0 +1,17 @@
+Outstack\Enveloper\Logging\LogEntry:
+    type: entity
+    inheritanceType: SINGLE_TABLE
+    discriminatorColumn:
+        name: type
+        type: string
+    discriminatorMap:
+        message-sent: Outstack\Enveloper\Logging\LogTypes\MessageSentLog
+        failed-schema-validation: Outstack\Enveloper\Logging\LogTypes\FailedSchemaValidationLog
+    id:
+        id:
+            type: guid
+            generator: { strategy: UUID }
+    fields:
+        logDate:
+            type: datetime_immutable
+            nullable: false

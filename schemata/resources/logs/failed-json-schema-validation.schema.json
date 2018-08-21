@@ -1,0 +1,28 @@
+{
+  "allOf": [
+    { "$ref": "./base-log.schema.json" },
+    {
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "string",
+                "example": "The object must contain the properties [\"name\"]."
+              },
+              "path": {
+                "type": "string",
+                "example": "\/required"
+              }
+            },
+            "required": ["error", "path"]
+          }
+        }
+      },
+      "required": ["errors"]
+    }
+  ]
+}

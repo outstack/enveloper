@@ -1,0 +1,5 @@
+Outstack\Enveloper\Logging\LogTypes\FailedSchemaValidationLog:
+    type: entity
+    fields:
+        errors:
+            type: json_array

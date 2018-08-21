@@ -1,0 +1,5 @@
+Outstack\Enveloper\Logging\LogTypes\MessageSentLog:
+    type: entity
+    fields:
+        messageId:
+            type: string
