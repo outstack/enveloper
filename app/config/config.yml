@@ -8,7 +8,6 @@ parameters:
     env(SMTP_ENCRYPTION): ~
     locale: en
     template_directory: "/app/data/templates"
-    mailer_record_messages: false
 
     secret: ThisTokenIsNotSoSecretChangeIt
 

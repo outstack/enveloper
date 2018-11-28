@@ -3,16 +3,17 @@
 namespace Outstack\Enveloper\Folders;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Outstack\Enveloper\Mail\SentMessage;
 
 class DoctrineOrmSentMessagesFolder implements SentMessagesFolder
 {
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     private $manager;
 
-    public function __construct(EntityManager $manager)
+    public function __construct(EntityManagerInterface $manager)
     {
         $this->manager = $manager;
     }

@@ -35,18 +35,11 @@ services:
 
     Outstack\Components\ApiProvider\ApiProblemDetails\ApiProblemFactory: ~
 
-    #service_name:
-    #    class: AppBundle\Directory\ClassName
-    #    arguments: ['@another_service_name', 'plain_value', '%parameter_name%']
-
-    enveloper.template_language:
-        alias: enveloper.template_language.twig
-
-    enveloper.template_language.twig:
-        class: Outstack\Enveloper\Resolution\Twig\TwigTemplateLanguage
+    Outstack\Enveloper\Resolution\TemplateLanguage: '@Outstack\Enveloper\Resolution\Twig\TwigTemplateLanguage'
+    Outstack\Enveloper\Resolution\Twig\TwigTemplateLanguage:
         arguments:
             - '@twig'
-    enveloper.template_pipeline:
+    Outstack\Enveloper\Templates\TemplatePipeline:
         factory: 'Outstack\Enveloper\PipeprintBridge\TemplatePipelineFactory:create'
         class: Outstack\Enveloper\Templates\TemplatePipeline
         arguments:
@@ -57,28 +50,19 @@ services:
             - '@enveloper.templates.template_loader.filesystem.flysystem'
             - '@twig'
 
-    enveloepr.resolution.participant_resolver:
+    Outstack\Enveloper\Resolution\ParticipantResolver:
         public: false
-        class: Outstack\Enveloper\Resolution\ParticipantResolver
-        arguments:
-            - '@enveloper.template_language'
+        autowire: true
 
-    enveloper.resolution.participant_list_resolver:
+    Outstack\Enveloper\Resolution\ParticipantListResolver:
         public: false
-        class: Outstack\Enveloper\Resolution\ParticipantListResolver
-        arguments:
-            - '@enveloepr.resolution.participant_resolver'
+        autowire: true
 
-    enveloper.resolution.message_resolver:
-        class: Outstack\Enveloper\Resolution\MessageResolver
+    Outstack\Enveloper\Resolution\MessageResolver:
+        autowire: true
         arguments:
-            - '@enveloper.template_language'
-            - '@enveloper.template_pipeline'
-            - '@enveloper.resolution.participant_list_resolver'
-            - '@enveloepr.resolution.participant_resolver'
-            - '@Outstack\Enveloper\Resolution\AttachmentListResolver'
-            - '%default_sender_email%'
-            - '%default_sender_name%'
+            $defaultSenderEmail: '%default_sender_email%'
+            $defaultSenderName: '%default_sender_name%'
 
     Outstack\Enveloper\Resolution\AttachmentListResolver: ~
     Outstack\Enveloper\Resolution\AttachmentResolver: ~
