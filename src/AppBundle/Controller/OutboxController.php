@@ -7,7 +7,7 @@ use Outstack\Components\ApiProvider\ApiProblemDetails\ApiProblemFactory;
 use Outstack\Enveloper\Folders\SentMessagesFolder;
 use Outstack\Enveloper\Mail\Message;
 use Outstack\Enveloper\Mail\Participants\Participant;
-use Outstack\Enveloper\Mail\SentMessage;
+use Outstack\Enveloper\Mail\OutboxItem;
 use Outstack\Enveloper\Outbox;
 use Outstack\Enveloper\PipeprintBridge\Exceptions\PipelineFailed;
 use Outstack\Enveloper\Resolution\ParametersFailedSchemaValidation;
@@ -71,7 +71,7 @@ class OutboxController extends Controller
         }
 
         try {
-            $outbox->send($payload->template, $payload->parameters);
+            $outbox->queue($payload->template, $payload->parameters);
             return new Response('', 204);
         } catch (PipelineFailed $e) {
             return $this->problemFactory
@@ -208,7 +208,7 @@ class OutboxController extends Controller
         ];
     }
 
-    private function serialiseSentMessage(SentMessage $sentMessage): array
+    private function serialiseSentMessage(OutboxItem $sentMessage): array
     {
         $resolved = $sentMessage->getResolvedMessage();
         $messageData = [

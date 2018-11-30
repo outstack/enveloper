@@ -2,19 +2,19 @@
 
 namespace Outstack\Enveloper\Folders;
 
-use Outstack\Enveloper\Mail\SentMessage;
+use Outstack\Enveloper\Mail\OutboxItem;
 
 interface SentMessagesFolder
 {
-    public function record(SentMessage $resolvedMessage);
+    public function record(OutboxItem $resolvedMessage);
 
     /**
-     * @return \Generator|SentMessage[]
+     * @return \Generator|OutboxItem[]
      */
     public function listAll();
 
     public function deleteAll(): void;
 
-    public function find(string $id): SentMessage;
+    public function find(string $id): OutboxItem;
 
 }

@@ -31,7 +31,8 @@
         "doctrine/orm": "^2.6",
         "doctrine/doctrine-bundle": "^1.9.1",
         "league/json-guard": "^1.0",
-        "league/json-reference": "^1.0"
+        "league/json-reference": "^1.0",
+        "symfony/messenger": "^4.1"
     },
     "require-dev": {
         "symfony/phpunit-bridge": "^3.3"

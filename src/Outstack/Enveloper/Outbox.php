@@ -4,16 +4,18 @@ namespace Outstack\Enveloper;
 
 use Outstack\Enveloper\Folders\SentMessagesFolder;
 use Outstack\Enveloper\Mail\Participants\Participant;
-use Outstack\Enveloper\Mail\SentMessage;
+use Outstack\Enveloper\Mail\OutboxItem;
 use Outstack\Enveloper\Resolution\MessageResolver;
 use Outstack\Enveloper\Templates\Loader\TemplateLoader;
 use Outstack\Enveloper\Templates\Template;
 use Outstack\Enveloper\SwiftMailerBridge\SwiftMailerInterface;
 use Outstack\Enveloper\Mail\Message;
 use Outstack\Enveloper\Mail\Participants\ParticipantList;
+use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 
-class Outbox
+class Outbox implements MessageHandlerInterface
 {
     /**
      * @var SentMessagesFolder
@@ -31,29 +33,50 @@ class Outbox
      * @var SwiftMailerInterface
      */
     private $mailer;
+    /**
+     * @var MessageBusInterface
+     */
+    private $messageBus;
 
-    public function __construct(MessageResolver $messageResolver, TemplateLoader $templateLoader, SwiftMailerInterface $mailer, SentMessagesFolder $sentMessages)
+    public function __construct(MessageBusInterface $messageBus, MessageResolver $messageResolver, TemplateLoader $templateLoader, SwiftMailerInterface $mailer, SentMessagesFolder $sentMessages)
     {
         $this->messageResolver = $messageResolver;
         $this->templateLoader = $templateLoader;
         $this->mailer = $mailer;
         $this->sentMessages = $sentMessages;
+        $this->messageBus = $messageBus;
     }
 
-    public function send(string $templateName, object $parameters)
+    public function queue(string $templateName, object $parameters)
     {
-        $message = $this->messageResolver->resolve(
-            $this->templateLoader->find($templateName),
-            $parameters
+        $this->messageBus->dispatch(
+            new OutboxItem(
+                $templateName,
+                $parameters,
+                null
+            )
+        );
+    }
+
+    public function __invoke(OutboxItem $message)
+    {
+        $this->send($message);
+    }
+
+    public function send(OutboxItem $message)
+    {
+        $message->setResolvedMessage(
+            $this->messageResolver->resolve(
+                $this->templateLoader->find($message->getTemplate()),
+                $message->getParameters()
+            )
         );
 
         $this->mailer->send(
-            $this->convertToSwiftMessage($message)
+            $this->convertToSwiftMessage($message->getResolvedMessage())
         );
 
-        $this->sentMessages->record(
-            new SentMessage($templateName, $parameters, $message)
-        );
+        $this->sentMessages->record($message);
     }
 
     public function preview(string $templateName, object $parameters): Message

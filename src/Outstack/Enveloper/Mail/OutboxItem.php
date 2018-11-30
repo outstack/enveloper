@@ -2,7 +2,7 @@
 
 namespace Outstack\Enveloper\Mail;
 
-class SentMessage
+class OutboxItem
 {
     /**
      * @var string
@@ -19,7 +19,7 @@ class SentMessage
 
     private $id;
 
-    public function __construct(string $template, object $parameters, Message $resolvedMessage)
+    public function __construct(string $template, object $parameters, ?Message $resolvedMessage)
     {
         $this->template = $template;
         $this->parameters = $parameters;
@@ -41,8 +41,16 @@ class SentMessage
         return (object) $this->parameters;
     }
 
+    public function setResolvedMessage(Message $message)
+    {
+        $this->resolvedMessage = $message;
+    }
+
     public function getResolvedMessage(): Message
     {
+        if ($this->resolvedMessage === null) {
+            throw new \LogicException('Message has not yet been resolved');
+        }
         return $this->resolvedMessage;
     }
 }

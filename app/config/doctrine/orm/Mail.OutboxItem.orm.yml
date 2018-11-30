@@ -1,5 +1,6 @@
-Outstack\Enveloper\Mail\SentMessage:
+Outstack\Enveloper\Mail\OutboxItem:
     type: entity
+    table: sent_message
     id:
         id:
             type: guid

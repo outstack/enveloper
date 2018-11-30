@@ -4,7 +4,7 @@ namespace Outstack\Enveloper\Folders;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Outstack\Enveloper\Mail\SentMessage;
+use Outstack\Enveloper\Mail\OutboxItem;
 
 class DoctrineOrmSentMessagesFolder implements SentMessagesFolder
 {
@@ -18,27 +18,27 @@ class DoctrineOrmSentMessagesFolder implements SentMessagesFolder
         $this->manager = $manager;
     }
 
-    public function record(SentMessage $resolvedMessage)
+    public function record(OutboxItem $resolvedMessage)
     {
         $this->manager->persist($resolvedMessage);
         $this->manager->flush();
     }
 
     /**
-     * @return \Generator|SentMessage[]
+     * @return \Generator|OutboxItem[]
      */
     public function listAll()
     {
-        return $this->manager->getRepository(SentMessage::class)->findAll();
+        return $this->manager->getRepository(OutboxItem::class)->findAll();
     }
 
     public function deleteAll(): void
     {
-        $this->manager->createQuery("DELETE FROM " . SentMessage::class)->execute();
+        $this->manager->createQuery("DELETE FROM " . OutboxItem::class)->execute();
     }
 
-    public function find(string $id): SentMessage
+    public function find(string $id): OutboxItem
     {
-        return $this->manager->getRepository(SentMessage::class)->find($id);
+        return $this->manager->getRepository(OutboxItem::class)->find($id);
     }
 }

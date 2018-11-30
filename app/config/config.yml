@@ -23,6 +23,7 @@ parameters:
     env(ENVELOPER_DB_DSN): "sqlite:////app/data/enveloper.sqlite"
     pipeprint_url: '%env(ENVELOPER_PIPEPRINT_URL)%'
     env(ENVELOPER_PIPEPRINT_URL): ~
+    env(ENVELOPER_QUEUE_DSN): 'spool://memory'
 
 
 monolog:
@@ -60,6 +61,11 @@ framework:
     assets: ~
     php_errors:
         log: true
+    messenger:
+        transports:
+            email_queue: "%env(ENVELOPER_QUEUE_DSN)%"
+        routing:
+            Outstack\Enveloper\Mail\OutboxItem: email_queue
 
 doctrine:
     dbal:

@@ -108,3 +108,9 @@ services:
 
     Outstack\Enveloper\Folders\SentMessagesFolder: '@Outstack\Enveloper\Folders\DoctrineOrmSentMessagesFolder'
     Outstack\Enveloper\Folders\DoctrineOrmSentMessagesFolder: ~
+
+    AppBundle\Messenger\SpoolTransportEventSubscriber:
+        autowire: true
+        arguments:
+            $receiverLocator: '@messenger.receiver_locator'
+            $enveloperQueueDsn: '%env(ENVELOPER_QUEUE_DSN)%'
