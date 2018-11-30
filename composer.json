@@ -11,7 +11,7 @@
         }
     },
     "require": {
-        "symfony/symfony": "^4.1",
+        "symfony/symfony": "^4.2",
         "symfony/monolog-bundle": "^3.3",
         "symfony/polyfill-apcu": "^1.0",
         "symfony/options-resolver": "^4.1",

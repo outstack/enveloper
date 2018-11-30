@@ -11,14 +11,14 @@ use Outstack\Enveloper\Mail\SentMessage;
 use Outstack\Enveloper\Outbox;
 use Outstack\Enveloper\PipeprintBridge\Exceptions\PipelineFailed;
 use Outstack\Enveloper\Resolution\ParametersFailedSchemaValidation;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class OutboxController extends Controller
+class OutboxController extends AbstractController
 {
     /**
      * @var Outbox
@@ -32,12 +32,17 @@ class OutboxController extends Controller
      * @var ApiProblemFactory
      */
     private $problemFactory;
+    /**
+     * @var string
+     */
+    private $projectDir;
 
-    public function __construct(Outbox $outbox, SentMessagesFolder $sentMessages, ApiProblemFactory $problemFactory)
+    public function __construct(Outbox $outbox, SentMessagesFolder $sentMessages, ApiProblemFactory $problemFactory, string $projectDir)
     {
         $this->outbox = $outbox;
         $this->sentMessages = $sentMessages;
         $this->problemFactory = $problemFactory;
+        $this->projectDir = $projectDir;
     }
 
     /**
@@ -49,7 +54,7 @@ class OutboxController extends Controller
         $payload = json_decode($request->getContent());
 
         $dereferencer  = \League\JsonReference\Dereferencer::draft6();
-        $schema        = $dereferencer->dereference('file://' . $this->container->getParameter('kernel.root_dir'). '/../schemata/endpoints/outbox/post.requestBody.schema.json');
+        $schema        = $dereferencer->dereference('file://' . $this->projectDir. '/schemata/endpoints/outbox/post.requestBody.schema.json');
 
         $validator     = new \League\JsonGuard\Validator($payload, $schema);
 
@@ -103,7 +108,7 @@ class OutboxController extends Controller
         $payload = json_decode($request->getContent());
 
         $dereferencer  = \League\JsonReference\Dereferencer::draft6();
-        $schema        = $dereferencer->dereference('file://' . $this->container->getParameter('kernel.root_dir'). '/../schemata/endpoints/outbox/preview/post.requestBody.schema.json');
+        $schema        = $dereferencer->dereference('file://' . $this->projectDir . '/schemata/endpoints/outbox/preview/post.requestBody.schema.json');
 
         $validator     = new \League\JsonGuard\Validator($payload, $schema);
 

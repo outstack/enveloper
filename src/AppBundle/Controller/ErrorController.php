@@ -3,10 +3,10 @@
 namespace AppBundle\Controller;
 
 use Outstack\Components\ApiProvider\ApiProblemDetails\ApiProblemFactory;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ErrorController extends Controller
+class ErrorController extends AbstractController
 {
     /**
      * @var ApiProblemFactory

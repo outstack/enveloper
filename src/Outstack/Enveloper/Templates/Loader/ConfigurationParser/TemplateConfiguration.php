@@ -14,9 +14,8 @@ class TemplateConfiguration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $root = $treeBuilder->root('template');
-        $root
+        $treeBuilder = new TreeBuilder('enveloper');
+        $treeBuilder->getRootNode()
             ->children()
                 ->scalarNode('subject')->end()
                 ->arrayNode('from')
