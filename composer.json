@@ -12,7 +12,6 @@
     },
     "require": {
         "symfony/symfony": "^4.1",
-        "sensio/framework-extra-bundle": "^5.2",
         "symfony/monolog-bundle": "^3.3",
         "symfony/polyfill-apcu": "^1.0",
         "symfony/options-resolver": "^4.1",
@@ -31,7 +30,8 @@
         "doctrine/orm": "^2.6",
         "doctrine/doctrine-bundle": "^1.9.1",
         "league/json-guard": "^1.0",
-        "league/json-reference": "^1.0"
+        "league/json-reference": "^1.0",
+        "sensio/framework-extra-bundle": "^5.2"
     },
     "require-dev": {
         "symfony/phpunit-bridge": "^3.3"

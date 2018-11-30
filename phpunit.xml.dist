@@ -10,7 +10,6 @@
         </testsuite>
     </testsuites>
     <php>
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak"/>
         <server name="KERNEL_CLASS" value="AppKernel" />
     </php>
 </phpunit>

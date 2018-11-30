@@ -4,8 +4,7 @@ namespace AppBundle\Controller;
 
 use Outstack\Components\ApiProvider\ApiProblemDetails\ApiProblemFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Debug\Exception\FlattenException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ErrorController extends Controller
 {

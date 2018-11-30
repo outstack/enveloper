@@ -61,6 +61,10 @@ framework:
     php_errors:
         log: true
 
+sensio_framework_extra:
+    router:
+        annotations: false
+
 doctrine:
     dbal:
         url: "%env(ENVELOPER_DB_DSN)%"

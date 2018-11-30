@@ -15,8 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class OutboxController extends Controller
@@ -42,8 +41,7 @@ class OutboxController extends Controller
     }
 
     /**
-     * @Route("/outbox")
-     * @Method("POST")
+     * @Route("/outbox", methods={"POST"})
      */
     public function postAction(Request $request)
     {
@@ -97,8 +95,7 @@ class OutboxController extends Controller
     }
 
     /**
-     * @Route("/outbox/preview")
-     * @Method("POST")
+     * @Route("/outbox/preview", methods={"POST"})
      */
     public function previewAction(Request $request)
     {
@@ -155,8 +152,7 @@ class OutboxController extends Controller
 
 
     /**
-     * @Route("/outbox", name="app.outbox.list")
-     * @Method("GET")
+     * @Route("/outbox", name="app.outbox.list", methods={"GET"})
      */
     public function listAction()
     {
@@ -170,8 +166,7 @@ class OutboxController extends Controller
     }
 
     /**
-     * @Route("/outbox/{id}", name="app.outbox.view", requirements={"id"="[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}"})
-     * @Method("GET")
+     * @Route("/outbox/{id}", name="app.outbox.view", requirements={"id"="[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}"}, methods={"GET"})
      */
     public function findAction(string $id)
     {
@@ -180,8 +175,7 @@ class OutboxController extends Controller
     }
 
     /**
-     * @Route("/outbox/{id}/content", name="app.outbox.view.content", requirements={"id"="[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}"})
-     * @Method("GET")
+     * @Route("/outbox/{id}/content", name="app.outbox.view.content", requirements={"id"="[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}"}, methods={"GET"})
      */
     public function viewContentAction(Request $request, string $id)
     {
@@ -189,8 +183,7 @@ class OutboxController extends Controller
     }
 
     /**
-     * @Route("/outbox")
-     * @Method("DELETE")
+     * @Route("/outbox", methods={"DELETE"})
      */
     public function truncateAction()
     {
