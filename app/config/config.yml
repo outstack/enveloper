@@ -67,6 +67,10 @@ framework:
         routing:
             Outstack\Enveloper\Mail\OutboxItem: email_queue
 
+sensio_framework_extra:
+    router:
+        annotations: false
+
 doctrine:
     dbal:
         url: "%env(ENVELOPER_DB_DSN)%"
