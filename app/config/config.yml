@@ -62,10 +62,12 @@ framework:
     php_errors:
         log: true
     messenger:
+        serializer:
+            id: ~
         transports:
             email_queue: "%env(ENVELOPER_QUEUE_DSN)%"
         routing:
-            Outstack\Enveloper\Mail\OutboxItem: email_queue
+            Outstack\Enveloper\Domain\Email\EmailRequest: email_queue
 
 sensio_framework_extra:
     router:
@@ -74,17 +76,20 @@ sensio_framework_extra:
 doctrine:
     dbal:
         url: "%env(ENVELOPER_DB_DSN)%"
+        types:
+            participant: 'Outstack\Enveloper\Infrastructure\History\EmailDeliveryLog\DoctrineOrm\ParticipantType'
+            participant_list: 'Outstack\Enveloper\Infrastructure\History\EmailDeliveryLog\DoctrineOrm\ParticipantListType'
 
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
         mappings:
-            Outstack\Enveloper:
+            Outstack\Enveloper\Domain:
                 type: yml
                 dir: '%kernel.root_dir%/config/doctrine/orm'
                 alias: ~
-                prefix: Outstack\Enveloper
+                prefix: Outstack\Enveloper\Domain
 
 # Twig Configuration
 twig:

@@ -4,15 +4,14 @@ namespace Outstack\Enveloper\Tests\Unit\Templates\Loader;
 
 use League\Flysystem\Filesystem;
 use League\Flysystem\Memory\MemoryAdapter;
-use Outstack\Enveloper\Mail\Participants\Participant;
-use Outstack\Enveloper\Templates\AttachmentListTemplate;
-use Outstack\Enveloper\Templates\AttachmentTemplate;
-use Outstack\Enveloper\Templates\Loader\Exceptions\InvalidConfigurationException;
-use Outstack\Enveloper\Templates\Loader\FilesystemLoader;
-use Outstack\Enveloper\Templates\Loader\TemplateNotFound;
-use Outstack\Enveloper\Templates\ParticipantListTemplate;
-use Outstack\Enveloper\Templates\ParticipantTemplate;
-use Outstack\Enveloper\Templates\Template;
+use Outstack\Enveloper\Domain\Resolution\Templates\AttachmentListTemplate;
+use Outstack\Enveloper\Domain\Resolution\Templates\AttachmentTemplate;
+use Outstack\Enveloper\Domain\Resolution\Templates\ParticipantListTemplate;
+use Outstack\Enveloper\Domain\Resolution\Templates\ParticipantTemplate;
+use Outstack\Enveloper\Domain\Resolution\Templates\Template;
+use Outstack\Enveloper\Domain\Resolution\Templates\TemplateNotFound;
+use Outstack\Enveloper\Infrastructure\Resolution\TemplateLoader\Filesystem\Exceptions\InvalidConfigurationException;
+use Outstack\Enveloper\Infrastructure\Resolution\TemplateLoader\Filesystem\FilesystemLoader;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Yaml\Yaml;
 

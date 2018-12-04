@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "type": "object",
+  "properties": {
+    "@id": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL of delivery attempt"
+    },
+    "resolved": {
+      "type": "object",
+      "$ref": "./resolved-message.schema.json"
+    }
+  },
+  "required": ["@id", "resolved"]
+}

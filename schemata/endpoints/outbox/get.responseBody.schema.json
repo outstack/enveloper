@@ -5,7 +5,7 @@
     "items": {
       "type": "array",
       "items": {
-        "$ref": "../../resources/sent-message.schema.json"
+        "$ref": "../../resources/email-request.schema.json"
       }
     }
   },

@@ -16,6 +16,8 @@ services:
         public: false
         bind:
             $projectDir: '%kernel.project_dir%'
+            $defaultSenderEmail: '%default_sender_email%'
+            $defaultSenderName: '%default_sender_name%'
 
     # makes classes in src/AppBundle available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -24,6 +26,9 @@ services:
         # you can exclude directories or files
         # but if a service is unused, it's removed anyway
         exclude: '../../src/AppBundle/{Entity,Repository,Tests}'
+
+    Outstack\:
+        resource: '../../src/Outstack/*'
 
     # controllers are imported separately to make sure they're public
     # and have a tag that allows actions to type-hint services
@@ -35,50 +40,19 @@ services:
     Http\Message\ResponseFactory: '@Http\Message\MessageFactory\DiactorosMessageFactory'
     Http\Message\MessageFactory\DiactorosMessageFactory: ~
 
-    Outstack\Components\ApiProvider\ApiProblemDetails\ApiProblemFactory: ~
-
-    Outstack\Enveloper\Resolution\TemplateLanguage: '@Outstack\Enveloper\Resolution\Twig\TwigTemplateLanguage'
-    Outstack\Enveloper\Resolution\Twig\TwigTemplateLanguage:
-        arguments:
-            - '@twig'
-    Outstack\Enveloper\Templates\TemplatePipeline:
-        factory: 'Outstack\Enveloper\PipeprintBridge\TemplatePipelineFactory:create'
-        class: Outstack\Enveloper\Templates\TemplatePipeline
+    Outstack\Enveloper\Domain\Resolution\Templates\Pipeline\TemplatePipeline:
+        factory: 'Outstack\Enveloper\Infrastructure\Resolution\TemplatePipeline\TemplatePipelineFactory:create'
+        class: Outstack\Enveloper\Domain\Resolution\Templates\Pipeline\TemplatePipeline
         arguments:
             - '%pipeprint_url%'
 
-    Outstack\Enveloper\PipeprintBridge\TemplatePipelineFactory:
-        arguments:
-            - '@enveloper.templates.template_loader.filesystem.flysystem'
-            - '@twig'
+    Outstack\Enveloper\Domain\Resolution\Templates\TemplateLoader: '@Outstack\Enveloper\Infrastructure\Resolution\TemplateLoader\Filesystem\FilesystemLoader'
 
-    Outstack\Enveloper\Resolution\ParticipantResolver:
-        public: false
-        autowire: true
-
-    Outstack\Enveloper\Resolution\ParticipantListResolver:
-        public: false
-        autowire: true
-
-    Outstack\Enveloper\Resolution\MessageResolver:
-        autowire: true
-        arguments:
-            $defaultSenderEmail: '%default_sender_email%'
-            $defaultSenderName: '%default_sender_name%'
-
-    Outstack\Enveloper\Resolution\AttachmentListResolver: ~
-    Outstack\Enveloper\Resolution\AttachmentResolver: ~
-
-
-    enveloper.templates.template_loader:
-        alias: enveloper.templates.template_loader.filesystem
-
-    Outstack\Enveloper\Templates\Loader\TemplateLoader: '@Outstack\Enveloper\Templates\Loader\FilesystemLoader'
-
-    Outstack\Enveloper\Templates\Loader\FilesystemLoader:
+    Outstack\Enveloper\Infrastructure\Resolution\TemplateLoader\Filesystem\FilesystemLoader:
         arguments:
             - '@enveloper.templates.template_loader.filesystem.flysystem'
 
+    League\Flysystem\Filesystem: '@enveloper.templates.template_loader.filesystem.flysystem'
     enveloper.templates.template_loader.filesystem.flysystem:
         public: false
         class: League\Flysystem\Filesystem
@@ -91,25 +65,23 @@ services:
         arguments:
             - '%template_directory%'
 
-    Outstack\Enveloper\SwiftMailerBridge\SwiftMailerFactory:
+    Outstack\Enveloper\Infrastructure\Delivery\DeliveryMethod\SwiftMailer\SwiftMailerFactory:
         arguments:
-            - transport:  'smtp'
-              record:     '%mailer_record_messages%'
-              host:       '%mailer_host%'
-              username:   '%mailer_username%'
-              port:       '%mailer_port%'
-              password:   '%mailer_password%'
-              encryption: '%mailer_encryption%'
-              deliver_messages: '%mailer_deliver_messages%'
+            $options:
+                transport:  'smtp'
+                record:     '%mailer_record_messages%'
+                host:       '%mailer_host%'
+                username:   '%mailer_username%'
+                port:       '%mailer_port%'
+                password:   '%mailer_password%'
+                encryption: '%mailer_encryption%'
+                deliver_messages: '%mailer_deliver_messages%'
 
-    Outstack\Enveloper\SwiftMailerBridge\SwiftMailerInterface:
+    Outstack\Enveloper\Infrastructure\Delivery\DeliveryMethod\SwiftMailer\SwiftMailerInterface:
         public: true
-        factory: 'Outstack\Enveloper\SwiftMailerBridge\SwiftMailerFactory:create'
+        factory: 'Outstack\Enveloper\Infrastructure\Delivery\DeliveryMethod\SwiftMailer\SwiftMailerFactory:create'
 
     Outstack\Enveloper\Outbox: ~
-
-    Outstack\Enveloper\Folders\SentMessagesFolder: '@Outstack\Enveloper\Folders\DoctrineOrmSentMessagesFolder'
-    Outstack\Enveloper\Folders\DoctrineOrmSentMessagesFolder: ~
 
     AppBundle\Messenger\SpoolTransportEventSubscriber:
         autowire: true

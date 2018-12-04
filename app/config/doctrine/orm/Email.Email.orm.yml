@@ -1,0 +1,20 @@
+Outstack\Enveloper\Domain\Email\Email:
+    type: embeddable
+    fields:
+        subject:
+            type: string
+            length: 1000
+        text:
+            type: text
+            nullable: true
+        html:
+            type: text
+            nullable: true
+        sender:
+            type: participant
+        to:
+            type: participant_list
+        cc:
+            type: participant_list
+        bcc:
+            type: participant_list

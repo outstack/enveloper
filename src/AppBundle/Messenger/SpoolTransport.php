@@ -35,9 +35,11 @@ class SpoolTransport implements TransportInterface
      * Sends the given envelope.
      *
      * @param Envelope $envelope
+     * @return Envelope
      */
-    public function send(Envelope $envelope)
+    public function send(Envelope $envelope): Envelope
     {
         $this->envelopes[] = $envelope;
+        return $envelope;
     }
 }

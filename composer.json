@@ -32,7 +32,8 @@
         "league/json-guard": "^1.0",
         "league/json-reference": "^1.0",
         "symfony/messenger": "^4.1",
-        "sensio/framework-extra-bundle": "^5.2"
+        "sensio/framework-extra-bundle": "^5.2",
+        "symfony/serializer-pack": "^1.0"
     },
     "require-dev": {
         "symfony/phpunit-bridge": "^3.3"
