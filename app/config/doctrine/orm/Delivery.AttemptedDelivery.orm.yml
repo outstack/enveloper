@@ -7,7 +7,7 @@ Outstack\Enveloper\Domain\Delivery\AttemptedDelivery:
             generator: { strategy: UUID }
     fields:
         attemptDate:
-            type: datetime
+            type: datetime_immutable
         attemptNumber:
             type: integer
     embedded:

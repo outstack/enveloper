@@ -14,11 +14,21 @@ class EmailRequest
     private $parameters;
 
     private $id;
+    /**
+     * @var \DateTimeImmutable
+     */
+    private $requestedAt;
 
-    public function __construct(string $template, object $parameters)
+    public function __construct(string $template, object $parameters, \DateTimeImmutable $requestedAt)
     {
         $this->template = $template;
         $this->parameters = $parameters;
+        $this->requestedAt = $requestedAt;
+    }
+
+    public function getRequestedAt(): \DateTimeImmutable
+    {
+        return $this->requestedAt;
     }
 
     public function getId(): string

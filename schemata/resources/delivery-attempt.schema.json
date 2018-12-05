@@ -10,7 +10,11 @@
     "resolved": {
       "type": "object",
       "$ref": "./resolved-message.schema.json"
+    },
+    "attemptedAt": {
+      "type": "string",
+      "format": "date-time"
     }
   },
-  "required": ["@id", "resolved"]
+  "required": ["@id", "resolved", "attemptedAt"]
 }

@@ -48,6 +48,7 @@ abstract class BaseController extends AbstractController
                 ],
                 UrlGeneratorInterface::ABSOLUTE_URL
             ),
+            'attemptedAt' => $attemptedDelivery->getAttemptDate()->format(\DateTime::ATOM),
             'resolved' => [
                 'subject' => $resolved->getSubject(),
                 'sender' => $this->serialiseParticipant($resolved->getSender()),
@@ -100,6 +101,7 @@ abstract class BaseController extends AbstractController
             ),
             'template' => $sentMessage->getTemplate(),
             'parameters' => $sentMessage->getParameters(),
+            'requestedAt' => $sentMessage->getRequestedAt()->format(\DateTime::ATOM),
             'deliveryAttempts' => $this->generateUrl('app.delivery_attempts.list', ['id' => $sentMessage->getId()], UrlGeneratorInterface::ABSOLUTE_URL)
         ];
         return $messageData;

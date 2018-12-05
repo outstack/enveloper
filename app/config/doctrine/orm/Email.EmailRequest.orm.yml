@@ -11,3 +11,5 @@ Outstack\Enveloper\Domain\Email\EmailRequest:
             length: 200
         parameters:
             type: json_array
+        requestedAt:
+            type: datetime_immutable

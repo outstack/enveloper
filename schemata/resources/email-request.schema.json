@@ -12,7 +12,11 @@
     },
     "parameters": {
       "$ref": "../model/template-parameters.schema.json"
+    },
+    "requestedAt": {
+      "type": "string",
+      "format": "date-time"
     }
   },
-  "required": ["@id", "template", "parameters"]
+  "required": ["@id", "template", "parameters", "requestedAt"]
 }

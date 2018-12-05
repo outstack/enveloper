@@ -45,7 +45,7 @@ class OutboxController extends BaseController
 
         try {
             $queueEmailRequest(
-                new EmailRequest($payload->template, $payload->parameters)
+                new EmailRequest($payload->template, $payload->parameters, new \DateTimeImmutable('now'))
             );
             return new Response('', 204);
         } catch (PipelineFailed $e) {
