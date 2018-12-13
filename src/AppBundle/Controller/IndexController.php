@@ -13,7 +13,6 @@ class IndexController extends BaseController
      */
     public function indexAction(Request $request)
     {
-        $a = 1;
         return $this->json(
             [
                 'name' => 'Outstack Enveloper API',
