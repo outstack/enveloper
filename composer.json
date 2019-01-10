@@ -36,6 +36,6 @@
         "symfony/serializer-pack": "^1.0"
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "^3.3"
+        "symfony/phpunit-bridge": "^3.4"
     }
 }

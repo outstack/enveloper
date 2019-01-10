@@ -12,5 +12,6 @@
     <php>
         <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak"/>
         <server name="KERNEL_CLASS" value="AppKernel" />
+        <env name="SYMFONY_PHPUNIT_VERSION" value="6.5"/>
     </php>
 </phpunit>
