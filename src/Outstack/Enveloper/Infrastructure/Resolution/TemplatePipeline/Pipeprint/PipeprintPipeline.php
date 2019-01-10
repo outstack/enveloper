@@ -3,6 +3,7 @@
 namespace Outstack\Enveloper\Infrastructure\Resolution\TemplatePipeline\Pipeprint;
 
 use League\Flysystem\Filesystem;
+use Outstack\Enveloper\Domain\Resolution\Templates\Pipeline\Exceptions\PipelineFailed;
 use Outstack\Enveloper\Domain\Resolution\Templates\Pipeline\TemplatePipeline;
 
 class PipeprintPipeline implements TemplatePipeline
