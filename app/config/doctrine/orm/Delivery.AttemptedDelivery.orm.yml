@@ -17,3 +17,5 @@ Outstack\Enveloper\Domain\Delivery\AttemptedDelivery:
     manyToOne:
         emailRequest:
             targetEntity: Outstack\Enveloper\Domain\Email\EmailRequest
+            joinColumn:
+                onDelete: 'CASCADE'
