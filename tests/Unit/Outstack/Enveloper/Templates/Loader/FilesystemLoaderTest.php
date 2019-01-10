@@ -13,9 +13,10 @@ use Outstack\Enveloper\Templates\Loader\TemplateNotFound;
 use Outstack\Enveloper\Templates\ParticipantListTemplate;
 use Outstack\Enveloper\Templates\ParticipantTemplate;
 use Outstack\Enveloper\Templates\Template;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Yaml\Yaml;
 
-class FilesystemLoaderTest extends \PHPUnit_Framework_TestCase
+class FilesystemLoaderTest extends TestCase
 {
     /**
      * @var Filesystem
