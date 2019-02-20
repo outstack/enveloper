@@ -1,4 +1,5 @@
 {
+    "name": "outstack/enveloper",
     "autoload": {
         "psr-4": {
             "": "src/"
