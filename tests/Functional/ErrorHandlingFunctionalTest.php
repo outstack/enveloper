@@ -3,11 +3,7 @@
 namespace Outstack\Enveloper\Tests\Functional;
 
 use Http\Client\Exception\HttpException;
-use Outstack\Components\SymfonySwiftMailerAssertionLibrary\SwiftMailerAssertionTrait;
-use Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector;
 use Zend\Diactoros\Request;
-use Zend\Diactoros\Stream;
-use Zend\Diactoros\Uri;
 
 class ErrorHandlingFunctionalTest extends AbstractApiTestCase
 {

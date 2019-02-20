@@ -8,7 +8,6 @@ parameters:
     env(SMTP_ENCRYPTION): ~
     locale: en
     template_directory: "/app/data/templates"
-    mailer_record_messages: false
 
     secret: ThisTokenIsNotSoSecretChangeIt
 
@@ -24,6 +23,7 @@ parameters:
     env(ENVELOPER_DB_DSN): "sqlite:////app/data/enveloper.sqlite"
     pipeprint_url: '%env(ENVELOPER_PIPEPRINT_URL)%'
     env(ENVELOPER_PIPEPRINT_URL): ~
+    env(ENVELOPER_QUEUE_DSN): 'spool://memory'
 
 
 monolog:
@@ -61,21 +61,35 @@ framework:
     assets: ~
     php_errors:
         log: true
+    messenger:
+        serializer:
+            id: ~
+        transports:
+            email_queue: "%env(ENVELOPER_QUEUE_DSN)%"
+        routing:
+            Outstack\Enveloper\Domain\Email\EmailRequest: email_queue
+
+sensio_framework_extra:
+    router:
+        annotations: false
 
 doctrine:
     dbal:
         url: "%env(ENVELOPER_DB_DSN)%"
+        types:
+            participant: 'Outstack\Enveloper\Infrastructure\History\EmailDeliveryLog\DoctrineOrm\ParticipantType'
+            participant_list: 'Outstack\Enveloper\Infrastructure\History\EmailDeliveryLog\DoctrineOrm\ParticipantListType'
 
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
         mappings:
-            Outstack\Enveloper:
+            Outstack\Enveloper\Domain:
                 type: yml
                 dir: '%kernel.root_dir%/config/doctrine/orm'
                 alias: ~
-                prefix: Outstack\Enveloper
+                prefix: Outstack\Enveloper\Domain
 
 # Twig Configuration
 twig:

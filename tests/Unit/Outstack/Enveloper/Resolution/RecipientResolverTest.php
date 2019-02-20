@@ -2,10 +2,10 @@
 
 namespace Outstack\Enveloper\Tests\Unit\Resolution;
 
-use Outstack\Enveloper\Mail\Participants\EmailAddress;
-use Outstack\Enveloper\Mail\Participants\Participant;
-use Outstack\Enveloper\Resolution\ParticipantResolver;
-use Outstack\Enveloper\Templates\ParticipantTemplate;
+use Outstack\Enveloper\Domain\Email\Participants\EmailAddress;
+use Outstack\Enveloper\Domain\Email\Participants\Participant;
+use Outstack\Enveloper\Domain\Resolution\ParticipantResolver;
+use Outstack\Enveloper\Domain\Resolution\Templates\ParticipantTemplate;
 
 class RecipientResolverTest extends AbstractResolutionUnitTest
 {

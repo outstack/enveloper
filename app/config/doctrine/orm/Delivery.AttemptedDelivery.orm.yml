@@ -1,0 +1,21 @@
+Outstack\Enveloper\Domain\Delivery\AttemptedDelivery:
+    type: entity
+    table: delivery_attempt
+    id:
+        id:
+            type: guid
+            generator: { strategy: UUID }
+    fields:
+        attemptDate:
+            type: datetime_immutable
+        attemptNumber:
+            type: integer
+    embedded:
+        resolvedMessage:
+            class: Outstack\Enveloper\Domain\Email\Email
+
+    manyToOne:
+        emailRequest:
+            targetEntity: Outstack\Enveloper\Domain\Email\EmailRequest
+            joinColumn:
+                onDelete: 'CASCADE'

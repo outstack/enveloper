@@ -6,6 +6,8 @@ services:
         environment:
             - SYMFONY_ENV=dev
             - VIRTUAL_HOST=enveloper.dev
+            - XDEBUG_CONFIG="idekey=PHPSTORM remote_host=192.168.65.2"
+            - PHP_IDE_CONFIG="serverName=enveloper.test"
     docs:
         build:
             context: .

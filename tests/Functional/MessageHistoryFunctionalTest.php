@@ -41,15 +41,38 @@ class MessageHistoryFunctionalTest extends AbstractApiTestCase
 
         $this->assertJsonDocumentMatchesSchema($actual, 'endpoints/outbox/get.responseBody.schema.json');
         $this->assertCount(1, $actual->items);
-        $this->assertSame('Hello, Bob',             $actual->items[0]->resolved->subject);
-        $this->assertSame('simplest-test-message',  $actual->items[0]->template);
+        $latestEmailRequest = $actual->items[0];
+        $this->assertSame('simplest-test-message',  $latestEmailRequest->template);
         $this->assertEquals(
             (object) [
                 'name' => 'Bob',
                 'email' => 'bob@example.com'
             ],
-            $actual->items[0]->parameters
+            $latestEmailRequest->parameters
         );
+
+        $deliveryAttempts = json_decode((string) $this->client->sendRequest(
+            new Request(
+                "{$latestEmailRequest->deliveryAttempts}",
+                'GET',
+                $this->convertToStream('')
+            )
+        )->getBody());
+
+        $this->assertJsonDocumentMatchesSchema($deliveryAttempts, 'endpoints/outbox/deliveryAttempts/get.responseBody.schema.json');
+        $this->assertCount(1, $deliveryAttempts->items);
+
+        $this->client->sendRequest(
+            new Request(
+                $deliveryAttempts->items[0]->{'@id'},
+                'GET',
+                $this->convertToStream('')
+            )
+        );
+
+        $resolved = $deliveryAttempts->items[0]->resolved;
+
+        $this->assertSame('Hello, Bob', $resolved->subject);
 
         $this->assertEquals(
             '<html>
@@ -59,7 +82,7 @@ class MessageHistoryFunctionalTest extends AbstractApiTestCase
 </html>',
             $this->client->sendRequest(
                 new Request(
-                    $actual->items[0]->resolved->content->{'@id'},
+                    $resolved->content->{'@id'},
                     'GET',
                     $this->convertToStream(''),
                     ['HTTP_ACCEPT' => 'text/html']
@@ -67,7 +90,7 @@ class MessageHistoryFunctionalTest extends AbstractApiTestCase
             )->getBody()->__toString()
         );
 
-$this->client->sendRequest(
+        $this->client->sendRequest(
             new Request(
                 "{$this->baseUri}/outbox",
                 'DELETE',

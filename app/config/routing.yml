@@ -4,6 +4,6 @@ app:
 
 error_404:
   path: /{req}
-  defaults: { _controller: 'AppBundle:Error:pageNotFound' }
+  defaults: { _controller: 'AppBundle\Controller\ErrorController::pageNotFoundAction' }
   requirements:
       req: ".+"

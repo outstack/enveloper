@@ -2,9 +2,9 @@
 
 namespace Outstack\Enveloper\Tests\Unit\Resolution;
 
-use Outstack\Enveloper\Mail\Attachments\Attachment;
-use Outstack\Enveloper\Resolution\AttachmentResolver;
-use Outstack\Enveloper\Templates\AttachmentTemplate;
+use Outstack\Enveloper\Domain\Email\Attachments\Attachment;
+use Outstack\Enveloper\Domain\Resolution\AttachmentResolver;
+use Outstack\Enveloper\Domain\Resolution\Templates\AttachmentTemplate;
 
 class AttachmentResolverTest extends AbstractResolutionUnitTest
 {

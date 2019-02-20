@@ -2,12 +2,10 @@
 
 namespace Outstack\Enveloper\Tests\Functional;
 
-use Outstack\Enveloper\SwiftMailerBridge\SwiftMailerInterface;
 use Http\Client\Exception\HttpException;
 use Outstack\Components\SymfonySwiftMailerAssertionLibrary\SwiftMailerAssertionTrait;
+use Outstack\Enveloper\Infrastructure\Delivery\DeliveryMethod\SwiftMailer\SwiftMailerInterface;
 use Zend\Diactoros\Request;
-use Zend\Diactoros\Stream;
-use Zend\Diactoros\Uri;
 
 class MessagePreviewingFunctionalTest extends AbstractApiTestCase
 {

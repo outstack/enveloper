@@ -3,22 +3,11 @@
 namespace AppBundle\Controller;
 
 use Outstack\Components\ApiProvider\ApiProblemDetails\ApiProblemFactory;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Debug\Exception\FlattenException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 
-class ErrorController extends Controller
+class ErrorController extends BaseController
 {
-    /**
-     * @var ApiProblemFactory
-     */
-    private $problemFactory;
-
-    public function __construct(ApiProblemFactory $problemFactory)
-    {
-        $this->problemFactory = $problemFactory;
-    }
-
     /**
      * @Route("/errors/500")
      */

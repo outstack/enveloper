@@ -2,22 +2,21 @@
 
 namespace Outstack\Enveloper\Tests\Unit;
 
-use Outstack\Enveloper\Mail\Attachments\Attachment;
-use Outstack\Enveloper\Mail\Participants\EmailAddress;
-use Outstack\Enveloper\Mail\Participants\Participant;
-use Outstack\Enveloper\Mail\Participants\ParticipantList;
-use Outstack\Enveloper\PipeprintBridge\TwigTemplatePipeline;
-use Outstack\Enveloper\Resolution\AttachmentListResolver;
-use Outstack\Enveloper\Resolution\AttachmentResolver;
-use Outstack\Enveloper\Resolution\MessageResolver;
-use Outstack\Enveloper\Resolution\ParticipantListResolver;
-use Outstack\Enveloper\Resolution\ParticipantResolver;
-use Outstack\Enveloper\ResolvedMessage;
-use Outstack\Enveloper\Templates\AttachmentListTemplate;
-use Outstack\Enveloper\Templates\AttachmentTemplate;
-use Outstack\Enveloper\Templates\ParticipantListTemplate;
-use Outstack\Enveloper\Templates\ParticipantTemplate;
-use Outstack\Enveloper\Templates\Template;
+use Outstack\Enveloper\Domain\Email\Attachments\Attachment;
+use Outstack\Enveloper\Domain\Email\Participants\EmailAddress;
+use Outstack\Enveloper\Domain\Email\Participants\Participant;
+use Outstack\Enveloper\Domain\Email\Participants\ParticipantList;
+use Outstack\Enveloper\Domain\Resolution\AttachmentListResolver;
+use Outstack\Enveloper\Domain\Resolution\AttachmentResolver;
+use Outstack\Enveloper\Domain\Resolution\MessageResolver;
+use Outstack\Enveloper\Domain\Resolution\ParticipantListResolver;
+use Outstack\Enveloper\Domain\Resolution\ParticipantResolver;
+use Outstack\Enveloper\Domain\Resolution\Templates\AttachmentListTemplate;
+use Outstack\Enveloper\Domain\Resolution\Templates\AttachmentTemplate;
+use Outstack\Enveloper\Domain\Resolution\Templates\ParticipantListTemplate;
+use Outstack\Enveloper\Domain\Resolution\Templates\ParticipantTemplate;
+use Outstack\Enveloper\Domain\Resolution\Templates\Template;
+use Outstack\Enveloper\Infrastructure\Resolution\TemplatePipeline\Twig\TwigTemplatePipeline;
 use Outstack\Enveloper\Tests\Unit\Resolution\AbstractResolutionUnitTest;
 
 class MessageResolverTest extends AbstractResolutionUnitTest

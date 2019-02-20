@@ -2,18 +2,14 @@
 
 namespace AppBundle\Controller;
 
-use Outstack\Enveloper\SwiftMailerBridge\SwiftMailerFactory;
-use Swift_Mailer;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
-class IndexController extends Controller
+class IndexController extends BaseController
 {
     /**
-     * @Route("/")
-     * @Method("GET")
+     * @Route("/", methods={"GET"})
      */
     public function indexAction(Request $request)
     {

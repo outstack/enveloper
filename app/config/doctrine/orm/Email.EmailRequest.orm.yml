@@ -1,0 +1,15 @@
+Outstack\Enveloper\Domain\Email\EmailRequest:
+    type: entity
+    table: email_request
+    id:
+        id:
+            type: guid
+            generator: { strategy: UUID }
+    fields:
+        template:
+            type: string
+            length: 200
+        parameters:
+            type: json_array
+        requestedAt:
+            type: datetime_immutable
