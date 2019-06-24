@@ -8,3 +8,4 @@
 /tests/data/enveloper_test.sqlite
 /docker-compose.override.yml
 docs/api/node_modules
+.idea
