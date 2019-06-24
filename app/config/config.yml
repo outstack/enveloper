@@ -24,7 +24,7 @@ parameters:
     pipeprint_url: '%env(ENVELOPER_PIPEPRINT_URL)%'
     env(ENVELOPER_PIPEPRINT_URL): ~
     env(ENVELOPER_QUEUE_DSN): 'spool://memory'
-    env(DEFAULT_TIMEZONE): 'Europe/London'
+    env(ENVELOPER_DEFAULT_TIMEZONE): 'UTC'
 
 
 monolog:
@@ -98,4 +98,4 @@ twig:
     strict_variables: '%kernel.debug%'
     exception_controller: AppBundle:Error:showException
     date:
-        timezone: "%env(DEFAULT_TIMEZONE)%"
+        timezone: "%env(ENVELOPER_DEFAULT_TIMEZONE)%"
