@@ -13,7 +13,7 @@ Enveloper is a small service intended to be run in your infrastucture to speed u
 
 Define your templates using template files and YAML, then send messages using simple API requests.
 
-See [Getting Started](./01-getting-started.md) or browse the rest of this documentation.
+See [Getting Started](./docs/01-getting-started.md) or browse the rest of this documentation.
 
 ## Main features
 
