@@ -25,6 +25,14 @@ class AppKernel extends Kernel
         return $bundles;
     }
 
+    public function handle(\Symfony\Component\HttpFoundation\Request $request, $type = \Symfony\Component\HttpKernel\HttpKernelInterface::MASTER_REQUEST, $catch = true)
+    {
+        $response = parent::handle($request, $type, $catch);
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        $response->headers->set('Access-Control-Allow-Headers', 'Content-type');
+        return $response;
+    }
+
     public function getRootDir()
     {
         return __DIR__;
