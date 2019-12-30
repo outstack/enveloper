@@ -155,7 +155,7 @@ class OutboxController extends BaseController
                 ->buildJsonResponse();
 
         }
-        return new Response(json_encode($data), 200);
+        return new JsonResponse($data, 200, ['Content-type' => 'application/json']);
     }
 
     /**
