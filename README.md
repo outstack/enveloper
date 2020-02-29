@@ -7,7 +7,7 @@
 
 ## What is it?
 
-Enveloper is a small service intended to be run in your infrastucture to speed up developing and testing transactional emails in your application.
+Enveloper is a small service intended to be run in your infrastructure to speed up developing and testing transactional emails in your application.
 
 <img src="https://i.imgur.com/y2bhAd3.gif" alt="Enveloper GIF Demo" />
 
@@ -20,7 +20,7 @@ See [Getting Started](./docs/01-getting-started.md) or browse the rest of this d
  - Simple setup with docker.
  - Configurable to send to any SMTP server, e.g. Mailgun, Mandrill, Amazon SES or your private email server
  - Attachment support
- - Simple API to send see sent messages
+ - Simple API to send and see sent messages
  - Support for Twig, MJML out of the box, [easily extensible for other languages](./docs/04-advanced-templating.md).
  - Records sent messages into [Relational DB supported by Doctrine ORM](http://docs.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/platforms.html).
 
