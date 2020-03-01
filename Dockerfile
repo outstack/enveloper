@@ -7,14 +7,14 @@ COPY composer.json /app/
 COPY composer.lock /app/
 RUN composer install --optimize-autoloader --no-interaction --ignore-platform-reqs --no-scripts
 
-FROM php:7.2-fpm-alpine
+FROM php:7.2-fpm-alpine3.11
 MAINTAINER Adam Quaile <adamquaile@gmail.com>
 RUN apk update --no-cache \
     && apk add openssl \
     && apk add ca-certificates \
     && apk add zlib-dev \
     && apk add bash \
-    && apk add nginx \
+    && apk add nginx=1.16.1-r6 \
     && apk add zip \
     && apk add unzip \
     && docker-php-source extract \
@@ -39,8 +39,6 @@ RUN addgroup enveloper && adduser -D -G enveloper enveloper && \
     chown -R enveloper:enveloper \
         /app \
         /var/lib/nginx/ \
-        /etc/nginx \
-        /var/tmp/nginx
-
+        /etc/nginx
 USER enveloper
 CMD ["/usr/local/bin/shoreman"]
