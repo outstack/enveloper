@@ -21,7 +21,7 @@
         "symfony/http-kernel": "^4.1",
         "symfony/framework-bundle": "^4.1",
         "swiftmailer/swiftmailer": "^6.0",
-        "twig/twig": "^2.4",
+        "twig/twig": "^2.13",
         "league/flysystem": "^1.0",
         "league/flysystem-memory": "^1.0",
         "zendframework/zend-diactoros": "^1.4",

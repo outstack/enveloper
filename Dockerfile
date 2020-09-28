@@ -1,4 +1,4 @@
-FROM php:7.2-fpm-alpine as deps
+FROM php:7.4-fpm-alpine3.12 as deps
 COPY --from=composer:1.6 /usr/bin/composer /usr/bin/composer
 WORKDIR /app
 COPY app/AppKernel.php /app/app/
@@ -7,15 +7,16 @@ COPY composer.json /app/
 COPY composer.lock /app/
 RUN composer install --optimize-autoloader --no-interaction --ignore-platform-reqs --no-scripts
 
-FROM php:7.2-fpm-alpine3.11
+FROM php:7.4-fpm-alpine3.12
 MAINTAINER Adam Quaile <adamquaile@gmail.com>
 RUN apk update --no-cache \
     && apk add openssl \
     && apk add ca-certificates \
     && apk add zlib-dev \
     && apk add bash \
-    && apk add nginx=1.16.1-r6 \
+    && apk add nginx=1.18.0-r0 \
     && apk add zip \
+    && apk add libzip-dev=1.6.1-r1 \
     && apk add unzip \
     && docker-php-source extract \
     && docker-php-ext-install zip \
