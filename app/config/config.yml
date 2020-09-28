@@ -63,8 +63,6 @@ framework:
     php_errors:
         log: true
     messenger:
-        serializer:
-            id: ~
         transports:
             email_queue: "%env(ENVELOPER_QUEUE_DSN)%"
         routing:

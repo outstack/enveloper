@@ -59,7 +59,13 @@ class SpoolTransportEventSubscriber implements EventSubscriberInterface
     public function onKernelTerminate(PostResponseEvent $event)
     {
         if ($this->enveloperQueueDsn === 'spool://memory') {
-            $worker = new Worker($this->receiverLocator->get('email_queue'), $this->bus);
+            $worker = new Worker(
+                $this->receiverLocator->get('email_queue'),
+//                [
+//                    'email_queue' => $this->receiverLocator->get('email_queue')
+//                ],
+                $this->bus
+            );
             $worker->run();
         }
     }

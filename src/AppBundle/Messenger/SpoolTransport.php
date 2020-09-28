@@ -3,6 +3,7 @@
 namespace AppBundle\Messenger;
 
 use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\Exception\TransportException;
 use Symfony\Component\Messenger\Transport\TransportInterface;
 
 class SpoolTransport implements TransportInterface
@@ -41,5 +42,18 @@ class SpoolTransport implements TransportInterface
     {
         $this->envelopes[] = $envelope;
         return $envelope;
+    }
+
+    public function get(): iterable
+    {
+        return [];
+    }
+
+    public function ack(Envelope $envelope): void
+    {
+    }
+
+    public function reject(Envelope $envelope): void
+    {
     }
 }
