@@ -41,12 +41,6 @@ class QueueEmailRequest
 
         $this->messageResolver->validate($template, $emailRequest->getParameters());
         $this->emailRequestLog->recordInitialRequest($emailRequest);
-        $this->deliveryQueue->append(
-            $emailRequest,
-            $this->messageResolver->resolve(
-                $template,
-                $emailRequest->getParameters()
-            )
-        );
+        $this->deliveryQueue->append($emailRequest);
     }
 }

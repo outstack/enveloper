@@ -12,27 +12,6 @@ class SpoolTransport implements TransportInterface
     private $envelopes = [];
 
     /**
-     * Receive some messages to the given handler.
-     *
-     * The handler will have, as argument, the received {@link \Symfony\Component\Messenger\Envelope} containing the message.
-     * Note that this envelope can be `null` if the timeout to receive something has expired.
-     */
-    public function receive(callable $handler): void
-    {
-        foreach ($this->envelopes as $key => $envelope) {
-            unset($this->envelopes[$key]);
-            $handler($envelope);
-        }
-    }
-
-    /**
-     * Stop receiving some messages.
-     */
-    public function stop(): void
-    {
-    }
-
-    /**
      * Sends the given envelope.
      *
      * @param Envelope $envelope
@@ -46,14 +25,25 @@ class SpoolTransport implements TransportInterface
 
     public function get(): iterable
     {
-        return [];
+        return $this->envelopes;
     }
 
     public function ack(Envelope $envelope): void
     {
+        $this->removeEnvelopeFromQueue($envelope);
     }
 
     public function reject(Envelope $envelope): void
     {
+        $this->removeEnvelopeFromQueue($envelope);
+    }
+
+    private function removeEnvelopeFromQueue(Envelope $envelope): void
+    {
+        foreach ($this->envelopes as $key => $queued) {
+            if ($queued->getMessage() === $envelope->getMessage()) {
+                unset($this->envelopes[$key]);
+            }
+        }
     }
 }
