@@ -3,9 +3,11 @@
 namespace AppBundle\Messenger;
 
 use Psr\Container\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\PostResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Messenger\Event\WorkerRunningEvent;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Worker;
 
@@ -59,12 +61,26 @@ class SpoolTransportEventSubscriber implements EventSubscriberInterface
     public function onKernelTerminate(PostResponseEvent $event)
     {
         if ($this->enveloperQueueDsn === 'spool://memory') {
+
+            $stopWhenFinishedEventDispatcher = new EventDispatcher();
+
+
             $worker = new Worker(
-                $this->receiverLocator->get('email_queue'),
-//                [
-//                    'email_queue' => $this->receiverLocator->get('email_queue')
-//                ],
-                $this->bus
+//                $this->receiverLocator->get('email_queue'),
+                [
+                    'email_queue' => $this->receiverLocator->get('email_queue')
+                ],
+                $this->bus,
+                $stopWhenFinishedEventDispatcher
+            );
+
+            $stopWhenFinishedEventDispatcher->addListener(
+                WorkerRunningEvent::class,
+                static function (WorkerRunningEvent $event) use ($worker) {
+                    if ($event->isWorkerIdle()) {
+                        $worker->stop();
+                    }
+                }
             );
             $worker->run();
         }
