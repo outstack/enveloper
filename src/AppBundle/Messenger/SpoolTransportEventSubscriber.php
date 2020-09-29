@@ -66,7 +66,6 @@ class SpoolTransportEventSubscriber implements EventSubscriberInterface
 
 
             $worker = new Worker(
-//                $this->receiverLocator->get('email_queue'),
                 [
                     'email_queue' => $this->receiverLocator->get('email_queue')
                 ],
